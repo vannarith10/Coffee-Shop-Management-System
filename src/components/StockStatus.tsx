@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { STOCK_STATUS_CONFIG } from "../types/stock-status";
 import { getAllProductsStatus } from "../services/admin.service";
 import { Ellipsis } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
 interface Product {
   id: string;
@@ -33,7 +34,10 @@ export default function StockStatus() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
+  const [refetchVersion, setRefetchVersion] = useState(0);
 
+  //
+  //
   // Fetching Data from API
   useEffect(() => {
     async function fetchData() {
@@ -44,10 +48,19 @@ export default function StockStatus() {
         console.error(error);
         setIsError(true);
       }
+
       setIsLoading(false);
+      setIsError(false);
     }
     fetchData();
-  }, [page, size]);
+  }, [refetchVersion, page, size]);
+
+
+  //Force re-fetch even if page is already 1
+  function handleRetry() {
+    setPage(1); // Reset to first page
+    setRefetchVersion((v) => v + 1); 
+  }
 
   //
   // Pagination logic
@@ -72,9 +85,11 @@ export default function StockStatus() {
     setPage(pageNum);
   }
   //
+  //
   // Get page numbers for pagination dropdown
   function getPageNumbers() {
     const pages: (number | string)[] = [];
+
     //
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
@@ -119,18 +134,21 @@ export default function StockStatus() {
           <Layers2 />
           <h3 className="font-semibold">Stoct Status</h3>
         </div>
-        <div>
-          <h4 className="font-semibold text-xs text-text-secondary">
-            Page {currentPage} of {totalPages}
-          </h4>
-          <h4 className="font-semibold text-sm">
-            Total Items: {product?.pagination.total_items}
-          </h4>
-        </div>
+        {/* Pages and Items */}
+        {!isLoading && !isError && (
+          <div>
+            <h4 className="font-semibold text-xs text-text-secondary">
+              Page {currentPage} of {totalPages}
+            </h4>
+            <h4 className="font-semibold text-sm">
+              Total Items: {product?.pagination.total_items ?? 0}
+            </h4>
+          </div>
+        )}
       </div>
       {/*  */}
       {/*  */}
-      {/* Header of items */}
+      {/* Header of item columns | column name */}
       <div className="grid grid-cols-6 bg-sidebar text-text-secondary p-4 px-6 text-[10px] xl:text-sm font-bold uppercase">
         <h4 className="col-span-2">Item Name</h4>
         <h4>Category</h4>
@@ -138,6 +156,29 @@ export default function StockStatus() {
         <h4 className="w-full text-center">Status</h4>
         <h4 className="text-right w-full">Action</h4>
       </div>
+
+      {/*  */}
+      {/* Handle Loading */}
+      {isLoading && (
+        <div className="w-full py-8 flex justify-center items-center text-lg font-bold ">
+          Loading product...
+        </div>
+      )}
+      {/*  */}
+      {/* Hanlde Error and Retry */}
+      {isError && (
+        <div className="w-full py-10 flex flex-col justify-center items-center gap-4">
+          <p className="text-lg font-semibold text-red-400">
+            Failed to load product stock data. Please try again.
+          </p>
+          <button
+            onClick={handleRetry}
+            className="bg-background-secondary-hover font-bold py-2 px-4 rounded-md flex gap-2 hover:bg-sidebar cursor-pointer active:scale-80 transition-all duration-200 ease-out"
+          >
+            Retry <RotateCcw />
+          </button>
+        </div>
+      )}
       {/*  */}
       {/* All items are being displayed here */}
       {/* Display list of products */}
