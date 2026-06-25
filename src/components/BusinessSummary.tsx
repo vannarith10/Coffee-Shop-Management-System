@@ -79,7 +79,7 @@ export default function BusinessSummary() {
       {cards.map((card, index) => (
         <SpotlightCard key={index}>
         <div
-          className="h-30 bg-background-secondary flex flex-col justify-center p-4 gap-2 rounded-lg border border-border hover:bg-background-secondary-hover"
+          className="h-30 bg-background-secondary flex flex-col justify-center p-4 gap-2 rounded-lg border-2 border-border hover:bg-background-secondary-hover"
         >
           <div className="flex justify-between text-text-secondary">
             <h4 className="text-sm font-bold">{card.title}</h4>

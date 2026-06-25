@@ -70,7 +70,7 @@ export default function TopSellingProductsChart() {
     });
 
   return (
-    <section className="w-full rounded-lg border border-border bg-background-secondary p-6 mt-4">
+    <section className="w-full rounded-lg border-2 border-border bg-background-secondary p-6 mt-4">
       <div className="mb-6">
         <h3 className="text-lg font-bold text-text-primary">
           Top Selling Products
@@ -140,7 +140,7 @@ export default function TopSellingProductsChart() {
           </div>
         </div>
 
-        <p className="mt-2 text-xs text-muted-foreground text-text-secondary">
+        <p className="mt-2 text-xs font-bold text-muted-foreground text-text-secondary">
           Unit Target: {data?.units_target}
         </p>
       </div>

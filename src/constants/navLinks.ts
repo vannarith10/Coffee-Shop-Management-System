@@ -6,6 +6,7 @@ import { CirclePile } from 'lucide-react';
 import { Coffee } from 'lucide-react';
 import { Summary } from 'lucide-react';
 import { Settings } from 'lucide-react';
+import { ChartColumnStacked } from 'lucide-react';
 
 
 export const links = [
@@ -19,6 +20,11 @@ export const links = [
     label: "Staff",
     path: "/admin/staff",
     icon: Users,
+  },
+  {
+    label: "Category",
+    path: "/admin/category",
+    icon: ChartColumnStacked,
   },
   {
     label: "Inventory",

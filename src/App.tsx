@@ -43,6 +43,10 @@ const router = createBrowserRouter([
                 element: <h2>Staff Dashboard</h2>
               },
               {
+                path: "category",
+                element: <h2>Category page</h2>
+              },
+              {
                 path: "inventory",
                 element: <h2>Inventory Screen</h2>
               },
