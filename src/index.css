@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+
+:root {
+  --text-primary: #000000;
+  --text-secondary: #262626;
+  --text-primary-hover: #262626;
+  --text-secondary-hover: #4d4d4d;
+
+  --background-primary: #e0e0ff;
+  --background-secondary: #b8b8e6;
+  --background-primary-hover: #b8b8e6;
+  --background-secondary-hover: #8f8fdb;
+
+   --sidebar: #6f6fbf;
+
+  --border: #4b4b8d;
+  --border-hover: #1a1a3a;
+}
+
+
+.dark {
+  --text-primary: #ececf4;
+  --text-secondary: #d9d6ef;
+  --text-primary-hover: #b7b3e8;
+  --text-secondary-hover: #41414b;
+
+  --background-primary: #0A0D15;
+  --background-secondary: #182C39;
+  --background-primary-hover: #182C39;
+  --background-secondary-hover: #1F3C4D;
+
+  --sidebar: #2D5067;
+
+  --border: #2D5067;
+  --border-hover: #3B6B81;
+}
+
+
+@theme {
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-primary-hover: var(--text-primary-hover);
+  --color-text-secondary-hover: var(--text-secondary-hover);
+
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-primary-hover: var(--background-primary-hover);
+  --color-background-secondary-hover: var(--background-secondary-hover);
+
+  --color-sidebar: var(--sidebar);
+
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+}
+
+
+/* This makes the scrollbar sit in a reserved gutter rather than overlapping the content */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  color: var(--text-primary);
+}
