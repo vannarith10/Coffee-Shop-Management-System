@@ -77,10 +77,9 @@ export default function StockStatus() {
   }
   //
   //
-  // Get page numbers for pagination dropdown
+  // Get page numbers for pagination list down
   function getPageNumbers() {
     const pages: (number | string)[] = [];
-
     //
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
@@ -115,7 +114,6 @@ export default function StockStatus() {
   //
   // Update Stock Status Logic
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
   async function handleUpdateStockStatus(
     productId: string,
     newStatus: PRODUCT_STOCK_STATUS,

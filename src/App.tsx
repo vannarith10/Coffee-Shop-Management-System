@@ -13,6 +13,7 @@ import CashierDashboard from "./pages/cashier/CashierDashboard";
 import BaristaDashboard from "./pages/barista/BaristaDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
+import StaffTab from "./pages/admin/StaffTab";
 
 
 
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "staff",
-                element: <h2>Staff Dashboard</h2>
+                element: <StaffTab/>
               },
               {
                 path: "category",

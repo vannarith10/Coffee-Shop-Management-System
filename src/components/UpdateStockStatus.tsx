@@ -4,14 +4,18 @@
 import { useState } from "react";
 import type { Product } from "../types/product";
 import type { PRODUCT_STOCK_STATUS } from "../types/product";
-import { Layers2 } from 'lucide-react';
+import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
+import { STOCK_STATUS_CONFIG } from "../types/stock-status";
 
 interface UpdateStockStatusProps {
   product: Product;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (productId: string, newStatus: PRODUCT_STOCK_STATUS) => Promise<number | null>;
+  onUpdate: (
+    productId: string,
+    newStatus: PRODUCT_STOCK_STATUS,
+  ) => Promise<number | null>;
 }
 
 const STATUS_OPTIONS: {
@@ -58,6 +62,8 @@ export default function UpdateStockStatus({
     product.status,
   );
 
+  const config = STOCK_STATUS_CONFIG[product.status];
+
   // Disable scrolling
   if (isOpen) {
     document.body.classList.add("overflow-hidden");
@@ -67,17 +73,17 @@ export default function UpdateStockStatus({
     e.preventDefault();
     const statusCode = await onUpdate(product.id, selectedStatus);
     if (statusCode == 200) {
-      toast.success("Stock updated successfully", {duration: 3000});
+      toast.success("Stock updated successfully", { duration: 3000 });
       onClose();
     } else {
-      toast.error("Error updating stock", {duration: 3000});
+      toast.error("Error updating stock", { duration: 3000 });
     }
   }
 
   if (!isOpen) return null;
 
   return (
-    <section className={`fixed inset-0 z-30 flex items-center justify-center`}>
+    <section className={`fixed inset-0 z-30`}>
       {/* Backdrop blur */}
       <div
         onClick={onClose}
@@ -88,18 +94,33 @@ export default function UpdateStockStatus({
         <form
           onSubmit={handleSubmit}
           onClick={(e) => e.stopPropagation()}
-          className="flex flex-col justify-between bg-background-primary/50 backdrop-blur-md border-border border-2 h-150 w-[80vw] md:w-[50vw] xl:w-[40vw] rounded-4xl p-8"
+          className="flex flex-col justify-between bg-background-primary/50 backdrop-blur-md border-border border-2 h-[60vh] md:h-[70vh] min-h-150 w-[80vw] md:w-[50vw] xl:w-[40vw] rounded-4xl p-8"
         >
           {/*  */}
           {/*  */}
           <div className="flex flex-col gap-6">
+            {/*  */}
             {/* Form Header | Name & Icon */}
             <div className="flex flex-col items-center">
               <div className="bg-background-secondary p-4 rounded-lg mb-4">
                 <Layers2 />
               </div>
-              <h3 className="font-bold text-sm md:text-xl">Update Stock Status</h3>
-              <h4 className="text-sm font-semibold text-yellow-500">{product.name}</h4>
+              <h3 className="font-bold text-sm md:text-xl">
+                Update Stock Status
+              </h3>
+              <h4 className="text-lg font-semibold text-yellow-500">
+                {product.name}
+              </h4>
+              <div className="flex gap-2 items-center justify-center mt-4">
+                <h5 className="font-semibold text-xs">
+                  Current stock:
+                </h5>
+                <span
+                  className={`text-sm font-bold ${config.colorClass} px-1 rounded-xs`}
+                >
+                  {config.label}
+                </span>
+              </div>
             </div>
             {/*  */}
             {/* Stock Status Input Options */}
@@ -107,30 +128,28 @@ export default function UpdateStockStatus({
               const isSelected = selectedStatus === option.value;
               return (
                 <label
-                key={option.value}
-                className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${
-                  isSelected
-                    ? `${option.border} ${option.bg}`
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="stockStatus"
-                  value={option.value}
-                  checked={isSelected}
-                  onChange={() => setSelectedStatus(option.value)}
-                  className={`w-4 h-4 ${option.accent}`}
-                />
-                <div>
-                  <span className="font-semibold">
-                    {option.label}
-                  </span>
-                  <p className="text-xs text-text-secondary">
-                    {option.description}
-                  </p>
-                </div>
-              </label>
+                  key={option.value}
+                  className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${
+                    isSelected
+                      ? `${option.border} ${option.bg}`
+                      : "border-background-secondary hover:border-background-secondary-hover"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="stockStatus"
+                    value={option.value}
+                    checked={isSelected}
+                    onChange={() => setSelectedStatus(option.value)}
+                    className={`w-4 h-4 ${option.accent}`}
+                  />
+                  <div>
+                    <span className="font-semibold">{option.label}</span>
+                    <p className="text-xs text-text-secondary">
+                      {option.description}
+                    </p>
+                  </div>
+                </label>
               );
             })}
           </div>

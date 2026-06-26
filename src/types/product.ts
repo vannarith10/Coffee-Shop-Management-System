@@ -1,6 +1,7 @@
 // types/product.ts
 //
 import type { CATEGORY_TYPE } from "./category";
+import type { Pagination } from "./pagination";
 
 
 export type PRODUCT_STOCK_STATUS = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
@@ -22,11 +23,6 @@ export interface Product {
 
 export interface StockStatusResponse {
   message: string;
-  pagination: {
-    page: number;
-    size: number;
-    total_pages: number;
-    total_items: number;
-  };
+  pagination: Pagination;
   products: Product[];
 }

@@ -6,7 +6,6 @@ import { publicApi } from "../lib/axios";
 import type { TopSellingProductRequest } from "../types/business-analytics";
 import type { PRODUCT_STOCK_STATUS } from "../types/product";
 
-
 interface ApiError {
   message: string;
   status: number;
@@ -14,13 +13,16 @@ interface ApiError {
   detail: string;
 }
 
-
+//
+//
 // Get employee profiles
+//
 export const getAllEmployeeProfiles = async () => {
   const response = await api.get("/api/v2/employee/profiles?page=1&size=20");
   return response.data;
 };
-
+//
+//
 // Get shop's image and name
 export const getShopImageAndName = async () => {
   const response = await publicApi.get(
@@ -28,14 +30,18 @@ export const getShopImageAndName = async () => {
   );
   return response.data;
 };
-
+//
+//
 // Get Business Summary Data
+//
 export const getBusinessSummary = async () => {
   const response = await api.get("/api/v2/analytics/summary");
   return response.data;
 };
-
+//
+//
 // Get top selling product to display at Admin Dashboard
+//
 export const getTopSellingProduct = async ({
   range,
   page,
@@ -48,8 +54,10 @@ export const getTopSellingProduct = async ({
   });
   return response;
 };
-
+//
+//
 // Get All Products Status
+//
 export const getAllProductsStatus = async ({
   page,
   size,
@@ -62,8 +70,10 @@ export const getAllProductsStatus = async ({
   );
   return response.data;
 };
-
+//
+//
 // Update Stock Status
+//
 export async function updateStockStatus({
   productId,
   newStatus,
@@ -73,6 +83,22 @@ export async function updateStockStatus({
 }): Promise<AxiosResponse<void> | AxiosResponse<ApiError>> {
   const response = await api.post<void>(
     `/api/v2/product/update/${productId}/stock-status?status=${newStatus}`,
+  );
+  return response;
+}
+//
+//
+// Get All Staff Profiles
+//
+export async function getAllStaffProfiles({
+  page,
+  size,
+}: {
+  page: number;
+  size: number;
+}) {
+  const response = await api.get(
+    `/api/v2/employee/profiles?page=${page}&size=${size}`,
   );
   return response;
 }
