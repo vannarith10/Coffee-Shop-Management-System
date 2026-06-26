@@ -18,6 +18,7 @@ export default function Navbar() {
   const [isError, setIsError] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // Disable scrolling screen
   if (open) {
     document.body.classList.add("overflow-hidden");
   } else {

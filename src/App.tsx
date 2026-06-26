@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CashierDashboard from "./pages/cashier/CashierDashboard";
 import BaristaDashboard from "./pages/barista/BaristaDashboard";
 import AdminLayout from "./layouts/AdminLayout";
+import { Toaster } from "sonner";
 
 
 
@@ -98,6 +99,7 @@ function App() {
   return (
     <div className="w-screen min-w-100 bg-background-primary transition-colors duration-500 ease-out">
       <RouterProvider router={router}/>
+      <Toaster position="top-center" richColors />
     </div>
   );
 }
