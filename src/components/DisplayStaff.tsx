@@ -1,13 +1,13 @@
 // components/DisplayStaff.tsx
 //
 import { useEffect, useState } from "react";
-import Image from "../assets/vr-comic.jpg";
 import DefaultProfile from "../assets/user-profile.png";
-import { Dot } from "lucide-react";
+import { UserRoundPen } from 'lucide-react';
 import type { StaffProfileResponse } from "../types/staff";
 import { getAllStaffProfiles } from "../services/admin.service";
 import { DAY_ORDER, SCHEDULE_CONFIG } from "../types/schedule";
 import { Ellipsis } from "lucide-react";
+import { ContactRound } from 'lucide-react';
 
 export default function DisplayStaff() {
   const [staff, setStaff] = useState<StaffProfileResponse | null>(null);
@@ -97,14 +97,35 @@ export default function DisplayStaff() {
   //
   return (
     <section className="w-full rounded-lg overflow-hidden border-border border-2">
+      {/*  */}
+      <header>
+        {/* Icon & Pagination Info */}
+        <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
+          <div className="flex gap-4">
+            <ContactRound />
+            <h3 className="font-semibold">Employee Profiles</h3>
+          </div>
+          {/* Pages and Items */}
+          {!isLoading && !isError && (
+            <div>
+              <h4 className="font-semibold text-xs text-text-secondary">
+                Page {currentPage} of {totalPages}
+              </h4>
+              <h4 className="font-semibold text-sm">
+                Profiles: {staff?.pagination.total_items ?? 0}
+              </h4>
+            </div>
+          )}
+        </div>
         {/*  */}
-        {/* Colum Title */}
-      <header className="grid grid-cols-6 bg-sidebar py-6 px-4 font-bold uppercase text-sm">
-        <h2 className="col-span-2">Profile</h2>
-        <h2>Role</h2>
-        <h2>Schedule</h2>
-        <h2 className="text-center">Status</h2>
-        <h2 className="text-end">Action</h2>
+        {/* Colum Titles */}
+        <div className="grid grid-cols-6 bg-sidebar py-4 px-4 font-bold uppercase text-sm">
+          <h2 className="col-span-2">Profile</h2>
+          <h2>Role</h2>
+          <h2>Schedule</h2>
+          <h2 className="text-center">Status</h2>
+          <h2 className="text-end">Action</h2>
+        </div>
       </header>
       {/*  */}
       {/*  */}
@@ -113,12 +134,13 @@ export default function DisplayStaff() {
       {staff?.staffs.map((staff) => {
         return (
           <main className="grid grid-cols-6 items-center-safe bg-background-secondary hover:bg-background-secondary-hover px-4 border-t border-border-hover">
+            {/*  */}
             {/* PROFILE */}
             <div className="flex items-center gap-4 col-span-2  py-4">
               <img
                 src={staff.image_url || DefaultProfile}
                 alt="profile"
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10 rounded-full border-2 border-border"
               />
               <div>
                 <h3 className="text-xs font-bold">
@@ -165,8 +187,8 @@ export default function DisplayStaff() {
             </div>
             {/*  */}
             {/* ACTION */}
-            <button className="px-4 py-2 text-white bg-sidebar text-xs justify-self-end rounded-sm font-bold hover:border cursor-pointer">
-              Edit
+            <button className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold hover:border cursor-pointer">
+              <UserRoundPen/>
             </button>
           </main>
         );

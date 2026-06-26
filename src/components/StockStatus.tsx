@@ -15,14 +15,14 @@ import {
 import { Ellipsis } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
-import type { Axios, AxiosResponse } from "axios";
+
 
 export default function StockStatus() {
   const [product, setProduct] = useState<StockStatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const size = 10;
   const [refetchVersion, setRefetchVersion] = useState(0);
 
   //
