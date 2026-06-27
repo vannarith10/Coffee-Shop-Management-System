@@ -2,12 +2,13 @@
 //
 import { useEffect, useState } from "react";
 import DefaultProfile from "../assets/user-profile.png";
-import { UserRoundPen } from 'lucide-react';
+import { UserRoundPen } from "lucide-react";
 import type { StaffProfileResponse } from "../types/staff";
 import { getAllStaffProfiles } from "../services/admin.service";
 import { DAY_ORDER, SCHEDULE_CONFIG } from "../types/schedule";
 import { Ellipsis } from "lucide-react";
-import { ContactRound } from 'lucide-react';
+import { ContactRound } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
 export default function DisplayStaff() {
   const [staff, setStaff] = useState<StaffProfileResponse | null>(null);
@@ -15,23 +16,26 @@ export default function DisplayStaff() {
   const size = 10;
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [refetchVersion, setRefetchVersion] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
+      setIsError(false);
+
       try {
         const response = await getAllStaffProfiles({ page, size });
         setStaff(response.data);
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
         setIsError(true);
       }
-      setIsLoading(false);
-      setIsError(false);
+      finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
-  }, [page]);
-  console.log("Staff: ", staff);
+  }, [page, refetchVersion]);
   //
   //
   //
@@ -92,6 +96,14 @@ export default function DisplayStaff() {
 
   //
   //
+  // Handle Error Loading Data
+  function handleRetry() {
+    setPage(1); // Reset to first page
+    setRefetchVersion((v) => v + 1);
+  }
+
+  //
+  //
   //
   //
   //
@@ -106,16 +118,16 @@ export default function DisplayStaff() {
             <h3 className="font-semibold">Employee Profiles</h3>
           </div>
           {/* Pages and Items */}
-          {!isLoading && !isError && (
+          {
             <div>
               <h4 className="font-semibold text-xs text-text-secondary">
-                Page {currentPage} of {totalPages}
+                Page {!isLoading && currentPage} of {!isLoading && totalPages}
               </h4>
               <h4 className="font-semibold text-sm">
-                Profiles: {staff?.pagination.total_items ?? 0}
+                Profiles: {(!isLoading && staff?.pagination.total_items) ?? 0}
               </h4>
             </div>
-          )}
+          }
         </div>
         {/*  */}
         {/* Colum Titles */}
@@ -131,68 +143,94 @@ export default function DisplayStaff() {
       {/*  */}
       {/* List down each RECORD of profile */}
       {/* Main */}
-      {staff?.staffs.map((staff) => {
-        return (
-          <main className="grid grid-cols-6 items-center-safe bg-background-secondary hover:bg-background-secondary-hover px-4 border-t border-border-hover">
-            {/*  */}
-            {/* PROFILE */}
-            <div className="flex items-center gap-4 col-span-2  py-4">
-              <img
-                src={staff.image_url || DefaultProfile}
-                alt="profile"
-                className="w-10 h-10 rounded-full border-2 border-border"
-              />
-              <div>
-                <h3 className="text-xs font-bold">
-                  {staff.name || "User Name"}
-                </h3>
-                <h5 className="text-[10px]">@{staff.username || "username"}</h5>
-                <h3 className="text-[10px] whitespace-normal break-all pr-2">
-                  {staff.email || "example@gmail.com"}
-                </h3>
+      {/* Render unless isLoading = false */}
+      {!isLoading &&
+        staff?.staffs.map((staff) => {
+          return (
+            <main className="grid grid-cols-6 items-center-safe bg-background-secondary hover:bg-background-secondary-hover px-4 border-t border-border-hover">
+              {/*  */}
+              {/* PROFILE */}
+              <div className="flex items-center gap-4 col-span-2  py-4">
+                <img
+                  src={staff.image_url || DefaultProfile}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full border-2 border-border"
+                />
+                <div>
+                  <h3 className="text-xs font-bold">
+                    {staff.name || "User Name"}
+                  </h3>
+                  <h5 className="text-[10px]">
+                    @{staff.username || "username"}
+                  </h5>
+                  <h3 className="text-[10px] whitespace-normal break-all pr-2">
+                    {staff.email || "example@gmail.com"}
+                  </h3>
+                </div>
               </div>
-            </div>
-            {/*  */}
-            {/* ROLE */}
-            <h3 className="text-xs font-bold text-left">{staff.role}</h3>
-            {/*  */}
-            {/* SCHEDULE */}
-            <div className="flex flex-col gap-1">
-              <div className="bg-sidebar px-2 py-1 justify-self-center inline-block w-fit rounded-xs">
-                <h3 className="text-xs text-white font-bold ">{staff.shift}</h3>
+              {/*  */}
+              {/* ROLE */}
+              <h3 className="text-xs font-bold text-left">{staff.role}</h3>
+              {/*  */}
+              {/* SCHEDULE */}
+              <div className="flex flex-col gap-1">
+                <div className="bg-sidebar px-2 py-1 justify-self-center inline-block w-fit rounded-xs">
+                  <h3 className="text-xs text-white font-bold ">
+                    {staff.shift}
+                  </h3>
+                </div>
+                {/* List down woring days */}
+                <ul className="flex gap-1 flex-wrap text-[8px]">
+                  {/* Order day from Mon to Sun not showing random*/}
+                  {DAY_ORDER.map((day) => {
+                    if (!staff.schedules.includes(day)) return null;
+
+                    const config = SCHEDULE_CONFIG[day];
+                    return (
+                      <li className="bg-sidebar text-white px-1 rounded-xs">
+                        {config.label}
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-              {/* List down woring days */}
-              <ul className="flex gap-1 flex-wrap text-[8px]">
-                {/* Order day from Mon to Sun not showing random*/}
-                {DAY_ORDER.map((day) => {
-                  if (!staff.schedules.includes(day)) return null;
+              {/*  */}
 
-                  const config = SCHEDULE_CONFIG[day];
-                  return (
-                    <li className="bg-sidebar text-white px-1 rounded-xs">
-                      {config.label}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            {/*  */}
-
-            {/*  */}
-            {/* STATUS */}
-            <div className="flex bg-green-600 justify-self-center px-2 py-1 rounded-xs">
-              <span className="text-xs font-bold text-white">
-                {staff.status || "Pending..."}
-              </span>
-            </div>
-            {/*  */}
-            {/* ACTION */}
-            <button className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold hover:border cursor-pointer">
-              <UserRoundPen/>
-            </button>
-          </main>
-        );
-      })}
+              {/*  */}
+              {/* STATUS */}
+              <div className="flex bg-green-600 justify-self-center px-2 py-1 rounded-xs">
+                <span className="text-xs font-bold text-white">
+                  {staff.status || "Pending..."}
+                </span>
+              </div>
+              {/*  */}
+              {/* ACTION */}
+              <button className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold hover:border cursor-pointer">
+                <UserRoundPen />
+              </button>
+            </main>
+          );
+        })}
+      {/*  */}
+      {/* Handle Loading Data */}
+      {isLoading && !isError && (<div className="flex justify-center items-center py-10 bg-background-secondary">
+        <h2 className="text-lg font-semibold">Loading Employee Profiles...</h2>
+      </div>)}
+      {/*  */}
+      {/* Hanlde Error and Retry */}
+      {isError && (
+        <div className="w-full py-10 bg-background-secondary flex flex-col justify-center items-center gap-4">
+          <p className="text-lg font-semibold text-red-400">
+            Failed to load product stock data. Please try again.
+          </p>
+          <button
+            onClick={handleRetry}
+            className="bg-background-secondary-hover font-bold py-2 px-4 rounded-md flex gap-2 hover:bg-sidebar cursor-pointer active:scale-80 transition-all duration-200 ease-out"
+          >
+            Retry <RotateCcw />
+          </button>
+        </div>
+      )}
       {/*  */}
       {/*  */}
       {/*  */}

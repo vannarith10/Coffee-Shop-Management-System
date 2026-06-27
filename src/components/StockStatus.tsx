@@ -30,6 +30,9 @@ export default function StockStatus() {
   // Fetching Data from API
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
+      setIsError(false);
+
       try {
         const response = await getAllProductsStatus({ page, size });
         setProduct(response);
@@ -37,14 +40,15 @@ export default function StockStatus() {
         console.error(error);
         setIsError(true);
       }
-
-      setIsLoading(false);
-      setIsError(false);
+      finally{
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, [refetchVersion, page, size]);
 
-  //Force re-fetch even if page is already 1
+  // Handle Error fetching data
+  // Force re-fetch even if page is already 1
   function handleRetry() {
     setPage(1); // Reset to first page
     setRefetchVersion((v) => v + 1);
