@@ -34,7 +34,7 @@ interface TopSellingResponse {
 export default function TopSellingProductsChart() {
   const [data, setData] = useState<TopSellingResponse | null>(null);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const size = 10;
   const [range, setRange] = useState<Range>("ALL");
     
   // Fetching Data

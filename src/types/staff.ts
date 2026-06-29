@@ -4,7 +4,7 @@
 import type { Pagination } from "./pagination";
 import type { Role } from "./role";
 import type { Schedule } from "./schedule";
-import type { Shift } from "./Shift";
+import type { Shift } from "./shift";
 import type { Status } from "./status";
 
 
@@ -27,4 +27,14 @@ export interface StaffProfileResponse {
   message: string;
   pagination: Pagination;
   staffs: Staff[];
+}
+
+export interface EditStaffDataRequest {
+  name: string | null;
+  username: string | null;
+  password: string | null;
+  role: Role | null;
+  status: Status | null;
+  shift_type: Shift | null;
+  schedules: Schedule[] | null;
 }

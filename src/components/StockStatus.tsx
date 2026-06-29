@@ -6,7 +6,7 @@ import type {
   PRODUCT_STOCK_STATUS,
   StockStatusResponse,
 } from "../types/product";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { STOCK_STATUS_CONFIG } from "../types/stock-status";
 import {
   getAllProductsStatus,
@@ -15,37 +15,46 @@ import {
 import { Ellipsis } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
-
+import TextLoader from "./ui/TextLoader";
 
 export default function StockStatus() {
-  const [product, setProduct] = useState<StockStatusResponse | null>(null);
+  const [pagesCache, setPagesCache] = useState<Record<number, StockStatusResponse>>({});
+  // const [product, setProduct] = useState<StockStatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const size = 10;
   const [refetchVersion, setRefetchVersion] = useState(0);
 
-  //
-  //
+  // Cache
+  const product = useMemo(() => pagesCache[page] ?? null, [pagesCache, page]);
+
+  // API
   // Fetching Data from API
   useEffect(() => {
+    // Check if pagesCache alread has this page
+    if (pagesCache[page]) {
+      // No requesting to API
+      return;
+    }
+
     async function fetchData() {
       setIsLoading(true);
       setIsError(false);
 
       try {
         const response = await getAllProductsStatus({ page, size });
-        setProduct(response);
+        // setProduct(response);
+        setPagesCache((prev) => ({...prev, [page]: response.data}));
       } catch (error) {
         console.error(error);
         setIsError(true);
-      }
-      finally{
-        setIsLoading(false);
+      } finally {
+        setTimeout(() => {setIsLoading(false);}, 1000);
       }
     }
     fetchData();
-  }, [refetchVersion, page, size]);
+  }, [refetchVersion, page, size, pagesCache]);
 
   // Handle Error fetching data
   // Force re-fetch even if page is already 1
@@ -121,7 +130,7 @@ export default function StockStatus() {
   async function handleUpdateStockStatus(
     productId: string,
     newStatus: PRODUCT_STOCK_STATUS,
-  ) : Promise<number | null> {
+  ): Promise<number | null> {
     // call api
     try {
       const response = await updateStockStatus({ productId, newStatus });
@@ -175,15 +184,15 @@ export default function StockStatus() {
         {/*  */}
         {/* Handle Loading */}
         {isLoading && (
-          <div className="w-full py-8 flex justify-center items-center text-lg font-bold ">
-            Loading product...
+          <div className="w-full py-20 flex justify-center items-center text-xl font-bold ">
+            <TextLoader text="Loading..." />
           </div>
         )}
         {/*  */}
         {/* Hanlde Error and Retry */}
         {isError && (
           <div className="w-full py-10 flex flex-col justify-center items-center gap-4">
-            <p className="text-lg font-semibold text-red-400">
+            <p className="text-lg font-semibold text-text-error">
               Failed to load product stock data. Please try again.
             </p>
             <button
@@ -197,7 +206,7 @@ export default function StockStatus() {
         {/*  */}
         {/* All items are being displayed here */}
         {/* Display list of products */}
-        {product?.products.map((p) => {
+        {!isLoading && product?.products.map((p) => {
           const config = STOCK_STATUS_CONFIG[p.status];
           return (
             <div
@@ -294,7 +303,10 @@ export default function StockStatus() {
         <UpdateStockStatus
           product={selectedProduct}
           isOpen={true}
-          onClose={() => {setSelectedProduct(null); document.body.classList.remove("overflow-hidden");}}
+          onClose={() => {
+            setSelectedProduct(null);
+            document.body.classList.remove("overflow-hidden");
+          }}
           onUpdate={handleUpdateStockStatus}
         />
       )}

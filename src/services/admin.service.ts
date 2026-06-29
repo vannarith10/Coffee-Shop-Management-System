@@ -5,6 +5,11 @@ import api from "../lib/axios";
 import { publicApi } from "../lib/axios";
 import type { TopSellingProductRequest } from "../types/business-analytics";
 import type { PRODUCT_STOCK_STATUS } from "../types/product";
+import type { Role } from "../types/role";
+import type { Status } from "../types/status";
+import type { Shift } from "../types/shift";
+import type { Schedule } from "../types/schedule";
+import type { EditStaffDataRequest } from "../types/staff";
 
 interface ApiError {
   message: string;
@@ -68,7 +73,7 @@ export const getAllProductsStatus = async ({
   const response = await api.get(
     `/api/v2/product/get-statuses?page=${page}&size=${size}`,
   );
-  return response.data;
+  return response;
 };
 //
 //
@@ -100,5 +105,19 @@ export async function getAllStaffProfiles({
   const response = await api.get(
     `/api/v2/employee/profiles?page=${page}&size=${size}`,
   );
+  return response;
+}
+//
+//
+//
+// UPDATE STAFF PROFILE
+//
+export async function editStaffDetail ({userId, data, file}:{userId:string, data:EditStaffDataRequest, file?:File | null}) {
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
+  if (file) {
+    formData.append("image", file);
+  }
+  const response = api.patch(`/api/v2/employee/${userId}/edit`, formData);
   return response;
 }
