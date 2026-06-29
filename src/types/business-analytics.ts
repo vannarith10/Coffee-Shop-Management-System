@@ -13,3 +13,4 @@ export interface TopSellingProductRequest {
     page: number,
     size: number
 }
+

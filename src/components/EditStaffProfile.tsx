@@ -140,6 +140,7 @@ export default function EditStaffProfile({
     };
 
     setIsLoading(true);
+    setIsError(false);
     try {
       const response = await editStaffDetail({ userId, data, file });
       if (response.status == 200) {
@@ -383,9 +384,9 @@ export default function EditStaffProfile({
           </button>
           <button
             type="submit"
-            className="col-span-2 bg-green-600 text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out"
+            className={`col-span-2 ${isError? "bg-amber-600":"bg-green-600"} text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
           >
-            {isLoading ? <TextLoader text="Submitting..."/> : "Submit"}
+            {isError ? "Try again" : (isLoading && !isError) ? <TextLoader text="Submitting..."/> : "Submit"}
           </button>
         </div>
       </form>

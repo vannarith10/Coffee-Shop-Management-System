@@ -11,7 +11,9 @@ import {
   Cell,
 } from "recharts";
 import { getTopSellingProduct } from "../services/admin.service";
-import type { Range } from "../types/business-analytics";
+import { RANGES, type Range } from "../types/business-analytics";
+import TextLoader from "./ui/TextLoader";
+import { RotateCcw } from "lucide-react";
 
 interface Product {
   product_id: string;
@@ -33,24 +35,46 @@ interface TopSellingResponse {
 
 export default function TopSellingProductsChart() {
   const [data, setData] = useState<TopSellingResponse | null>(null);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const size = 10;
-  const [range, setRange] = useState<Range>("ALL");
-    
+  const [selectedRange, setSelectedRange] = useState<Range>("ALL");
+  const [isLoading, setIsLoading] = useState(true);
+  const [refetchVersion, setRefetchVersion] = useState(0);
+
   // Fetching Data
   useEffect(() => {
-    async function fetchingData(){
-        try {
-            const response = await getTopSellingProduct({range, page, size});
-            setData(response.data);
-        } catch (error) {
-            console.log(error);
-        }
+    async function fetchingData() {
+      setIsLoading(true);
+      try {
+        const range = selectedRange;
+        const response = await getTopSellingProduct({ range, page, size });
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      }
     }
     fetchingData();
-  }, [page, size, range])
+  }, [page, size, selectedRange, refetchVersion]);
 
-    const filtered = data?.top_products.sort((a, b) => b.units_sold - a.units_sold)
+  //
+  // Handle Refresh | Retry
+  function handleRefresh() {
+    setPage(1);
+    setRefetchVersion((v) => v + 1);
+  }
+  //
+  //
+  function handleFilterRange(range: Range) {
+    setSelectedRange(range);
+  }
+
+  // Showing most sold first
+  const filtered = data?.top_products
+    .sort((a, b) => b.units_sold - a.units_sold)
     .map((product) => {
       const percentage = (product.units_sold / data.units_target) * 100;
 
@@ -71,55 +95,106 @@ export default function TopSellingProductsChart() {
 
   return (
     <section className="w-full rounded-lg border-2 border-border bg-background-secondary p-6 mt-4">
-      <div className="mb-6">
-        <h3 className="text-lg font-bold text-text-primary">
-          Top Selling Products
-        </h3>
-
-        <p className="text-sm text-muted-foreground text-text-secondary">
-          Volume distribution by unit sales
-        </p>
+      {/*  */}
+      {/* Header */}
+      <div className="mb-6 flex justify-between">
+        <div>
+          <h3 className="text-lg font-bold text-text-primary">
+            Top Selling Products
+          </h3>
+          <p className="text-sm text-muted-foreground text-text-secondary">
+            Volume distribution by unit sales
+          </p>
+        </div>
+        {/* Refresh */}
+        <div className="flex items-center">
+          <button
+            onClick={handleRefresh}
+            className="font-bold text-sm text-white items-center flex gap-2 bg-sidebar px-3 py-1 rounded-md cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-100 ease-out outline-none"
+          >
+            {" "}
+            Refresh <RotateCcw />{" "}
+          </button>
+        </div>
       </div>
 
-      <div className="space-y-6">
-        {filtered?.map((product) => (
-          <div key={product.id} >
-            {/* Header */}
-            <div className="mb-2 flex items-center justify-between">
-              <span className="font-semibold text-sm text-text-secondary">
-                {product.name}
-              </span>
+      {/* Filter */}
+      <div className="w-full mb-4 flex flex-wrap gap-4">
+        {RANGES.map((range) => {
+          return (
+            <button
+              onClick={() => handleFilterRange(range)}
+              key={range}
+              className={`${range === selectedRange ? "bg-green-600" : "bg-background-secondary"} font-bold rounded-sm text-xs border border-border py-2 px-4 cursor-pointer hover:border-border-hover active:scale-90 transition-all duration-100 ease-out outline-none`}
+            >
+              {/* Turn "THIS_WEEK" to "THIS WEEK" */}
+              {range.replaceAll("_", " ")}
+            </button>
+          );
+        })}
+      </div>
 
-              <span className="text-sm text-muted-foreground text-text-secondary">
-                {product.sold} units
-              </span>
+      {/* Handle Loading... */}
+      {isLoading && (
+        <div className="w-full text-xl py-10 flex items-center justify-center">
+          <TextLoader text="Loading..." />
+        </div>
+      )}
+
+      {/*  */}
+      {/* Display Data */}
+      {!isLoading && (
+        <div className="space-y-6">
+          {filtered?.length == 0 ? (
+            <div className="w-full flex justify-center items-center py-10 font-bold">
+              No data for {selectedRange.replace("_", " ").toLowerCase()}
             </div>
+          ) : (
+            filtered?.map((product) => (
+              <div key={product.id}>
+                {/* Header */}
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="font-semibold text-sm text-text-secondary">
+                    {product.name}
+                  </span>
 
-            {/* Progress Bar */}
-            <ResponsiveContainer width="100%" height={14} >
-              <BarChart
-                data={[product]}
-                layout="vertical"
-                margin={{
-                  top: 0,
-                  right: 0,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis type="number" domain={[0, data?.units_target || 0]} hide />
+                  <span className="text-sm text-muted-foreground text-text-secondary">
+                    {product.sold} units
+                  </span>
+                </div>
 
-                <YAxis type="category" dataKey="name" hide />
+                {/* Progress Bar */}
+                <ResponsiveContainer width="100%" height={14}>
+                  <BarChart
+                    data={[product]}
+                    layout="vertical"
+                    margin={{
+                      top: 0,
+                      right: 0,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <XAxis
+                      type="number"
+                      domain={[0, data?.units_target || 0]}
+                      hide
+                    />
 
-                <Bar dataKey="sold" radius={[4, 4, 4, 4]} barSize={14}>
-                  <Cell fill={product.color} />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        ))}
-      </div>
+                    <YAxis type="category" dataKey="name" hide />
 
+                    <Bar dataKey="sold" radius={[4, 4, 4, 4]} barSize={14}>
+                      <Cell fill={product.color} />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* FOOTER */}
       {/*  */}
       {/* The 3 colors bottom */}
       <div className="mt-6 border-t-2 pt-4 border-border">
@@ -148,4 +223,3 @@ export default function TopSellingProductsChart() {
     </section>
   );
 }
-
