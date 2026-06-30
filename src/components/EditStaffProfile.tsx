@@ -144,7 +144,7 @@ export default function EditStaffProfile({
     try {
       const response = await editStaffDetail({ userId, data, file });
       if (response.status == 200) {
-        toast.success("Staff profile updated successfully", { duration: 3000 });
+        // toast.success("Staff profile updated successfully", { duration: 3000 });
         setIsLoading(false);
         onClose();
       }

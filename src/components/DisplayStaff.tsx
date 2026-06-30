@@ -11,11 +11,16 @@ import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "./ui/TextLoader";
+import { authStorage } from "../util/auth-storage";
+import { Client, type IFrame, type IMessage } from "@stomp/stompjs";
+import { toast } from "sonner";
 
 export default function DisplayStaff() {
   // Using Record to make Key: Value pair | EX: {1: { staffs: [...], pagination: { ... } }}
   // Pages Cache is an Object{} not Array[]
-  const [pagesCache, setPagesCache] = useState<Record<number, StaffProfileResponse>>({});
+  const [pagesCache, setPagesCache] = useState<
+    Record<number, StaffProfileResponse>
+  >({});
   const [page, setPage] = useState(1);
   const size = 10;
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +35,9 @@ export default function DisplayStaff() {
   const totalPages = staff?.pagination.total_pages ?? 1;
   const totalItems = staff?.pagination.total_items ?? 0;
 
-  //
+  //=====================
   // API
+  //=====================
   useEffect(() => {
     // If this page is already cached, skip the API call entirely.
     if (pagesCache[page]) {
@@ -44,7 +50,7 @@ export default function DisplayStaff() {
       try {
         const response = await getAllStaffProfiles({ page, size });
         // setStaff(response.data);
-        setPagesCache((prev) => ({...prev, [page]: response.data}));
+        setPagesCache((prev) => ({ ...prev, [page]: response.data }));
       } catch (error) {
         console.error(error);
         setIsError(true);
@@ -52,16 +58,94 @@ export default function DisplayStaff() {
         // I want to keep loading animatiin for 2s
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000)
+        }, 1000);
       }
     }
     fetchData();
   }, [page, refetchVersion, pagesCache]);
 
 
+
+
+  //==============================
+  // Helper - Update Staff
+  //==============================
+  function updateStaffInCache(
+    cache: Record<number, StaffProfileResponse>,
+    updateStaff: Staff,
+  ) {
+    const newCache = { ...cache };
+
+    for (const pageNumber in newCache) {
+      newCache[Number(pageNumber)] = {
+        ...newCache[Number(pageNumber)],
+        staffs: newCache[Number(pageNumber)].staffs.map((staff) =>
+          staff.id === updateStaff.id ? updateStaff : staff,
+        ),
+      };
+    }
+    return newCache;
+  }
+
+
+
+  //====================
+  // WebSocket
+  //====================
+  useEffect(() => {
+    const stompClient = new Client({
+      brokerURL: `ws://localhost:8080/ws?token=${authStorage.getAccessToken()}`,
+
+      onConnect: (frame: IFrame) => {
+        console.log("Connected: ", frame);
+
+        stompClient.subscribe(
+          "/topic/admin/update-employee-details",
+          (message: IMessage) => {
+            try {
+              const employee = JSON.parse(message.body);
+              //
+              setPagesCache((prev) => updateStaffInCache(prev, employee));
+              //
+              console.log("Employee Updated: ", employee);
+              toast.success("A employee profile has been updated.");
+            } catch (error) {
+              console.log("- - Connection Error - - -")
+              console.error("Failed to parse WebSocket message:", error);
+            }
+          },
+        );
+      },
+
+      onDisconnect: () => {
+        console.log("Disconnected - - -");
+      },
+
+      onStompError: (frame: IFrame) => {
+        console.error("Broker Error: ", frame.headers["message"]);
+      },
+
+      onWebSocketError: (event) => {
+        console.error("WebSocket Error: ", event);
+      },
+
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    stompClient.activate();
+
+    return () => {
+      stompClient.deactivate();
+    };
+  }, []);
+
+
+
+
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
-  //
   function handlePrev() {
     if (hasPrev) {
       setPage((p) => p - 1);
@@ -141,15 +225,16 @@ export default function DisplayStaff() {
             </div>
             {/*  */}
             {/* Pages and Items */}
-            {(!isLoading && !isError) && (<div>
-              <h4 className="font-semibold text-xs text-text-secondary">
-                Page {currentPage} of {totalPages}
-              </h4>
-              <h4 className="font-semibold text-sm">
-                Profiles: {totalItems}
-              </h4>
-            </div>)}
-            
+            {!isLoading && !isError && (
+              <div>
+                <h4 className="font-semibold text-xs text-text-secondary">
+                  Page {currentPage} of {totalPages}
+                </h4>
+                <h4 className="font-semibold text-sm">
+                  Profiles: {totalItems}
+                </h4>
+              </div>
+            )}
           </div>
           {/*  */}
           {/* Colum Titles */}

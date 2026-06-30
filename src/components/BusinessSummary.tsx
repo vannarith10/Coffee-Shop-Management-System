@@ -75,7 +75,7 @@ export default function BusinessSummary() {
     value >= 0 ? "text-green-600" : "text-red-600";
 
   return (
-    <section className={`w-full grid grid-cols-2 lg:grid-cols-3 gap-4 `}>
+    <section className={`w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 `}>
       {cards.map((card, index) => (
         <SpotlightCard key={index}>
         <div

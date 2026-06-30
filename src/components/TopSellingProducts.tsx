@@ -166,7 +166,7 @@ export default function TopSellingProductsChart() {
                 {/* Progress Bar */}
                 <ResponsiveContainer width="100%" height={14}>
                   <BarChart
-                    data={[product]}
+                    data={[{ ...product, target: data?.units_target || 0 }]}
                     layout="vertical"
                     margin={{
                       top: 0,
@@ -183,7 +183,8 @@ export default function TopSellingProductsChart() {
 
                     <YAxis type="category" dataKey="name" hide />
 
-                    <Bar dataKey="sold" radius={[4, 4, 4, 4]} barSize={14}>
+                    {/* Actual sold bar */}
+                    <Bar dataKey="sold" radius={[0, 0, 0, 0]} barSize={14} background={{fill:"#d3d3d3"}}>
                       <Cell fill={product.color} />
                     </Bar>
                   </BarChart>

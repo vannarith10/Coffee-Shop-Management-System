@@ -6,6 +6,9 @@ import { refreshAccessToken } from "../services/auth.service";
 import type { RefreshResponse } from "../types/auth";
 
 
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 // For Login/Refresh only
 export const authApi = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
