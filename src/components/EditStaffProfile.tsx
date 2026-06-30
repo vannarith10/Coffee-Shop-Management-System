@@ -3,14 +3,14 @@
 
 import type { EditStaffDataRequest, Staff } from "../types/staff";
 import DefaultProfile from "../assets/user-profile.png";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
-import { getCroppedImg } from "../util/crop-helper";
+import { getCroppedImg } from "../utils/crop-helper";
 import type { Area } from "react-easy-crop";
 import { DAY_ORDER, type Schedule } from "../types/schedule";
 import { SHIFT_ORDER, type Shift } from "../types/shift";
 import { editStaffDetail } from "../services/admin.service";
-import { base64ToFile } from "../util/convertor";
+import { base64ToFile } from "../utils/convertor";
 import { ROLES, type Role } from "../types/role";
 import { STATUSES, type Status } from "../types/status";
 import { toast } from "sonner";
@@ -143,11 +143,8 @@ export default function EditStaffProfile({
     setIsError(false);
     try {
       const response = await editStaffDetail({ userId, data, file });
-      if (response.status == 200) {
-        // toast.success("Staff profile updated successfully", { duration: 3000 });
         setIsLoading(false);
-        onClose();
-      }
+        if (response.status == 200) onClose();
     } catch (error) {
       console.error(error);
       setIsError(true);
@@ -156,7 +153,6 @@ export default function EditStaffProfile({
       setIsLoading(false);
     }
   }
-
 
   return (
     <section
@@ -194,7 +190,6 @@ export default function EditStaffProfile({
             className="hidden"
           />
         </div>
-
 
         {/*  */}
         {/* TEXT FIELDS */}
@@ -251,8 +246,8 @@ export default function EditStaffProfile({
         {/*  */}
         {/*  */}
         {/*  */}
-          {/* SCHEDULES */}
-          {/* WORKING DAYS */}
+        {/* SCHEDULES */}
+        {/* WORKING DAYS */}
         <div className="w-full flex flex-col gap-10">
           <div className="flex flex-col gap-2">
             <label htmlFor="schedules" className="text-xs font-bold">
@@ -384,9 +379,15 @@ export default function EditStaffProfile({
           </button>
           <button
             type="submit"
-            className={`col-span-2 ${isError? "bg-amber-600":"bg-green-600"} text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
+            className={`col-span-2 ${isError ? "bg-amber-600" : "bg-green-600"} text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
           >
-            {isError ? "Try again" : (isLoading && !isError) ? <TextLoader text="Submitting..."/> : "Submit"}
+            {isError ? (
+              "Try again"
+            ) : isLoading && !isError ? (
+              <TextLoader text="Submitting..." />
+            ) : (
+              "Submit"
+            )}
           </button>
         </div>
       </form>

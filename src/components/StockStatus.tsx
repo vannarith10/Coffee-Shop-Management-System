@@ -3,23 +3,22 @@
 import { Layers2 } from "lucide-react";
 import type {
   Product,
-  PRODUCT_STOCK_STATUS,
   StockStatusResponse,
 } from "../types/product";
 import { useEffect, useMemo, useState } from "react";
 import { STOCK_STATUS_CONFIG } from "../types/stock-status";
-import {
-  getAllProductsStatus,
-  updateStockStatus,
-} from "../services/admin.service";
+import { getAllProductsStatus } from "../services/admin.service";
 import { Ellipsis } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
 import TextLoader from "./ui/TextLoader";
+import { useProductStockStatusUpdate } from "../hooks/useProductStockStatusUpdate";
+import { updateStockStatusInCache } from "../utils/data-cache-update";
 
 export default function StockStatus() {
-  const [pagesCache, setPagesCache] = useState<Record<number, StockStatusResponse>>({});
-  // const [product, setProduct] = useState<StockStatusResponse | null>(null);
+  const [pagesCache, setPagesCache] = useState<
+    Record<number, StockStatusResponse>
+  >({});
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
@@ -28,6 +27,8 @@ export default function StockStatus() {
 
   // Cache
   const product = useMemo(() => pagesCache[page] ?? null, [pagesCache, page]);
+  // Select a product and pass to Update form
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   // API
   // Fetching Data from API
@@ -45,12 +46,14 @@ export default function StockStatus() {
       try {
         const response = await getAllProductsStatus({ page, size });
         // setProduct(response);
-        setPagesCache((prev) => ({...prev, [page]: response.data}));
+        setPagesCache((prev) => ({ ...prev, [page]: response.data }));
       } catch (error) {
         console.error(error);
         setIsError(true);
       } finally {
-        setTimeout(() => {setIsLoading(false);}, 1000);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       }
     }
     fetchData();
@@ -63,11 +66,19 @@ export default function StockStatus() {
     setRefetchVersion((v) => v + 1);
   }
 
-  //
-  //
-  //
+  //================================
+  // WebSocket - Update Data
+  //================================
+  function handleUpdateStockStatusWebSocket(product: Product) {
+    setPagesCache((prev) => updateStockStatusInCache(prev, product));
+  }
+  useProductStockStatusUpdate({
+    onStockStatusUpdate: handleUpdateStockStatusWebSocket,
+  });
+
   //
   // Pagination logic
+  //
   const currentPage = product?.pagination.page ?? page;
   const totalPages = product?.pagination.total_pages ?? 1;
   const hasPrev = currentPage > 1;
@@ -120,33 +131,7 @@ export default function StockStatus() {
     //
     return pages;
   }
-  //
-  //
-  //
-  //
-  //
-  // Update Stock Status Logic
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  async function handleUpdateStockStatus(
-    productId: string,
-    newStatus: PRODUCT_STOCK_STATUS,
-  ): Promise<number | null> {
-    // call api
-    try {
-      const response = await updateStockStatus({ productId, newStatus });
-      return response.status;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  }
 
-  //
-  //
-  //
-  //
-  //
-  //
   return (
     <>
       <section className="w-full bg-background-secondary text-text-primary rounded-lg mt-4 overflow-hidden border-border border-2">
@@ -206,47 +191,48 @@ export default function StockStatus() {
         {/*  */}
         {/* All items are being displayed here */}
         {/* Display list of products */}
-        {!isLoading && product?.products.map((p) => {
-          const config = STOCK_STATUS_CONFIG[p.status];
-          return (
-            <div
-              key={p.id}
-              className="grid grid-cols-6 items-center px-6 py-4 text-xs xl:text-base border-t border-border hover:bg-background-secondary-hover"
-            >
-              {/*  */}
-              {/* Product Name Label*/}
-              <h4 className="col-span-2 font-bold ">{p.name}</h4>
-              {/*  */}
-              {/* Catogory Label*/}
-              <div className="h-full flex flex-col justify-center">
-                <h5 className="text-[10px] xl:text-xs uppercase">
-                  {p.category_type}
-                </h5>
-                <h5 className="font-semibold">{p.category_name}</h5>
-              </div>
-              {/*  */}
-              {/* Current Stock Label */}
-              <h4 className="font-bold">Comming soon</h4>
-              {/*  */}
-              {/* Stock Status Label */}
+        {!isLoading &&
+          product?.products.map((p) => {
+            const config = STOCK_STATUS_CONFIG[p.status];
+            return (
               <div
-                className={`${config.colorClass} justify-self-center inline-block py-1 px-3 rounded-sm`}
+                key={p.id}
+                className="grid grid-cols-6 items-center px-6 py-4 text-xs xl:text-base border-t border-border hover:bg-background-secondary-hover"
               >
-                <h4 className="font-bold text-white text-center uppercase">
-                  {config.label}
-                </h4>
+                {/*  */}
+                {/* Product Name Label*/}
+                <h4 className="col-span-2 font-bold ">{p.name}</h4>
+                {/*  */}
+                {/* Catogory Label*/}
+                <div className="h-full flex flex-col justify-center">
+                  <h5 className="text-[10px] xl:text-xs uppercase">
+                    {p.category_type}
+                  </h5>
+                  <h5 className="font-semibold">{p.category_name}</h5>
+                </div>
+                {/*  */}
+                {/* Current Stock Label */}
+                <h4 className="font-bold">Comming soon</h4>
+                {/*  */}
+                {/* Stock Status Label */}
+                <div
+                  className={`${config.colorClass} justify-self-center inline-block py-1 px-3 rounded-sm`}
+                >
+                  <h4 className="font-bold text-white text-center uppercase">
+                    {config.label}
+                  </h4>
+                </div>
+                {/*  */}
+                {/* Update Stock Status Button */}
+                <button
+                  onClick={() => setSelectedProduct(p)}
+                  className="py-1 px-3 lg:px-6 bg-green-600 text-white font-bold rounded-sm justify-self-end cursor-pointer hover:scale-110 active:scale-90 focus:outline-none transition-all duration-300 ease-out"
+                >
+                  Restock
+                </button>
               </div>
-              {/*  */}
-              {/* Update Stock Status Button */}
-              <button
-                onClick={() => setSelectedProduct(p)}
-                className="py-1 px-3 lg:px-6 bg-green-600 text-white font-bold rounded-sm justify-self-end cursor-pointer hover:scale-110 active:scale-90 focus:outline-none transition-all duration-300 ease-out"
-              >
-                Restock
-              </button>
-            </div>
-          );
-        })}
+            );
+          })}
 
         {/* Footer of the Stock Status Board */}
         {/* The bottom of the Stock Status board */}
@@ -307,13 +293,8 @@ export default function StockStatus() {
             setSelectedProduct(null);
             document.body.classList.remove("overflow-hidden");
           }}
-          onUpdate={handleUpdateStockStatus}
         />
       )}
     </>
   );
 }
-//
-//
-//
-//

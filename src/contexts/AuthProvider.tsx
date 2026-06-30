@@ -2,11 +2,10 @@
 //
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import { authStorage } from "../util/auth-storage";
+import { authStorage } from "../utils/auth-storage";
 import { refreshAccessToken } from "../services/auth.service";
 import type { RefreshResponse } from "../types/auth";
 import type { UserInfo } from "../types/auth";
-
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   //

@@ -11,9 +11,8 @@ import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "./ui/TextLoader";
-import { authStorage } from "../util/auth-storage";
-import { Client, type IFrame, type IMessage } from "@stomp/stompjs";
-import { toast } from "sonner";
+import { useStaffUpdate } from "../hooks/useStaffUpdate";
+import { updateStaffInCache } from "../utils/data-cache-update";
 
 export default function DisplayStaff() {
   // Using Record to make Key: Value pair | EX: {1: { staffs: [...], pagination: { ... } }}
@@ -64,85 +63,26 @@ export default function DisplayStaff() {
     fetchData();
   }, [page, refetchVersion, pagesCache]);
 
+  // Highlight background for user that just updated for 5s
+  const [justUpdatedId, setJustUpdatedId] = useState<string | null>(null);
+  useEffect(() => {
+    setTimeout(() => {
+      setJustUpdatedId(null);
+    }, 5000);
+  }, [justUpdatedId]);
 
-
-
-  //==============================
-  // Helper - Update Staff
-  //==============================
-  function updateStaffInCache(
-    cache: Record<number, StaffProfileResponse>,
-    updateStaff: Staff,
-  ) {
-    const newCache = { ...cache };
-
-    for (const pageNumber in newCache) {
-      newCache[Number(pageNumber)] = {
-        ...newCache[Number(pageNumber)],
-        staffs: newCache[Number(pageNumber)].staffs.map((staff) =>
-          staff.id === updateStaff.id ? updateStaff : staff,
-        ),
-      };
-    }
-    return newCache;
+  //=========================
+  // WebSocket | Custom hook
+  //=========================
+  function handleStaffUpdated(staff: Staff) {
+    setPagesCache((prev) => updateStaffInCache(prev, staff));
   }
 
-
-
-  //====================
-  // WebSocket
-  //====================
-  useEffect(() => {
-    const stompClient = new Client({
-      brokerURL: `ws://localhost:8080/ws?token=${authStorage.getAccessToken()}`,
-
-      onConnect: (frame: IFrame) => {
-        console.log("Connected: ", frame);
-
-        stompClient.subscribe(
-          "/topic/admin/update-employee-details",
-          (message: IMessage) => {
-            try {
-              const employee = JSON.parse(message.body);
-              //
-              setPagesCache((prev) => updateStaffInCache(prev, employee));
-              //
-              console.log("Employee Updated: ", employee);
-              toast.success("A employee profile has been updated.");
-            } catch (error) {
-              console.log("- - Connection Error - - -")
-              console.error("Failed to parse WebSocket message:", error);
-            }
-          },
-        );
-      },
-
-      onDisconnect: () => {
-        console.log("Disconnected - - -");
-      },
-
-      onStompError: (frame: IFrame) => {
-        console.error("Broker Error: ", frame.headers["message"]);
-      },
-
-      onWebSocketError: (event) => {
-        console.error("WebSocket Error: ", event);
-      },
-
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-
-    stompClient.activate();
-
-    return () => {
-      stompClient.deactivate();
-    };
-  }, []);
-
-
-
+  useStaffUpdate({
+    onEmployeeUpdated: handleStaffUpdated,
+  });
+  //
+  //
 
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
@@ -204,6 +144,7 @@ export default function DisplayStaff() {
   }
   //
   // Handle Update Staff Profile
+  // Pass user value to Edit Form
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   //
   //
@@ -213,9 +154,9 @@ export default function DisplayStaff() {
   return (
     <>
       <section className="w-full rounded-lg overflow-hidden border-border border-2">
-        {/*  */}
+        {/* ======================== */}
         {/* HEADER */}
-        {/*  */}
+        {/* ======================== */}
         <header>
           {/* Icon & Pagination Info */}
           <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
@@ -246,17 +187,18 @@ export default function DisplayStaff() {
             <h2 className="text-end">Action</h2>
           </div>
         </header>
-        {/*  */}
-        {/*  */}
+        {/* ================================ */}
         {/* List down each RECORD of profile */}
-        {/* Main */}
+        {/* MAIN */}
         {/* Render unless isLoading = false */}
+        {/* ================================ */}
         {!isLoading &&
           staff?.staffs.map((staff) => {
+            const isUpdated = staff.id === justUpdatedId;
             return (
               <main
                 key={staff.id}
-                className="grid grid-cols-6 items-center-safe bg-background-secondary hover:bg-background-secondary-hover px-4 border-t border-border-hover"
+                className={`grid grid-cols-6 items-center-safe ${isUpdated ? "bg-green-700 hover:bg-green-600" : "bg-background-secondary "} hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
               >
                 {/*  */}
                 {/* PROFILE */}
@@ -355,10 +297,9 @@ export default function DisplayStaff() {
             </button>
           </div>
         )}
-        {/*  */}
-        {/*  */}
-        {/*  */}
-        {/*  */}
+        {/* ================= */}
+        {/* FOOTER */}
+        {/* ================= */}
         <footer>
           <div className="flex bg-background-secondary justify-between px-6 py-4 border-t-4 border-border">
             {/* PREV */}

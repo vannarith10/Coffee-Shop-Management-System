@@ -7,15 +7,13 @@ import type { PRODUCT_STOCK_STATUS } from "../types/product";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
 import { STOCK_STATUS_CONFIG } from "../types/stock-status";
+import { updateStockStatus } from "../services/admin.service";
+import TextLoader from "./ui/TextLoader";
 
 interface UpdateStockStatusProps {
   product: Product;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (
-    productId: string,
-    newStatus: PRODUCT_STOCK_STATUS,
-  ) => Promise<number | null>;
 }
 
 const STATUS_OPTIONS: {
@@ -56,11 +54,13 @@ export default function UpdateStockStatus({
   product,
   isOpen,
   onClose,
-  onUpdate,
+  // onUpdate,
 }: UpdateStockStatusProps) {
   const [selectedStatus, setSelectedStatus] = useState<PRODUCT_STOCK_STATUS>(
     product.status,
   );
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const config = STOCK_STATUS_CONFIG[product.status];
 
@@ -69,14 +69,27 @@ export default function UpdateStockStatus({
     document.body.classList.add("overflow-hidden");
   }
 
+
+  //=====================
+  // Handle Update
+  //=====================
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const statusCode = await onUpdate(product.id, selectedStatus);
-    if (statusCode == 200) {
-      toast.success("Stock updated successfully", { duration: 3000 });
-      onClose();
-    } else {
+
+    setIsUpdating(true);
+    setIsError(false);
+    try {
+      const res = await updateStockStatus({
+        productId: product.id,
+        newStatus: selectedStatus,
+      });
+      if (res.status == 200) onClose();
+    } catch (error) {
+      console.error(error);
+      setIsError(true);
       toast.error("Error updating stock", { duration: 3000 });
+    } finally {
+      setIsUpdating(false);
     }
   }
 
@@ -112,9 +125,7 @@ export default function UpdateStockStatus({
                 {product.name}
               </h4>
               <div className="flex gap-2 items-center justify-center mt-4">
-                <h5 className="font-semibold text-xs">
-                  Current stock:
-                </h5>
+                <h5 className="font-semibold text-xs">Current stock:</h5>
                 <span
                   className={`text-sm font-bold ${config.colorClass} px-1 rounded-xs`}
                 >
@@ -162,8 +173,14 @@ export default function UpdateStockStatus({
             >
               Cancel
             </button>
-            <button className="w-full font-semibold col-span-2 bg-sidebar/70 hover:bg-sidebar rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out">
-              Update Status
+            <button className={`w-full font-semibold col-span-2 ${isError ? "bg-amber-600" : "bg-sidebar/70 hover:bg-sidebar"}  rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out`}>
+              {isError ? (
+                "Try again"
+              ) : isUpdating && !isError ? (
+                <TextLoader text="Updating..." />
+              ) : (
+                "Update"
+              )}
             </button>
           </div>
         </form>
