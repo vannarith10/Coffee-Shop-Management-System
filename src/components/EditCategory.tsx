@@ -72,7 +72,7 @@ export default function EditCategory({
   return (
     <section
       onClick={onClose}
-      className="absolute inset-0 z-30 backdrop-blur-xs flex justify-center items-center"
+      className="absolute inset-0 z-30 backdrop-blur-xs flex justify-center items-center transition-all duration-500 ease-out"
     >
       <form
         onClick={(e) => e.stopPropagation()}
@@ -81,8 +81,9 @@ export default function EditCategory({
       >
         <h2 className="font-bold text-2xl">Edit Category</h2>
         <div className="flex flex-col gap-6">
-          {/*  */}
-          {/* Name */}
+          {/* ================================= */}
+          {/* Name input*/}
+          {/* ================================= */}
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="name" className="text-xs font-bold">
               NAME
@@ -94,8 +95,9 @@ export default function EditCategory({
               className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
           </div>
-          {/*  */}
-          {/* Type */}
+          {/* ================================= */}
+          {/* Category selection */}
+          {/* ================================= */}
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="name" className="text-xs font-bold">
               CATEGORY TYPE
@@ -118,8 +120,9 @@ export default function EditCategory({
               })}
             </select>
           </div>
-          {/*  */}
-          {/* STATUS */}
+          {/* ==================================== */}
+          {/* STATUS | Dropdown selection */}
+          {/* ==================================== */}
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="name" className="text-xs font-bold">
               ACTIVE STATUS
@@ -143,8 +146,10 @@ export default function EditCategory({
             </select>
           </div>
         </div>
+        {/* ================================ */}
         {/* Buttons */}
         {/* Submit */}
+        {/* ================================ */}
         <div className="w-full grid grid-cols-3 gap-6 pt-6">
           <button
             type="button"
