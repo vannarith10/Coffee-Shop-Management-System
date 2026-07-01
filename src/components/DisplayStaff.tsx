@@ -76,6 +76,7 @@ export default function DisplayStaff() {
   //=========================
   function handleStaffUpdated(staff: Staff) {
     setPagesCache((prev) => updateStaffInCache(prev, staff));
+    setJustUpdatedId(staff.id);
   }
 
   useStaffUpdate({
@@ -142,9 +143,9 @@ export default function DisplayStaff() {
     setPagesCache({});
     setRefetchVersion((v) => v + 1);
   }
+  // 
+  // Send user value to Edit Form
   //
-  // Handle Update Staff Profile
-  // Pass user value to Edit Form
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   //
   //
@@ -227,7 +228,7 @@ export default function DisplayStaff() {
                 {/* SHIFT */}
                 <div className="flex flex-col gap-1">
                   <div className="bg-sidebar px-2 py-1 justify-self-center inline-block w-fit rounded-xs">
-                    <h3 className="text-xs text-white font-bold whitespace-normal break-all">
+                    <h3 className="text-xs text-white font-bold whitespace-nowrap break-all">
                       {staff.shift === "FULL_DAY" ? "FULL DAY" : staff.shift}
                     </h3>
                   </div>
@@ -257,7 +258,7 @@ export default function DisplayStaff() {
                 <div
                   className={`flex ${staff.status === "ACTIVE" ? "bg-green-600" : staff.status === "INACTIVE" ? "bg-amber-600" : staff.status === "ON_LEAVE" ? "bg-blue-500" : "bg-red-600"} justify-self-center px-2 py-1 rounded-xs`}
                 >
-                  <span className="text-xs font-bold text-white">
+                  <span className="text-xs font-bold text-white whitespace-nowrap">
                     {(staff.status === "ON_LEAVE"
                       ? "ON LEAVE"
                       : staff.status) || "Pending..."}
@@ -268,7 +269,7 @@ export default function DisplayStaff() {
                 {/* EDIT */}
                 <button
                   onClick={() => setSelectedStaff(staff)}
-                  className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold hover:border cursor-pointer"
+                  className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
                 >
                   <UserRoundPen />
                 </button>

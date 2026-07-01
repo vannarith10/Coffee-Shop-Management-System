@@ -1,4 +1,5 @@
 // hooks/useProductStockStatusUpdate.ts
+// WebSocket
 //
 
 import { useEffect } from "react";

@@ -14,6 +14,7 @@ import BaristaDashboard from "./pages/barista/BaristaDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
 import StaffTab from "./pages/admin/StaffTab";
+import CategoryTab from "./pages/admin/CategoryTab";
 
 
 
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "category",
-                element: <h2>Category page</h2>
+                element: <CategoryTab/>
               },
               {
                 path: "inventory",
@@ -98,7 +99,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="w-screen min-w-100 bg-background-primary transition-colors duration-500 ease-out">
+    <div className="w-screen min-w-100 min-h-screen bg-background-primary transition-colors duration-500 ease-out">
       <RouterProvider router={router}/>
       <Toaster position="top-center" richColors />
     </div>

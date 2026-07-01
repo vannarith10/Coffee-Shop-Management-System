@@ -1,6 +1,7 @@
 // utils/staff-cache.ts
 //
 
+import type { Category, GetAllCategoriesResponse } from "../types/category";
 import type { Product, StockStatusResponse } from "../types/product";
 import type { Staff, StaffProfileResponse } from "../types/staff";
 
@@ -33,6 +34,22 @@ export function updateStockStatusInCache (cache: Record<number, StockStatusRespo
                 product.id === updatedStock.id ? updatedStock : product)
             };
         }
+
+    return newCache;
+}
+
+//
+// Update Category
+//
+export function updateCategory (cache: Record<number, GetAllCategoriesResponse>, updatedCategory: Category) {
+    const newCache = {...cache};
+
+    for (const pageNumber in newCache) {
+        newCache[Number(pageNumber)] = {
+            ...newCache[Number(pageNumber)], categories: newCache[Number(pageNumber)].categories.map((category) => 
+            category.category_id === updatedCategory.category_id ? updatedCategory : category)
+        };
+    }
 
     return newCache;
 }

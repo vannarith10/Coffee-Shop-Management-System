@@ -1,34 +1,34 @@
-// hooks/useStaffUpdate.ts
+// hooks/useCategoryUpdate.ts
 // WebSocket
 //
-//======================================================
-// Used to Receive Data from WebSocket and Update Cache
-//======================================================
-
+// =====================================================
+// Receives data via WebSocket for updating Category UI
+// =====================================================
+//
 import { useEffect } from "react";
-import type { Staff } from "../types/staff";
-import { authStorage } from "../utils/auth-storage";
+import type { Category } from "../types/category";
 import { Client } from "@stomp/stompjs";
+import { authStorage } from "../utils/auth-storage";
 import { toast } from "sonner";
 
 interface Props {
-  //   Receives parameter of type Staff, returns nothing
-  onEmployeeUpdated: (employee: Staff) => void;
+  onCategoryUpdate: (category: Category) => void;
 }
 
-
-export function useStaffUpdate({ onEmployeeUpdated }: Props) {
+export function useCategoryUpdate({ onCategoryUpdate }: Props) {
   useEffect(() => {
     const client = new Client({
       brokerURL: `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${authStorage.getAccessToken()}`,
 
       onConnect: () => {
-        console.log("+ + + Connected + + +");
-        client.subscribe("/topic/admin/update-employee-details", (message) => {
+        console.log("+ + + CONNECTED + + +");
+        client.subscribe("/topic/admin/category-update", (message) => {
           try {
-            const employee: Staff = JSON.parse(message.body);
-            onEmployeeUpdated(employee);
-            toast.success("An employee profile has been updated.", {duration: 3000});
+            const category: Category = JSON.parse(message.body);
+            onCategoryUpdate(category);
+            toast.success("Product Stock Status Updated Successfully!", {
+              duration: 3000,
+            });
           } catch (error) {
             console.error(error);
           }
@@ -36,7 +36,7 @@ export function useStaffUpdate({ onEmployeeUpdated }: Props) {
       },
 
       onDisconnect: () => {
-        console.log("- - - Disconnected - - -");
+        console.log("- - - DISCONNECTED - - -");
       },
 
       onStompError: (frame) => {
@@ -57,5 +57,5 @@ export function useStaffUpdate({ onEmployeeUpdated }: Props) {
     return () => {
       client.deactivate();
     };
-  }, [onEmployeeUpdated]);
+  }, [onCategoryUpdate]);
 }
