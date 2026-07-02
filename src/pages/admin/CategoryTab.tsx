@@ -1,5 +1,6 @@
 // pages/admin/CategoryTab.tsx
 //
+import AddNewCategory from "../../components/AddNewCategory";
 import CategoryStatus from "../../components/CategoryStatus";
 import ListCategory from "../../components/ListCategory";
 
@@ -14,6 +15,7 @@ export default function CategoryTab() {
           Oversee and manage your categories.
         </p>
       </div>
+      <AddNewCategory/>
       <CategoryStatus/>
       <ListCategory/>
     </div>

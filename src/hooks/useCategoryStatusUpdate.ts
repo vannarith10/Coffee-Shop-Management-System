@@ -1,34 +1,28 @@
-// hooks/useCategoryUpdate.ts
-// WebSocket
+// hooks/useCategoryStatusUpdate.ts
 //
-// =====================================================
-// Receives data via WebSocket for updating Category UI
-// =====================================================
-//
+
 import { useEffect } from "react";
-import type { Category } from "../types/category";
+import type { CategoryStatusResponse } from "../types/category";
 import { Client } from "@stomp/stompjs";
 import { authStorage } from "../utils/auth-storage";
-import { toast } from "sonner";
 
-interface Props {
-  onCategoryUpdate: (category: Category) => void;
-}
-
-export function useCategoryUpdate({ onCategoryUpdate }: Props) {
+export function useCategoryStatusUpdate({
+  onUpdateCategoryStatus,
+}: {
+  onUpdateCategoryStatus: (newStatus: CategoryStatusResponse) => void;
+}) {
   useEffect(() => {
     const client = new Client({
       brokerURL: `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${authStorage.getAccessToken()}`,
 
       onConnect: () => {
-        console.log("+ + + CONNECTED + + +");
-        client.subscribe("/topic/admin/category-update", (message) => {
+        console.log("+ + + Connected + + +");
+        client.subscribe("/topic/admin/category-create-status", (message) => {
           try {
-            const category: Category = JSON.parse(message.body);
-            onCategoryUpdate(category);
-            toast.success("Product Stock Status Updated Successfully!", {
-              duration: 3000,
-            });
+            const categoryStatus: CategoryStatusResponse = JSON.parse(
+              message.body,
+            );
+            setTimeout(() => onUpdateCategoryStatus(categoryStatus), 2000);
           } catch (error) {
             console.error(error);
           }
@@ -36,7 +30,7 @@ export function useCategoryUpdate({ onCategoryUpdate }: Props) {
       },
 
       onDisconnect: () => {
-        console.log("- - - DISCONNECTED - - -");
+        console.log("- - - Disconnected - - -");
       },
 
       onStompError: (frame) => {
@@ -51,11 +45,10 @@ export function useCategoryUpdate({ onCategoryUpdate }: Props) {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-
     client.activate();
 
     return () => {
       client.deactivate();
     };
-  }, [onCategoryUpdate]);
+  }, [onUpdateCategoryStatus]);
 }

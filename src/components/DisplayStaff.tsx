@@ -13,6 +13,7 @@ import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "./ui/TextLoader";
 import { useStaffUpdate } from "../hooks/useStaffUpdate";
 import { updateStaffInCache } from "../utils/data-cache-update";
+import { getPageNumbers } from "../utils/page-numbers";
 
 export default function DisplayStaff() {
   // Using Record to make Key: Value pair | EX: {1: { staffs: [...], pagination: { ... } }}
@@ -54,7 +55,7 @@ export default function DisplayStaff() {
         console.error(error);
         setIsError(true);
       } finally {
-        // I want to keep loading animatiin for 2s
+        // I want to keep loading animatiin for 1s
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
@@ -103,39 +104,6 @@ export default function DisplayStaff() {
     setPage(pageNum);
   }
   //
-  //
-  // Get page numbers for pagination list down
-  //
-  function getPageNumbers() {
-    const pages: (number | string)[] = [];
-    //
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      // This block to be executed unless the Total Pages > 5
-      pages.push(1);
-      if (currentPage > 3) {
-        pages.push("...");
-      }
-      for (
-        let i = Math.max(2, currentPage - 1);
-        i <= Math.min(totalPages - 1, currentPage + 1);
-        i++
-      ) {
-        pages.push(i);
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push("...");
-      }
-      pages.push(totalPages);
-    }
-    //
-    return pages;
-  }
-  //
   // Handle Error Loading Data
   //
   function handleRetry() {
@@ -178,8 +146,9 @@ export default function DisplayStaff() {
               </div>
             )}
           </div>
-          {/*  */}
+          {/* ========================= */}
           {/* Colum Titles */}
+          {/* ========================= */}
           <div className="grid grid-cols-6 bg-sidebar py-4 px-4 font-bold uppercase text-sm">
             <h2 className="col-span-2">Profile</h2>
             <h2>Role</h2>
@@ -207,7 +176,7 @@ export default function DisplayStaff() {
                   <img
                     src={staff.image_url || DefaultProfile}
                     alt="profile"
-                    className="w-10 h-10 rounded-full border-2 border-border"
+                    className="w-10 h-10 lg:w-14 lg:h-14 rounded-full border-2 border-border object-cover"
                   />
                   <div>
                     <h3 className="text-xs font-bold">
@@ -233,7 +202,7 @@ export default function DisplayStaff() {
                     </h3>
                   </div>
                   {/* SCHEDULE */}
-                  {/* List down woring days */}
+                  {/* List down working days */}
                   <ul className="flex gap-1 flex-wrap text-[8px]">
                     {/* Order day from Mon to Sun not showing random*/}
                     {DAY_ORDER.map((day) => {
@@ -264,12 +233,13 @@ export default function DisplayStaff() {
                       : staff.status) || "Pending..."}
                   </span>
                 </div>
-                {/*  */}
-                {/* ACTION */}
+                {/* ================================ */}
+                {/* ACTION | Button */}
                 {/* EDIT */}
+                {/* ================================ */}
                 <button
                   onClick={() => setSelectedStaff(staff)}
-                  className="px-2 py-1 text-white bg-sidebar justify-self-end rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
+                  className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
                 >
                   <UserRoundPen />
                 </button>
@@ -303,7 +273,9 @@ export default function DisplayStaff() {
         {/* ================= */}
         <footer>
           <div className="flex bg-background-secondary justify-between px-6 py-4 border-t-4 border-border">
+            {/* =================== */}
             {/* PREV */}
+            {/* =================== */}
             <button
               onClick={handlePrev}
               disabled={!hasPrev}
@@ -311,10 +283,12 @@ export default function DisplayStaff() {
             >
               Prev
             </button>
+            {/* ============================= */}
             {/* 1 2 3 ... 4 */}
             {/* Page Numbers */}
+            {/* ============================= */}
             <div className="flex items-center justify-center gap-2">
-              {getPageNumbers().map((pageNum, idx) =>
+              {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
                 pageNum === "..." ? (
                   <span
                     key={`ellipsis-${idx}`}
@@ -333,8 +307,9 @@ export default function DisplayStaff() {
                 ),
               )}
             </div>
-            {/*  */}
+            {/* ================= */}
             {/* NEXT */}
+            {/* ================= */}
             <button
               onClick={handleNext}
               disabled={!hasNext}
@@ -346,6 +321,12 @@ export default function DisplayStaff() {
         </footer>
         {/*  */}
       </section>
+
+
+
+      {/* =============================== */}
+      {/* Open Form Edit */}
+      {/* =============================== */}
       {selectedStaff && (
         <EditStaffProfile
           isOpen={true}

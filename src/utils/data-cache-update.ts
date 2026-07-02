@@ -5,9 +5,9 @@ import type { Category, GetAllCategoriesResponse } from "../types/category";
 import type { Product, StockStatusResponse } from "../types/product";
 import type { Staff, StaffProfileResponse } from "../types/staff";
 
-//
+// ==========================================
 // This used to update new staff's details
-//
+// ==========================================
 export function updateStaffInCache (cache: Record<number, StaffProfileResponse>, updatedStaff: Staff) {
     const newCache = {...cache};
 
@@ -22,9 +22,9 @@ export function updateStaffInCache (cache: Record<number, StaffProfileResponse>,
 }
 
 
-//
-// For updating product stock status
-//
+// ======================================
+// For updating stock status
+// ======================================
 export function updateStockStatusInCache (cache: Record<number, StockStatusResponse>, updatedStock: Product) {
     const newCache = {...cache};
 
@@ -38,9 +38,10 @@ export function updateStockStatusInCache (cache: Record<number, StockStatusRespo
     return newCache;
 }
 
-//
+
+//=======================
 // Update Category
-//
+//=======================
 export function updateCategory (cache: Record<number, GetAllCategoriesResponse>, updatedCategory: Category) {
     const newCache = {...cache};
 
@@ -52,4 +53,48 @@ export function updateCategory (cache: Record<number, GetAllCategoriesResponse>,
     }
 
     return newCache;
+}
+
+
+
+//============================================
+// Add New Created Category to the Cache
+//============================================
+export function addCategory(
+  prevCache: Record<number, GetAllCategoriesResponse>,
+  newCategory: Category,
+  pageSize: number = 20,
+): Record<number, GetAllCategoriesResponse> {
+  const newCache = { ...prevCache };
+
+  // Update page 1: prepend new category
+  if (newCache[1]) {
+    const page1 = newCache[1];
+    const newCategories = [newCategory, ...page1.categories];
+
+    // If page 1 exceeds size, trim the last item (it "pushed" to page 2)
+    if (newCategories.length > pageSize) {
+      newCategories.pop();
+    }
+
+    newCache[1] = {
+      ...page1,
+      categories: newCategories,
+      pagination: {
+        ...page1.pagination,
+        total_items: page1.pagination.total_items + 1,
+      },
+    };
+  }
+
+  // Invalidate pages 2+ — their item offsets are now wrong
+  // (A new item at the top shifts everything down)
+  Object.keys(newCache).forEach((key) => {
+    const pageNum = Number(key);
+    if (pageNum > 1) {
+      delete newCache[pageNum];
+    }
+  });
+
+  return newCache;
 }

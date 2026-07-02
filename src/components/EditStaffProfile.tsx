@@ -191,8 +191,9 @@ export default function EditStaffProfile({
           />
         </div>
 
-        {/*  */}
+        {/* =================================== */}
         {/* TEXT FIELDS */}
+        {/* =================================== */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* NAME */}
           <div className="flex flex-col w-full gap-2">
@@ -245,9 +246,10 @@ export default function EditStaffProfile({
         </div>
         {/*  */}
         {/*  */}
-        {/*  */}
+        {/* ============================== */}
         {/* SCHEDULES */}
         {/* WORKING DAYS */}
+        {/* ============================== */}
         <div className="w-full flex flex-col gap-10">
           <div className="flex flex-col gap-2">
             <label htmlFor="schedules" className="text-xs font-bold">
@@ -275,9 +277,10 @@ export default function EditStaffProfile({
               })}
             </div>
           </div>
-          {/*  */}
+          {/* ============================== */}
           {/* WORKING TIMES */}
           {/* SHIFTS */}
+          {/* ============================== */}
           <div className="flex flex-col gap-2">
             <label htmlFor="shift" className="text-xs font-bold">
               SHIFT
@@ -305,9 +308,10 @@ export default function EditStaffProfile({
               })}
             </div>
           </div>
-          {/*  */}
+          {/* ============================== */}
           {/* ROLE */}
           {/* STAFF ROLE */}
+          {/* ============================== */}
           <div className="flex flex-col gap-2">
             <label htmlFor="shift" className="text-xs font-bold">
               ROLE
@@ -335,9 +339,10 @@ export default function EditStaffProfile({
               })}
             </div>
           </div>
-          {/*  */}
+          {/* ================================== */}
           {/* USER STATUS */}
           {/* STATUS */}
+          {/* ================================== */}
           <div className="flex flex-col gap-2">
             <label htmlFor="shift" className="text-xs font-bold">
               STATUS
@@ -366,9 +371,9 @@ export default function EditStaffProfile({
             </div>
           </div>
         </div>
-        {/*  */}
-        {/*  */}
+        {/* ======================================= */}
         {/* BUTTONS: CANCEL & SUBMIT */}
+        {/* ======================================= */}
         <div className="w-full grid grid-cols-3 gap-6 pt-6">
           <button
             type="button"
@@ -395,9 +400,10 @@ export default function EditStaffProfile({
       {/*  */}
       {/*  */}
       {/*  */}
-      {/*  */}
+      {/* ================================================= */}
       {/* THIS WILL SHOW ONLY WHEN INPUT IMAGE RUNS */}
       {/* CROP MODAL */}
+      {/* ================================================= */}
       {image && (
         <div
           onClick={(e) => e.stopPropagation()}

@@ -3,6 +3,8 @@
 
 export type CATEGORY_TYPE = "FOOD" | "DRINK";
 
+export type CATEGORY_STATUS = boolean;
+
 
 export interface GetAllCategoriesResponse {
     pagination: {
@@ -43,3 +45,17 @@ export interface PatchCategoryRequest {
     new_status: boolean | null;
 }
 
+
+export interface CreateCategoryRequest {
+    type: CATEGORY_TYPE;
+    name: string;
+    is_active: boolean;
+}
+
+
+export interface CategoryStatusResponse {
+    total_categories: number;
+    total_drinks: number;
+    total_foods: number;
+    total_disables: number;
+}

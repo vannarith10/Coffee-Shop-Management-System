@@ -6,7 +6,7 @@ import { publicApi } from "../lib/axios";
 import type { TopSellingProductRequest } from "../types/business-analytics";
 import type { PRODUCT_STOCK_STATUS } from "../types/product";
 import type { EditStaffDataRequest } from "../types/staff";
-import type { PatchCategoryRequest } from "../types/category";
+import type { CreateCategoryRequest, PatchCategoryRequest } from "../types/category";
 
 interface ApiError {
   message: string;
@@ -135,4 +135,22 @@ export async function getAllCategories ({page, size}:{page:number, size:number})
 export async function patchCategory ({categoryId, data}:{categoryId:string, data:PatchCategoryRequest}) {
   const response = await api.patch(`/api/v2/category/${categoryId}`, data);
   return response;
+}
+//
+//
+//
+// CREATE CATEGORY
+//
+export async function createCategory ({data} : {data: CreateCategoryRequest}) {
+  const response = await api.post("/api/v2/category", data);
+  return response;
+}
+//
+//
+//
+// GET CATEGORY STATUS
+//
+export async function getCategoryStatus () {
+  const res = await api.get("/api/v2/category/category-status");
+  return res;
 }

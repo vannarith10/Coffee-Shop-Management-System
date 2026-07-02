@@ -36,6 +36,9 @@ export default function EditCategory({
     document.body.classList.add("overflow-hidden");
   }
 
+  //=======================
+  // Submit
+  //=======================
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -68,16 +71,21 @@ export default function EditCategory({
     }
   }
 
+
+
   if (!isOpen) return null;
   return (
     <section
       onClick={onClose}
-      className="absolute inset-0 z-30 backdrop-blur-xs flex justify-center items-center transition-all duration-500 ease-out"
+      className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-xs flex justify-center items-center"
     >
+      {/* =================== */}
+      {/* Form */}
+      {/* =================== */}
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
-        className="w-[70vw] max-h-[70vh] flex flex-col gap-6 bg-background-secondary p-10 rounded-2xl border-2 border-border"
+        className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-secondary p-10 rounded-4xl border-4 border-border-hover"
       >
         <h2 className="font-bold text-2xl">Edit Category</h2>
         <div className="flex flex-col gap-6">
@@ -95,55 +103,57 @@ export default function EditCategory({
               className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
           </div>
-          {/* ================================= */}
-          {/* Category selection */}
-          {/* ================================= */}
-          <div className="flex flex-col w-full gap-2">
-            <label htmlFor="name" className="text-xs font-bold">
-              CATEGORY TYPE
-            </label>
-            <select
-              value={categoryType}
-              onChange={(e) => setCategoryType(e.target.value as CATEGORY_TYPE)}
-              className="border-2 font-bold border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
-            >
-              {CATEGORY_TYPES_ARRAY.map((type) => {
-                return (
-                  <option
-                    key={type}
-                    value={type}
-                    className="bg-background-secondary"
-                  >
-                    {type}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          {/* ==================================== */}
-          {/* STATUS | Dropdown selection */}
-          {/* ==================================== */}
-          <div className="flex flex-col w-full gap-2">
-            <label htmlFor="name" className="text-xs font-bold">
-              ACTIVE STATUS
-            </label>
-            <select
-              value={String(isActive)}
-              onChange={(e) => setIsActive(e.target.value === "true")}
-              className={`${isActive ? "text-white" : "text-text-error"} border-2 font-bold border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover`}
-            >
-              {CategoryStatusOptions.map((option) => {
-                return (
-                  <option
-                    key={String(option.value)}
-                    value={String(option.value)}
-                    className="bg-background-secondary text-text-primary"
-                  >
-                    {option.label}
-                  </option>
-                );
-              })}
-            </select>
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* ================================= */}
+            {/* Category selection */}
+            {/* ================================= */}
+            <div className="flex flex-col w-full gap-2">
+              <label htmlFor="name" className="text-xs font-bold">
+                CATEGORY TYPE
+              </label>
+              <select
+                value={categoryType}
+                onChange={(e) => setCategoryType(e.target.value as CATEGORY_TYPE)}
+                className="border-2 font-bold border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
+              >
+                {CATEGORY_TYPES_ARRAY.map((type) => {
+                  return (
+                    <option
+                      key={type}
+                      value={type}
+                      className="bg-background-secondary"
+                    >
+                      {type}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            {/* ==================================== */}
+            {/* STATUS | Dropdown selection */}
+            {/* ==================================== */}
+            <div className="flex flex-col w-full gap-2">
+              <label htmlFor="name" className="text-xs font-bold">
+                ACTIVE STATUS
+              </label>
+              <select
+                value={String(isActive)}
+                onChange={(e) => setIsActive(e.target.value === "true")}
+                className={`${isActive ? "text-white" : "text-text-error"} border-2 font-bold border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover`}
+              >
+                {CategoryStatusOptions.map((option) => {
+                  return (
+                    <option
+                      key={String(option.value)}
+                      value={String(option.value)}
+                      className="bg-background-secondary text-text-primary"
+                    >
+                      {option.label}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
         </div>
         {/* ================================ */}

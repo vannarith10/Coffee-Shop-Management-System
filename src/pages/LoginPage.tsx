@@ -50,23 +50,23 @@ export default function LoginPage() {
     >
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-6 w-80 bg-background-primary p-10 rounded-md border-2 border-border"
+        className="flex flex-col gap-6 w-80 backdrop-blur-xs p-10 rounded-4xl border-4 border-border"
       >
-        <h2 className="font-bold text-2xl text-text-primary text-center">
+        <h2 className="font-bold text-2xl text-text-secondary text-center">
           Login to System
         </h2>
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
-          className="p-2 border"
+          className="p-2 border-2 border-border"
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="p-2 border"
+          className="p-2 border-2 border-border"
         />
         {isError && (
           <h3 className="text-sm text-red-500">Invalid username or password</h3>
