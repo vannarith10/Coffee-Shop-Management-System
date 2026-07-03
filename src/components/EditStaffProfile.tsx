@@ -15,6 +15,7 @@ import { ROLES, type Role } from "../types/role";
 import { STATUSES, type Status } from "../types/status";
 import { toast } from "sonner";
 import TextLoader from "./ui/TextLoader";
+import { Image } from "lucide-react";
 
 interface UpdateStaffProfile {
   isOpen: boolean;
@@ -72,7 +73,7 @@ export default function EditStaffProfile({
     }
   };
   //
-  // TEACK CROP AREA
+  // TRACK CROP AREA
   const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
     setCroppedAreaPixels(croppedPixels);
   }, []);
@@ -90,6 +91,7 @@ export default function EditStaffProfile({
     const file = base64ToFile(croppedImage, "profile.jpg");
     setFile(file);
 
+    setZoom(1);
     setImage(null); // Close modal
   }
   //
@@ -143,8 +145,8 @@ export default function EditStaffProfile({
     setIsError(false);
     try {
       const response = await editStaffDetail({ userId, data, file });
-        setIsLoading(false);
-        if (response.status == 200) onClose();
+      setIsLoading(false);
+      if (response.status == 200) onClose();
     } catch (error) {
       console.error(error);
       setIsError(true);
@@ -168,20 +170,25 @@ export default function EditStaffProfile({
         onClick={(e) => e.stopPropagation()}
         className="max-h-[90vh] w-[80vw] overflow-y-auto scrollbar-hide flex flex-col gap-10 items-center p-6 bg-background-secondary rounded-2xl border-4 border-border"
       >
+        {/* --------------------------- */}
         {/* IMAGE */}
+        {/* --------------------------- */}
         <div>
           {/* CLICKABLE IMAGE */}
           <label htmlFor="imageUpload" className="cursor-pointer">
-            <div className="w-40 h-40 xl:w-60 xl:h-60 rounded-md overflow-hidden border-2 border-border hover:border-border-hover">
+            <div className="relative w-40 h-40 xl:w-60 xl:h-60 rounded-md overflow-hidden border-2 border-border hover:border-border-hover">
               <img
                 src={preview}
                 alt="profile"
                 className="w-full h-full object-cover "
               />
+              <span className="absolute hover:bg-gray-400/50 backdrop-blur-xs rounded-md opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-700">
+                <Image size={48} />
+              </span>
             </div>
           </label>
 
-          {/* HIDDEN FILE INPUT */}
+          {/* Image input */}
           <input
             id="imageUpload"
             type="file"
@@ -313,7 +320,7 @@ export default function EditStaffProfile({
           {/* STAFF ROLE */}
           {/* ============================== */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="shift" className="text-xs font-bold">
+            <label htmlFor="role" className="text-xs font-bold">
               ROLE
             </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -445,7 +452,6 @@ export default function EditStaffProfile({
               <button
                 onClick={() => {
                   handleCrop();
-                  setZoom(1);
                 }}
                 className="px-10 py-2 bg-background-secondary text-white rounded-md cursor-pointer hover:bg-background-secondary-hover border border-border"
               >

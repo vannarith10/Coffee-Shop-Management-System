@@ -95,13 +95,13 @@ export default function AddNewCategory() {
   return (
     <>
       <section className="w-full flex justify-end">
-        <div className="w-full grid grid-cols-2 gap-4">
+        <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4">
             {/* ===================== */}
             {/* Button Add */}
             {/* ===================== */}
           <button
             onClick={() => setIsOpen(true)}
-            className="col-start-2 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className="col-start-2 lg:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             Add Category <SquarePlus />
           </button>
@@ -155,7 +155,6 @@ export default function AddNewCategory() {
               </label>
               <input
                 onChange={(e) => setCategoryName(e.target.value)}
-                //   placeholder={category.category_name}
                 type="text"
                 className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
               />

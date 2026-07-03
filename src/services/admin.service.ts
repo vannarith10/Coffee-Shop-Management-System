@@ -5,7 +5,7 @@ import api from "../lib/axios";
 import { publicApi } from "../lib/axios";
 import type { TopSellingProductRequest } from "../types/business-analytics";
 import type { PRODUCT_STOCK_STATUS } from "../types/product";
-import type { EditStaffDataRequest } from "../types/staff";
+import type { CreateStaffRequest, EditStaffDataRequest } from "../types/staff";
 import type { CreateCategoryRequest, PatchCategoryRequest } from "../types/category";
 
 interface ApiError {
@@ -152,5 +152,20 @@ export async function createCategory ({data} : {data: CreateCategoryRequest}) {
 //
 export async function getCategoryStatus () {
   const res = await api.get("/api/v2/category/category-status");
+  return res;
+}
+//
+//
+//
+// Create Staff Account
+//
+export async function createStaffAccount ({data, file}: {data: CreateStaffRequest, file?:File | null}) {
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+  if (file) {
+    formData.append("image", file);
+  }
+  const res = await api.post("/api/v2/employee/create-account", formData);
   return res;
 }

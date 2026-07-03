@@ -38,3 +38,14 @@ export interface EditStaffDataRequest {
   shift_type: Shift | null;
   schedules: Schedule[] | null;
 }
+
+
+export interface CreateStaffRequest {
+  full_name: string;
+  username: string;
+  password: string;
+  role: Role;
+  shift: Shift;
+  schedules: Schedule[];
+  status: Status;
+}

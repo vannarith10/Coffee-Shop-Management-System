@@ -1,6 +1,7 @@
 // pages/admin/StaffTab.tsx
 //
 
+import AddNewStaff from "../../components/AddNewStaff";
 import DisplayStaff from "../../components/DisplayStaff";
 
 
@@ -15,6 +16,7 @@ export default function StaffTab () {
                 <h1 className="text-2xl xl:text-4xl font-extrabold">Staff Management</h1>
                 <p className="text-sm text-text-secondary">Oversee your team and manage shift schedules.</p>
             </div>
+            <AddNewStaff/>
             <DisplayStaff/>
         </div>
     )
