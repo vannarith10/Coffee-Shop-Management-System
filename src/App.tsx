@@ -15,6 +15,11 @@ import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
 import StaffTab from "./pages/admin/StaffTab";
 import CategoryTab from "./pages/admin/CategoryTab";
+import InventoryTab from "./pages/admin/InventoryTab";
+import ProductTab from "./pages/admin/ProductTab";
+import ReportTab from "./pages/admin/ReportTab";
+import SettingTab from "./pages/admin/SettingTab";
+import ProductDetailPage from "./pages/admin/ProductDetailPage";
 
 
 
@@ -51,19 +56,25 @@ const router = createBrowserRouter([
               },
               {
                 path: "inventory",
-                element: <h2>Inventory Screen</h2>
+                element: <InventoryTab/>
               },
               {
                 path: "products",
-                element: <h2>Product Screen</h2>
+                element: <ProductTab/>,
+                children: [
+                  {
+                    path: ":id",
+                    element: <ProductDetailPage/>
+                  }
+                ]
               },
               {
                 path: "reports",
-                element: <h2>Report Screen</h2>
+                element: <ReportTab/>
               },
               {
                 path: "settings",
-                element: <h2>Setting Screen</h2>
+                element: <SettingTab/>
               }
             ]
           }

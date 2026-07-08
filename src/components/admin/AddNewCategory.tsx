@@ -3,16 +3,16 @@
 
 import { SquarePlus } from "lucide-react";
 import { useState } from "react";
-import TextLoader from "./ui/TextLoader";
+import TextLoader from "../ui/TextLoader";
 import {
   CATEGORY_TYPES_ARRAY,
   CategoryStatusOptions,
   type CATEGORY_STATUS,
   type CATEGORY_TYPE,
   type CreateCategoryRequest,
-} from "../types/category";
+} from "../../types/category";
 import { toast } from "sonner";
-import { createCategory } from "../services/admin.service";
+import { createCategory } from "../../services/admin.service";
 import axios from "axios";
 
 export default function AddNewCategory() {

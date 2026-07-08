@@ -4,10 +4,8 @@ import { Wallet } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { ChartColumn } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getBusinessSummary } from "../services/admin.service";
-import SpotlightCard from "./animation/SpotlightCard";
-
-
+import { getBusinessSummary } from "../../services/admin.service";
+import SpotlightCard from "../animation/SpotlightCard";
 
 interface BusinessSummaryResponse {
   summary: {
@@ -75,30 +73,31 @@ export default function BusinessSummary() {
     value >= 0 ? "text-green-600" : "text-red-600";
 
   return (
-    <section className={`w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 `}>
+    <section
+      className={`w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 `}
+    >
       {cards.map((card, index) => (
-        <SpotlightCard key={index}>
-        <div
-          className="h-30 bg-background-secondary flex flex-col justify-center p-4 gap-2 rounded-lg border-2 border-border hover:bg-background-secondary-hover"
-        >
-          <div className="flex justify-between text-text-secondary">
-            <h4 className="text-sm font-bold">{card.title}</h4>
-            {card.icon}
+        <SpotlightCard key={index} rounded="lg">
+          <div className="h-30 bg-background-secondary flex flex-col justify-center p-4 gap-2 rounded-lg border-2 border-border hover:bg-background-secondary-hover">
+            <div className="flex justify-between text-text-secondary">
+              <h4 className="text-sm font-bold">{card.title}</h4>
+              {card.icon}
+            </div>
+
+            <h2 className="text-2xl font-bold text-text-primary z-10">
+              {card.value}
+            </h2>
+
+            <h4 className="text-xs font-semibold text-text-secondary">
+              <span className={`${getGrowthColor(card.growth)} font-bold`}>
+                {card.growth >= 0 ? "+" : ""}
+                {card.growth}%
+              </span>{" "}
+              vs yesterday
+            </h4>
           </div>
-
-          <h2 className="text-2xl font-bold text-text-primary">{card.value}</h2>
-
-          <h4 className="text-xs font-semibold text-text-secondary">
-            <span className={`${getGrowthColor(card.growth)} font-bold`}>
-              {card.growth >= 0 ? "+" : ""}
-              {card.growth}%
-            </span>{" "}
-            vs yesterday
-          </h4>
-        </div>
         </SpotlightCard>
       ))}
     </section>
   );
 }
-

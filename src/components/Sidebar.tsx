@@ -57,8 +57,10 @@ export default function Sidebar() {
             {shopName || "SHOP NAME"}
           </h1>
         </div>
+        {/* ======================================== */}
         {/* List of menu */}
         {/* Showing on when md: */}
+        {/* ======================================== */}
         <div className="flex flex-col gap-4">
           {links.map((link) => {
             const Icon = link.icon;
@@ -67,7 +69,7 @@ export default function Sidebar() {
                 key={link.label}
                 to={link.path}
                 end={link.end}
-                className={(props) =>`${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md transition-all duration-300 ease-out`}
+                className={(props) =>`${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md outline-none transition-all duration-300 ease-out`}
               >
                 {Icon && <Icon />}
                 {link.label}

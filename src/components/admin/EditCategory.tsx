@@ -8,9 +8,9 @@ import {
   type Category,
   type CATEGORY_TYPE,
   type PatchCategoryRequest,
-} from "../types/category";
-import TextLoader from "./ui/TextLoader";
-import { patchCategory } from "../services/admin.service";
+} from "../../types/category";
+import TextLoader from "../ui/TextLoader";
+import { patchCategory } from "../../services/admin.service";
 import { toast } from "sonner";
 
 interface EditCategory {
@@ -71,8 +71,6 @@ export default function EditCategory({
     }
   }
 
-
-
   if (!isOpen) return null;
   return (
     <section
@@ -113,7 +111,9 @@ export default function EditCategory({
               </label>
               <select
                 value={categoryType}
-                onChange={(e) => setCategoryType(e.target.value as CATEGORY_TYPE)}
+                onChange={(e) =>
+                  setCategoryType(e.target.value as CATEGORY_TYPE)
+                }
                 className="border-2 font-bold border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
               >
                 {CATEGORY_TYPES_ARRAY.map((type) => {

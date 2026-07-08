@@ -1,20 +1,20 @@
 // components/EditStaffProfile.tsx
 //
 
-import type { EditStaffDataRequest, Staff } from "../types/staff";
-import DefaultProfile from "../assets/user-profile.png";
+import type { EditStaffDataRequest, Staff } from "../../types/staff";
+import DefaultProfile from "../../assets/user-profile.png";
 import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
-import { getCroppedImg } from "../utils/crop-helper";
+import { getCroppedImg } from "../../utils/crop-helper";
 import type { Area } from "react-easy-crop";
-import { DAY_ORDER, type Schedule } from "../types/schedule";
-import { SHIFT_ORDER, type Shift } from "../types/shift";
-import { editStaffDetail } from "../services/admin.service";
-import { base64ToFile } from "../utils/convertor";
-import { ROLES, type Role } from "../types/role";
-import { STATUSES, type Status } from "../types/status";
+import { DAY_ORDER, type Schedule } from "../../types/schedule";
+import { SHIFT_ORDER, type Shift } from "../../types/shift";
+import { editStaffDetail } from "../../services/admin.service";
+import { base64ToFile } from "../../utils/convertor";
+import { ROLES, type Role } from "../../types/role";
+import { STATUSES, type Status } from "../../types/status";
 import { toast } from "sonner";
-import TextLoader from "./ui/TextLoader";
+import TextLoader from "../ui/TextLoader";
 import { Image } from "lucide-react";
 
 interface UpdateStaffProfile {

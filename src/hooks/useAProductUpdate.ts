@@ -1,31 +1,28 @@
-// hooks/useProductStockStatusUpdate.ts
-// WebSocket
+// hooks/useAProductUpdate.ts
 //
 
 import { useEffect } from "react";
-import type { ProductStock } from "../types/product";
+import type { Product } from "../types/product";
 import { Client } from "@stomp/stompjs";
 import { authStorage } from "../utils/auth-storage";
 import { toast } from "sonner";
 
 interface Props {
-  onStockStatusUpdate: (product: ProductStock) => void;
+  onProductUpdate: (product: Product) => void;
 }
 
-export function useProductStockStatusUpdate({ onStockStatusUpdate }: Props) {
+export function useAProductUpdate({ onProductUpdate }: Props) {
   useEffect(() => {
     const client = new Client({
       brokerURL: `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${authStorage.getAccessToken()}`,
 
       onConnect: () => {
-        console.log("+ + + CONNECTED + + +");
-        client.subscribe("/topic/admin/stock-update", (message) => {
+        console.log("+ + + Connected + + +");
+        client.subscribe("/topic/admin/product-update", (message) => {
           try {
-            const product: ProductStock = JSON.parse(message.body);
-            onStockStatusUpdate(product);
-            toast.success("Product Stock Status Updated Successfully!", {
-              duration: 3000,
-            });
+            const product: Product = JSON.parse(message.body);
+            onProductUpdate(product);
+            toast.success("A product has been updated.", { duration: 5000 });
           } catch (error) {
             console.error(error);
           }
@@ -33,7 +30,7 @@ export function useProductStockStatusUpdate({ onStockStatusUpdate }: Props) {
       },
 
       onDisconnect: () => {
-        console.log("- - - DISCONNECTED - - -");
+        console.log("- - - Disconnected - - -");
       },
 
       onStompError: (frame) => {
@@ -54,5 +51,5 @@ export function useProductStockStatusUpdate({ onStockStatusUpdate }: Props) {
     return () => {
       client.deactivate();
     };
-  }, [onStockStatusUpdate]);
+  }, [onProductUpdate]);
 }

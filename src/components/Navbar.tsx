@@ -42,7 +42,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed md:hidden w-screen top-0 z-10 ${open ? "h-screen flex flex-col justify-between" : "h-20 ease-in"} px-4 py-4 bg-sidebar transition-all duration-500 ease-out`}
+      className={`z-90 fixed md:hidden w-screen top-0 ${open ? "h-screen flex flex-col justify-between" : "h-20 ease-in"} px-4 py-4 bg-sidebar transition-all duration-500 ease-out`}
     >
       {/*  */}
       {/*  */}
@@ -71,7 +71,9 @@ export default function Navbar() {
           </div>
           <MenuSwitch handleOpen={() => setOpen(!open)} open={open} />
         </div>
+        {/* ================================== */}
         {/* List of menu */}
+        {/* ================================== */}
         <div className={`${open ? "w-full flex flex-col gap-4" : "hidden"}`}>
           {links.map((link) => {
             const Icon = link.icon;
@@ -82,7 +84,7 @@ export default function Navbar() {
                 end={link.end}
                 onClick={() => setOpen(false)}
                 className={(props) =>
-                  `${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md transition-all duration-300 ease-out`
+                  `${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md outline-none transition-all duration-300 ease-out`
                 }
               >
                 {Icon && <Icon />}

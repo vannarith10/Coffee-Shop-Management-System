@@ -33,7 +33,7 @@ export default function ImageCropForm(
       onClick={(e) => e.stopPropagation()}
       className="fixed inset-0 z-50 backdrop-blur-sm bg-background-primary flex flex-col items-center justify-center"
     >
-      <div className="relative w-80 h-80 xl:h-100 xl:w-100 bg-white border-4 border-border">
+      <div className="relative w-80 h-80 md:h-100 md:w-100 bg-white border-4 border-border">
         <Cropper
           image={image}
           crop={crop}

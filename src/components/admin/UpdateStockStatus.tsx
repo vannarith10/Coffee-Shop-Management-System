@@ -2,53 +2,20 @@
 //
 
 import { useState } from "react";
-import type { Product } from "../types/product";
-import type { PRODUCT_STOCK_STATUS } from "../types/product";
+import type { ProductStock } from "../../types/product";
+import type { PRODUCT_STOCK_STATUS } from "../../types/product";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
-import { STOCK_STATUS_CONFIG } from "../types/stock-status";
-import { updateStockStatus } from "../services/admin.service";
-import TextLoader from "./ui/TextLoader";
+import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
+import { updateStockStatus } from "../../services/admin.service";
+import TextLoader from "../ui/TextLoader";
 
 interface UpdateStockStatusProps {
-  product: Product;
+  product: ProductStock;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const STATUS_OPTIONS: {
-  value: PRODUCT_STOCK_STATUS;
-  label: string;
-  description: string;
-  accent: string;
-  border: string;
-  bg: string;
-}[] = [
-  {
-    value: "IN_STOCK",
-    label: "Normal",
-    description: "Stock level is healthy",
-    accent: "accent-green-600",
-    border: "border-green-500",
-    bg: "bg-background-secondary",
-  },
-  {
-    value: "LOW_STOCK",
-    label: "Low",
-    description: "Stock is running low",
-    accent: "accent-yellow-600",
-    border: "border-yellow-500",
-    bg: "bg-background-secondary",
-  },
-  {
-    value: "OUT_OF_STOCK",
-    label: "Out",
-    description: "Out of stock",
-    accent: "accent-red-600",
-    border: "border-red-500",
-    bg: "bg-background-secondary",
-  },
-];
 
 export default function UpdateStockStatus({
   product,
@@ -68,7 +35,6 @@ export default function UpdateStockStatus({
   if (isOpen) {
     document.body.classList.add("overflow-hidden");
   }
-
 
   //=====================
   // Handle Update
@@ -173,7 +139,9 @@ export default function UpdateStockStatus({
             >
               Cancel
             </button>
-            <button className={`w-full font-semibold col-span-2 ${isError ? "bg-amber-600" : "bg-sidebar/70 hover:bg-sidebar"}  rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out`}>
+            <button
+              className={`w-full font-semibold col-span-2 ${isError ? "bg-amber-600" : "bg-sidebar/70 hover:bg-sidebar"}  rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out`}
+            >
               {isError ? (
                 "Try again"
               ) : isUpdating && !isError ? (

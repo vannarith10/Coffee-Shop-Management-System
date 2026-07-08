@@ -109,7 +109,7 @@ export function useCategory(page: number = 1, size: number = 10) {
         setIsError(true);
         toast.error("Error loading categories", { duration: 3000 });
       } finally {
-        setTimeout(() => setIsLoading(false), 1000);
+        setTimeout(() => setIsLoading(false), 300);
       }
     }
 

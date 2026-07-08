@@ -2,24 +2,22 @@
 //
 
 import { useState } from "react";
-import type { Category } from "../types/category";
+import type { Category } from "../../types/category.ts";
 import { Ellipsis, SquarePen } from "lucide-react";
-import EditCategory from "./EditCategory";
-import TextLoader from "./ui/TextLoader";
+import EditCategory from "./EditCategory.tsx";
+import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
-import { useCategory } from "../hooks/useCategory.ts";
-import { getPageNumbers } from "../utils/page-numbers.ts";
+import { useCategory } from "../../hooks/useCategory.ts";
+import { getPageNumbers } from "../../utils/page-numbers.ts";
 
 export default function ListCategory() {
   const [page, setPage] = useState(1);
   const size = 10;
   // Receive data from custom hook
-  const {
-    category,
-    isLoading,
-    isError,
-    justUpdatedFieldId,
-  } = useCategory(page, size);
+  const { category, isLoading, isError, justUpdatedFieldId } = useCategory(
+    page,
+    size,
+  );
   //
   const currentPage = category?.pagination.page ?? page;
   const totalPages = category?.pagination.total_pages ?? 1;
@@ -28,19 +26,18 @@ export default function ListCategory() {
   const hasNext = currentPage < totalPages;
   const handlePrev = () => {
     if (hasPrev) setPage((p) => p - 1);
-  }
+  };
   const handleNext = () => {
     if (hasNext) setPage((p) => p + 1);
-  }
+  };
   function handlePageClick(pageNum: number) {
     setPage(pageNum);
   }
-  
+
   // Select a category to open Form edit
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
-
 
   //
   //
@@ -128,7 +125,7 @@ export default function ListCategory() {
               </main>
             );
           })}
-          {/* ================= */}
+        {/* ================= */}
         {/* FOOTER */}
         {/* ================= */}
         <footer>

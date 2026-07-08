@@ -3,16 +3,15 @@
 import type { CATEGORY_TYPE } from "./category";
 import type { Pagination } from "./pagination";
 
-
 export type PRODUCT_STOCK_STATUS = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
 
 export const STOCK_STATUS = {
-    normal: "IN_STOCK",
-    low: "LOW_STOCK",
-    out: "OUT_OF_STOCK"
-}
+  normal: "IN_STOCK",
+  low: "LOW_STOCK",
+  out: "OUT_OF_STOCK",
+};
 
-export interface Product {
+export interface ProductStock {
   id: string;
   name: string;
   category_name: string;
@@ -20,9 +19,40 @@ export interface Product {
   status: PRODUCT_STOCK_STATUS;
 }
 
-
 export interface StockStatusResponse {
   message: string;
   pagination: Pagination;
-  products: Product[];
+  products: ProductStock[];
+}
+
+
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  cost_price: number;
+  description: string | null;
+  image_url: string | null;
+  category_type: CATEGORY_TYPE;
+  category_name: string;
+  stock_status: PRODUCT_STOCK_STATUS;
+  created_at: string;
+  updated_at: string | null;
+}
+
+
+export interface AdminProductResponse {
+  pagination: Pagination;
+  product_items: Product[];
+}
+
+
+export interface UpdateProductRequest {
+  name: string | null | undefined;
+  category_name: string | null | undefined;
+  selling_price: number | null | undefined;
+  cost_price: number | null | undefined;
+  description: string | null | undefined;
+  stock_status: PRODUCT_STOCK_STATUS | null | undefined ;
 }

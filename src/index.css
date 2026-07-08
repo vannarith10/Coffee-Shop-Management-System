@@ -17,7 +17,8 @@
   --border: #4b4b8d;
   --border-hover: #1a1a3a;
 
-  --text-error: #800000
+  --text-error: #800000;
+  --spot-light: #194a7a;
 }
 
 
@@ -37,7 +38,8 @@
   --border: #2D5067;
   --border-hover: #3B6B81;
 
-  --text-error: #d74a49
+  --text-error: #d74a49;
+  --spot-light: #d1dbe4;
 }
 
 
@@ -58,6 +60,7 @@
   --color-border-hover: var(--border-hover);
 
   --color-text-error: var(--text-error);
+  --color-spot-light: var(--spot-light);
 }
 
 

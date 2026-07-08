@@ -1,19 +1,19 @@
 // components/DisplayStaff.tsx
 //
 import { useEffect, useMemo, useState } from "react";
-import DefaultProfile from "../assets/user-profile.png";
+import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
-import type { Staff, StaffProfileResponse } from "../types/staff";
-import { getAllStaffProfiles } from "../services/admin.service";
-import { DAY_ORDER, SCHEDULE_CONFIG } from "../types/schedule";
+import type { Staff, StaffProfileResponse } from "../../types/staff";
+import { getAllStaffProfiles } from "../../services/admin.service";
+import { DAY_ORDER, SCHEDULE_CONFIG } from "../../types/schedule";
 import { Ellipsis } from "lucide-react";
 import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
-import TextLoader from "./ui/TextLoader";
-import { useStaffUpdate } from "../hooks/useStaffUpdate";
-import { updateStaffInCache } from "../utils/data-cache-update";
-import { getPageNumbers } from "../utils/page-numbers";
+import TextLoader from "../ui/TextLoader";
+import { useStaffUpdate } from "../../hooks/useStaffUpdate";
+import { updateStaffInCache } from "../../utils/data-cache-update";
+import { getPageNumbers } from "../../utils/page-numbers";
 
 export default function DisplayStaff() {
   // Using Record to make Key: Value pair | EX: {1: { staffs: [...], pagination: { ... } }}
@@ -58,7 +58,7 @@ export default function DisplayStaff() {
         // I want to keep loading animatiin for 1s
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 300);
       }
     }
     fetchData();
@@ -111,7 +111,7 @@ export default function DisplayStaff() {
     setPagesCache({});
     setRefetchVersion((v) => v + 1);
   }
-  // 
+  //
   // Send user value to Edit Form
   //
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
@@ -151,7 +151,7 @@ export default function DisplayStaff() {
           {/* ========================= */}
           <div className="grid grid-cols-6 bg-sidebar py-4 px-4 font-bold uppercase text-sm">
             <h2 className="col-span-2">Profile</h2>
-            <h2>Role</h2>
+            <h2 className="text-center">Role</h2>
             <h2>Schedule</h2>
             <h2 className="text-center">Status</h2>
             <h2 className="text-end">Action</h2>
@@ -192,12 +192,14 @@ export default function DisplayStaff() {
                 </div>
                 {/*  */}
                 {/* ROLE */}
-                <h3 className="text-xs font-bold text-left">{staff.role}</h3>
+                <h3 className="text-[8px] md:text-[10px] lg:text-xs bg-amber-600 inline-flex justify-self-center px-2 py-1 rounded-xs font-bold text-left">
+                  {staff.role}
+                </h3>
                 {/*  */}
                 {/* SHIFT */}
                 <div className="flex flex-col gap-1">
                   <div className="bg-sidebar px-2 py-1 justify-self-center inline-block w-fit rounded-xs">
-                    <h3 className="text-xs text-white font-bold whitespace-nowrap break-all">
+                    <h3 className="text-[8px] md:text-[10px] lg:text-xs text-white font-bold whitespace-nowrap break-all">
                       {staff.shift === "FULL_DAY" ? "FULL DAY" : staff.shift}
                     </h3>
                   </div>
@@ -227,7 +229,7 @@ export default function DisplayStaff() {
                 <div
                   className={`flex ${staff.status === "ACTIVE" ? "bg-green-600" : staff.status === "INACTIVE" ? "bg-amber-600" : staff.status === "ON_LEAVE" ? "bg-blue-500" : "bg-red-600"} justify-self-center px-2 py-1 rounded-xs`}
                 >
-                  <span className="text-xs font-bold text-white whitespace-nowrap">
+                  <span className="text-[8px] md:text-[10px] lg:text-xs font-bold text-white whitespace-nowrap">
                     {(staff.status === "ON_LEAVE"
                       ? "ON LEAVE"
                       : staff.status) || "Pending..."}
@@ -321,8 +323,6 @@ export default function DisplayStaff() {
         </footer>
         {/*  */}
       </section>
-
-
 
       {/* =============================== */}
       {/* Open Form Edit */}

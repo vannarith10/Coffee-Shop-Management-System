@@ -4,9 +4,12 @@ import type { AxiosResponse } from "axios";
 import api from "../lib/axios";
 import { publicApi } from "../lib/axios";
 import type { TopSellingProductRequest } from "../types/business-analytics";
-import type { PRODUCT_STOCK_STATUS } from "../types/product";
+import type { PRODUCT_STOCK_STATUS, UpdateProductRequest } from "../types/product";
 import type { CreateStaffRequest, EditStaffDataRequest } from "../types/staff";
-import type { CreateCategoryRequest, PatchCategoryRequest } from "../types/category";
+import type {
+  CreateCategoryRequest,
+  PatchCategoryRequest,
+} from "../types/category";
 
 interface ApiError {
   message: string;
@@ -109,9 +112,20 @@ export async function getAllStaffProfiles({
 //
 // UPDATE STAFF PROFILE
 //
-export async function editStaffDetail ({userId, data, file}:{userId:string, data:EditStaffDataRequest, file?:File | null}) {
+export async function editStaffDetail({
+  userId,
+  data,
+  file,
+}: {
+  userId: string;
+  data: EditStaffDataRequest;
+  file?: File | null;
+}) {
   const formData = new FormData();
-  formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
   if (file) {
     formData.append("image", file);
   }
@@ -123,7 +137,13 @@ export async function editStaffDetail ({userId, data, file}:{userId:string, data
 //
 // GET ALL CATEGORIES
 //
-export async function getAllCategories ({page, size}:{page:number, size:number}) {
+export async function getAllCategories({
+  page,
+  size,
+}: {
+  page: number;
+  size: number;
+}) {
   const response = await api.get(`/api/v2/category?page=${page}&size=${size}`);
   return response;
 }
@@ -132,7 +152,13 @@ export async function getAllCategories ({page, size}:{page:number, size:number})
 //
 // PATCH CATEGORY
 //
-export async function patchCategory ({categoryId, data}:{categoryId:string, data:PatchCategoryRequest}) {
+export async function patchCategory({
+  categoryId,
+  data,
+}: {
+  categoryId: string;
+  data: PatchCategoryRequest;
+}) {
   const response = await api.patch(`/api/v2/category/${categoryId}`, data);
   return response;
 }
@@ -141,7 +167,11 @@ export async function patchCategory ({categoryId, data}:{categoryId:string, data
 //
 // CREATE CATEGORY
 //
-export async function createCategory ({data} : {data: CreateCategoryRequest}) {
+export async function createCategory({
+  data,
+}: {
+  data: CreateCategoryRequest;
+}) {
   const response = await api.post("/api/v2/category", data);
   return response;
 }
@@ -150,7 +180,7 @@ export async function createCategory ({data} : {data: CreateCategoryRequest}) {
 //
 // GET CATEGORY STATUS
 //
-export async function getCategoryStatus () {
+export async function getCategoryStatus() {
   const res = await api.get("/api/v2/category/category-status");
   return res;
 }
@@ -159,13 +189,62 @@ export async function getCategoryStatus () {
 //
 // Create Staff Account
 //
-export async function createStaffAccount ({data, file}: {data: CreateStaffRequest, file?:File | null}) {
+export async function createStaffAccount({
+  data,
+  file,
+}: {
+  data: CreateStaffRequest;
+  file?: File | null;
+}) {
   const formData = new FormData();
-  formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
 
   if (file) {
     formData.append("image", file);
   }
   const res = await api.post("/api/v2/employee/create-account", formData);
+  return res;
+}
+//
+//
+//
+// Get all product
+//
+export async function getAllProducts({
+  page,
+  size,
+}: {
+  page: number;
+  size: number;
+}) {
+  const res = await api.get(
+    `/api/v2/product/get-all-products?page=${page}&size=${size}`,
+  );
+  return res;
+}
+//
+//
+//
+// Get a single product
+//
+export async function getASingleProduct({ id }: { id: string }) {
+  const res = await api.get(`/api/v2/product/get-a-single/${id}`);
+  return res;
+}
+//
+//
+//
+// Update product | PATCH
+//
+export async function patchProduct ({id, data, image}:{id:string, data:UpdateProductRequest, image?: File | null}) {
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+  if (image) {
+    formData.append("image", image);
+  }
+  const res = await api.patch(`/api/v2/product/${id}/patch`, formData);
   return res;
 }

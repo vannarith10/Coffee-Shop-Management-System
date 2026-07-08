@@ -48,9 +48,10 @@ export default function LoginPage() {
     <div
       className={`w-screen h-screen flex justify-center items-center ${theme == "light" ? "bg-[radial-gradient(125%_125%_at_50%_10%,#fff_40%,#6366f1_100%)]" : "bg-[radial-gradient(125%_125%_at_50%_10%,#0F1D29_40%,#5B8DA3_100%)]"} transition-colors duration-300 ease-out`}
     >
+      <SpotlightCard rounded="4xl">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-6 w-80 backdrop-blur-xs p-10 rounded-4xl border-4 border-border"
+        className="flex flex-col gap-6 w-80 backdrop-blur-xs p-10 rounded-4xl border-4 border-border overflow-hidden"
       >
         <h2 className="font-bold text-2xl text-text-secondary text-center">
           Login to System
@@ -59,27 +60,27 @@ export default function LoginPage() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
-          className="p-2 border-2 border-border"
+          className="p-2 border-2 border-border outline-none bg-background-secondary"
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="p-2 border-2 border-border"
+          className="p-2 border-2 border-border outline-none bg-background-secondary"
         />
         {isError && (
           <h3 className="text-sm text-red-500">Invalid username or password</h3>
         )}
-        <SpotlightCard>
+        
           <button
             type="submit"
-            className="py-4 w-full px-8 font-bold text-text-primary bg-background-secondary hover:bg-background-primary-hover cursor-pointer "
+            className="py-4 w-full px-8 font-bold text-text-primary bg-background-secondary cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             Login
           </button>
-        </SpotlightCard>
       </form>
+        </SpotlightCard>
     </div>
   );
 }

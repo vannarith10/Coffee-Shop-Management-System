@@ -10,9 +10,9 @@ import {
   YAxis,
   Cell,
 } from "recharts";
-import { getTopSellingProduct } from "../services/admin.service";
-import { RANGES, type Range } from "../types/business-analytics";
-import TextLoader from "./ui/TextLoader";
+import { getTopSellingProduct } from "../../services/admin.service";
+import { RANGES, type Range } from "../../types/business-analytics";
+import TextLoader from "../ui/TextLoader";
 import { RotateCcw } from "lucide-react";
 
 interface Product {
@@ -54,7 +54,7 @@ export default function TopSellingProductsChart() {
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 300);
       }
     }
     fetchingData();
@@ -184,7 +184,12 @@ export default function TopSellingProductsChart() {
                     <YAxis type="category" dataKey="name" hide />
 
                     {/* Actual sold bar */}
-                    <Bar dataKey="sold" radius={[0, 0, 0, 0]} barSize={14} background={{fill:"#d3d3d3"}}>
+                    <Bar
+                      dataKey="sold"
+                      radius={[0, 0, 0, 0]}
+                      barSize={14}
+                      background={{ fill: "#d3d3d3" }}
+                    >
                       <Cell fill={product.color} />
                     </Bar>
                   </BarChart>

@@ -3,19 +3,19 @@
 
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import TextLoader from "./ui/TextLoader";
-import { ROLES, type Role } from "../types/role";
-import { SHIFT_ORDER, type Shift } from "../types/shift";
-import { STATUSES, type Status } from "../types/status";
-import { DAY_ORDER, type Schedule } from "../types/schedule";
-import ImageCropForm from "./ui/ImageCropForm";
-import DefaultProfile from "../assets/user-profile.png";
+import TextLoader from "../ui/TextLoader";
+import { ROLES, type Role } from "../../types/role";
+import { SHIFT_ORDER, type Shift } from "../../types/shift";
+import { STATUSES, type Status } from "../../types/status";
+import { DAY_ORDER, type Schedule } from "../../types/schedule";
+import ImageCropForm from "../ui/ImageCropForm";
+import DefaultProfile from "../../assets/user-profile.png";
 import type { Area } from "react-easy-crop";
-import { getCroppedImg } from "../utils/crop-helper";
-import { base64ToFile } from "../utils/convertor";
+import { getCroppedImg } from "../../utils/crop-helper";
+import { base64ToFile } from "../../utils/convertor";
 import { toast } from "sonner";
-import type { CreateStaffRequest } from "../types/staff";
-import { createStaffAccount } from "../services/admin.service";
+import type { CreateStaffRequest } from "../../types/staff";
+import { createStaffAccount } from "../../services/admin.service";
 import axios from "axios";
 import { Image } from "lucide-react";
 

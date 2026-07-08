@@ -1,19 +1,16 @@
 // components/StockStatus.tsx
 //
 import { Layers2 } from "lucide-react";
-import type {
-  Product,
-  StockStatusResponse,
-} from "../types/product";
+import type { ProductStock, StockStatusResponse } from "../../types/product";
 import { useEffect, useMemo, useState } from "react";
-import { STOCK_STATUS_CONFIG } from "../types/stock-status";
-import { getAllProductsStatus } from "../services/admin.service";
+import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
+import { getAllProductsStatus } from "../../services/admin.service";
 import { Ellipsis } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
-import TextLoader from "./ui/TextLoader";
-import { useProductStockStatusUpdate } from "../hooks/useProductStockStatusUpdate";
-import { updateStockStatusInCache } from "../utils/data-cache-update";
+import TextLoader from "../ui/TextLoader";
+import { useProductStockStatusUpdate } from "../../hooks/useProductStockStatusUpdate";
+import { updateStockStatusInCache } from "../../utils/data-cache-update";
 
 export default function StockStatus() {
   const [pagesCache, setPagesCache] = useState<
@@ -28,7 +25,9 @@ export default function StockStatus() {
   // Cache
   const product = useMemo(() => pagesCache[page] ?? null, [pagesCache, page]);
   // Select a product and pass to Update form
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(
+    null,
+  );
 
   // API
   // Fetching Data from API
@@ -53,7 +52,7 @@ export default function StockStatus() {
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 300);
       }
     }
     fetchData();
@@ -69,7 +68,7 @@ export default function StockStatus() {
   //================================
   // WebSocket - Update Data
   //================================
-  function handleUpdateStockStatusWebSocket(product: Product) {
+  function handleUpdateStockStatusWebSocket(product: ProductStock) {
     setPagesCache((prev) => updateStockStatusInCache(prev, product));
   }
   useProductStockStatusUpdate({
