@@ -14,3 +14,21 @@ export interface TopSellingProductRequest {
     size: number
 }
 
+
+export interface BusinessSummaryResponse {
+  summary: {
+    today_revenue: {
+      value: number;
+      growth_pct: number;
+    };
+    today_total_orders: {
+      value: number;
+      growth_pct: number;
+    };
+    today_average_order_value: {
+      value: number;
+      growth_pct: number;
+    };
+  };
+}
+

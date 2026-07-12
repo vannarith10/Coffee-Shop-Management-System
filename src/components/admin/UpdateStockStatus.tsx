@@ -99,14 +99,15 @@ export default function UpdateStockStatus({
                 </span>
               </div>
             </div>
-            {/*  */}
+            {/* =========================================== */}
             {/* Stock Status Input Options */}
+            {/* =========================================== */}
             {STATUS_OPTIONS.map((option) => {
               const isSelected = selectedStatus === option.value;
               return (
                 <label
                   key={option.value}
-                  className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${
+                  className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all active:scale-80 duration-100 ease-out ${
                     isSelected
                       ? `${option.border} ${option.bg}`
                       : "border-background-secondary hover:border-background-secondary-hover"

@@ -12,9 +12,13 @@
   "dependencies": {
     "@stomp/stompjs": "^7.3.0",
     "@tailwindcss/vite": "^4.3.1",
+    "@tanstack/react-query": "^5.101.2",
     "axios": "^1.18.1",
+    "colorthief": "^3.4.0",
     "framer-motion": "^12.42.0",
     "lucide-react": "^1.21.0",
+    "motion": "^12.42.2",
+    "node-vibrant": "^4.0.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-easy-crop": "^6.0.2",

@@ -29,6 +29,7 @@ export const getAllEmployeeProfiles = async () => {
 //
 //
 // Get shop's image and name
+//
 export const getShopImageAndName = async () => {
   const response = await publicApi.get(
     "/api/v2/shop-profile/shop-name/shop-image",
@@ -41,7 +42,7 @@ export const getShopImageAndName = async () => {
 //
 export const getBusinessSummary = async () => {
   const response = await api.get("/api/v2/analytics/summary");
-  return response.data;
+  return response;
 };
 //
 //

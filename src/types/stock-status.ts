@@ -45,7 +45,7 @@ export const STATUS_OPTIONS: {
     accent: "accent-yellow-600",
     border: "border-yellow-500",
     bg: "bg-background-secondary",
-    color:  "yellow-600",
+    color:  "amber-600",
   },
   {
     value: "OUT_OF_STOCK",

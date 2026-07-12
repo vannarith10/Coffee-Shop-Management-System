@@ -1,7 +1,7 @@
 // components/DisplayProduct.tsx
 //
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { AdminProductResponse } from "../../types/product";
 import { toast } from "sonner";
 import axios from "axios";
@@ -12,6 +12,8 @@ import { Ellipsis, RotateCcw, SquareChartGantt } from "lucide-react";
 import { getPageNumbers } from "../../utils/page-numbers";
 import { useNavigate } from "react-router-dom";
 import TextLoader from "../ui/TextLoader";
+import { Vibrant } from "node-vibrant/browser";
+import { motion, stagger, AnimatePresence } from "motion/react";
 
 export default function DisplayProduct() {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,10 +35,21 @@ export default function DisplayProduct() {
   const navigate = useNavigate();
   const [refetchVersion, setRefetchVersion] = useState(1);
 
+  const [gradients, setGradients] = useState<Record<string, string>>({});
+  const targetRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollToComponent = () => {
+    targetRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   // ==============================
   // Fetching Data
   // ==============================
   useEffect(() => {
+    setTimeout(() => scrollToComponent(), 200)
     if (pagesCache[page]) {
       return;
     }
@@ -74,8 +87,45 @@ export default function DisplayProduct() {
     setRefetchVersion((v) => v + 1);
   }
 
+  // ====================================
+  // Generate Gradient Colors
+  // ====================================
+  useEffect(() => {
+    products?.product_items?.forEach((product) => {
+      if (!product.image_url) return;
+
+      Vibrant.from(product.image_url)
+        .getPalette()
+        .then((palette) => {
+          const swatches = Object.values(palette)
+            .filter((s): s is NonNullable<typeof s> => !!s)
+            .sort((a, b) => b.population - a.population);
+
+          const primary = swatches[0]?.hex ?? "#444";
+          const secondary = swatches[1]?.hex ?? primary;
+          const tertiary = swatches[2]?.hex ?? secondary;
+          setGradients((prev) => ({
+            ...prev,
+            [product.id]: `
+              radial-gradient(circle at 20% 20%, ${primary}, transparent 45%),
+              radial-gradient(circle at 80% 25%, ${secondary}, transparent 45%),
+              radial-gradient(circle at 50% 85%, ${tertiary}, transparent 55%),
+              linear-gradient(
+                180deg,
+                ${secondary},
+                ${primary}
+              )
+            `,
+          }));
+        })
+        .catch(console.error);
+    });
+  }, [products]);
+
+  // "linear-gradient(to bottom, #333, #111)"
+
   return (
-    <section className="w-full rounded-lg overflow-hidden border-border border-2">
+    <section ref={targetRef} className="w-full rounded-lg overflow-hidden border-border border-2">
       {/* ======================== */}
       {/* HEADER */}
       {/* ======================== */}
@@ -154,66 +204,79 @@ export default function DisplayProduct() {
       {/* List Items */}
       {/* =============================== */}
       {!isLoading && !isError && (
-        <div>
-          {products?.product_items?.map((product) => {
-            const config = STOCK_STATUS_CONFIG[product.stock_status];
-            return (
-              <button
-                key={product.id}
-                onClick={() => {setTimeout(() => navigate(`${product.id}`), 300)}}
-                className={`relative grid grid-cols-5 w-full items-center-safe bg-cover bg-center border-b-4 border-border hover:border-white  p-4 cursor-pointer active:p-10  overflow-hidden transition-all duration-100 ease-out`}
-                style={{ backgroundImage: `url(${product.image_url || NoImage})` }}
-              >
-                {/* Overlay with blur */}
-                <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-                {/* -------------------------- */}
-                {/* Product Image */}
-                {/* -------------------------- */}
-                <img
-                  src={product.image_url || NoImage}
-                  alt="Product image"
-                  className="w-20 h-20 z-10 lg:w-24 lg:h-24 rounded-md border-2 border-border object-cover"
-                />
-                {/* -------------------------- */}
-                {/* Product Name */}
-                {/* -------------------------- */}
-                <h3 className="font-bold z-10 text-xs md:text-sm lg:text-lg">
-                  {product.name}
-                </h3>
-                {/* -------------------------- */}
-                {/* Product category */}
-                {/* -------------------------- */}
-                <div className="flex flex-col z-10">
-                  <h5 className="text-[8px] md:text-[10px] lg:text-xs text-text-secondary font-bold">
-                    {product.category_type}
-                  </h5>
-                  <h4 className="text-xs md:text-sm font-bold">
-                    {product.category_name}
-                  </h4>
-                </div>
-                {/* -------------------------- */}
-                {/* Product price */}
-                {/* -------------------------- */}
-                <div className="flex flex-col z-10">
-                  <span className="font-bold text-sm md:text-lg">
-                    ${product.price}
-                  </span>
-                  <span className="text-[10px] md:text-xs lg:text-sm text-amber-600 font-bold">
-                    ${product.cost_price}
-                  </span>
-                </div>
-                {/* -------------------------- */}
-                {/* Product status */}
-                {/* -------------------------- */}
-                <span
-                  className={`text-sm z-10 font-bold inline-flex justify-self-end px-2 py-1 rounded-sm ${config.colorClass}`}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={page}
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit={{ opacity: 0 }}
+          >
+            {products?.product_items?.map((product) => {
+              const config = STOCK_STATUS_CONFIG[product.stock_status];
+              return (
+                <motion.button
+                  key={product.id}
+                  variants={itemVariants}
+                  whileTap={{ scale: 0.95 }}
+                  layout
+                  onClick={() => {
+                    setTimeout(() => navigate(`${product.id}`), 300);
+                  }}
+                  className={`relative grid grid-cols-5 w-full items-center-safe bg-cover bg-center  p-4 cursor-pointer active:px-10 overflow-hidden hover:pl-10 transition-all duration-100 ease-out`}
+                  style={{ backgroundImage: gradients[product.id] }}
                 >
-                  {config.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  {/* Overlay with blur */}
+                  <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+                  {/* -------------------------- */}
+                  {/* Product Image */}
+                  {/* -------------------------- */}
+                  <img
+                    src={product.image_url || NoImage}
+                    alt="Product image"
+                    className="w-20 h-20 z-10 lg:w-24 lg:h-24 rounded-md border-2 border-border object-cover"
+                  />
+                  {/* -------------------------- */}
+                  {/* Product Name */}
+                  {/* -------------------------- */}
+                  <h3 className="font-bold z-10 text-xs md:text-sm lg:text-lg text-white">
+                    {product.name}
+                  </h3>
+                  {/* -------------------------- */}
+                  {/* Product category */}
+                  {/* -------------------------- */}
+                  <div className="flex flex-col z-10 transition-colors duration-300 ease-out">
+                    <h5 className="text-[8px] md:text-[10px] lg:text-xs text-text-secondary font-bold">
+                      {product.category_type}
+                    </h5>
+                    <h4 className="text-xs md:text-sm font-bold">
+                      {product.category_name}
+                    </h4>
+                  </div>
+                  {/* -------------------------- */}
+                  {/* Product price */}
+                  {/* -------------------------- */}
+                  <div className="flex flex-col z-10 transition-colors duration-300 ease-out">
+                    <span className="font-bold text-sm md:text-lg">
+                      ${product.price}
+                    </span>
+                    <span className="text-[10px] md:text-xs lg:text-sm text-amber-600 font-bold">
+                      ${product.cost_price}
+                    </span>
+                  </div>
+                  {/* -------------------------- */}
+                  {/* Product status */}
+                  {/* -------------------------- */}
+                  <span
+                    className={`text-sm z-10 font-bold inline-flex justify-self-end px-2 py-1 rounded-sm ${config.colorClass} transition-colors duration-300 ease-out`}
+                  >
+                    {config.label}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {/* ================= */}
@@ -272,3 +335,33 @@ export default function DisplayProduct() {
     </section>
   );
 }
+
+// For styles & animations
+
+const containerVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: stagger(0.1),
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.80,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};

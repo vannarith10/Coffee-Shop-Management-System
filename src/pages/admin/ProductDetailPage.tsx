@@ -5,9 +5,8 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { getASingleProduct, patchProduct } from "../../services/admin.service";
+import { patchProduct } from "../../services/admin.service";
 import type {
-  Product,
   PRODUCT_STOCK_STATUS,
   UpdateProductRequest,
 } from "../../types/product";
@@ -25,8 +24,8 @@ import {
   Pencil,
   ScanBarcode,
   Tag,
+  X,
 } from "lucide-react";
-import { type CATEGORY_TYPE } from "../../types/category";
 import { STATUS_OPTIONS } from "../../types/stock-status";
 import ButtonCopy from "../../components/ui/ButtonCopy";
 import DefaultPicture from "../../assets/no-image.webp";
@@ -109,7 +108,7 @@ export default function ProductDetailPage() {
   };
 
   // ===========================
-  // Handle Cancel button
+  // Cancel button
   // ===========================
   const handleCancelButton = () => {
     setIsEditing(false);
@@ -203,11 +202,14 @@ export default function ProductDetailPage() {
     try {
       setIsSavingError(false);
       setIsSaving(true);
-      await patchProduct({
+      const res = await patchProduct({
         id: product!.id,
         data: data,
         image: file ?? null,
       });
+      if (res.status == 200) {
+        setIsEditing(false);
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const errData = error.response?.data as {
@@ -224,8 +226,6 @@ export default function ProductDetailPage() {
     }
   };
 
-
-
   return (
     <section
       onClick={handleClose}
@@ -235,13 +235,16 @@ export default function ProductDetailPage() {
         onClick={(e) => e.stopPropagation()}
         className=" grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 overflow-y-scroll scrollbar-hide w-[80vw] max-h-[80vh] gap-4 bg-white/60 p-6 border-4 border-border rounded-4xl"
       >
+        {/* ---------------------------- */}
+        {/* Clost button */}
+        {/* ---------------------------- */}
         <button
           onClick={() => {
             setTimeout(() => handleClose(), 200);
           }}
-          className="fixed top-10 right-10 md:right-20 px-4 py-1 rounded-full cursor-pointer bg-amber-600 hover:bg-amber-700 active:scale-60 active:px-10 transition-all duration-200 ease-out outline-none"
+          className="fixed top-10 right-10 flex items-center justify-center md:right-20 px-4 py-1 rounded-full cursor-pointer bg-amber-600 hover:bg-amber-700 active:scale-60 active:px-10 transition-all duration-200 ease-out outline-none"
         >
-          Close
+          Close <X size={20}/>
         </button>
         {/* =================================================== */}
         {/* Image and Date container */}
@@ -253,24 +256,22 @@ export default function ProductDetailPage() {
           <div className="aspect-square rounded-xl overflow-hidden  flex justify-center items-center border-2 border-border">
             {isLoading && <TextLoader text="Loading image..." />}
             {!isLoading && !isError && (
-              <div>
+              <>
                 {/* CLICKABLE IMAGE */}
                 <label
                   htmlFor="imageUpload"
-                  className="cursor-pointer w-full h-full"
+                  className="relative block cursor-pointer w-full h-full"
                 >
-                  <div className="relative h-full w-full rounded-md overflow-hidden">
-                    <img
-                      src={preview || DefaultPicture}
-                      alt="product image"
-                      className="w-full h-full object-cover aspect-square"
-                    />
-                    <span
-                      className={`${!isEditing && "hidden"} absolute hover:bg-gray-400/50 backdrop-blur-xs rounded-lg opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-700 active:text-gray-200`}
-                    >
-                      <Image size={48} />
-                    </span>
-                  </div>
+                  <img
+                    src={preview || DefaultPicture}
+                    alt="product image"
+                    className="w-full h-full object-cover aspect-square"
+                  />
+                  <span
+                    className={`${!isEditing && "hidden"} absolute backdrop-blur-xs rounded-xl opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400 active:text-gray-200`}
+                  >
+                    <Image size={56} />
+                  </span>
                 </label>
 
                 {/* Image input */}
@@ -282,7 +283,7 @@ export default function ProductDetailPage() {
                   onChange={handleInputImage}
                   className="hidden"
                 />
-              </div>
+              </>
             )}
           </div>
           {/* --------------------------- */}

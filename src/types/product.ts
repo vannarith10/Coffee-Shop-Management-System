@@ -56,3 +56,18 @@ export interface UpdateProductRequest {
   description: string | null | undefined;
   stock_status: PRODUCT_STOCK_STATUS | null | undefined ;
 }
+
+
+
+interface TopProduct {
+  product_id: string;
+  product_name: string;
+  image_url: string;
+  units_sold: number;
+}
+
+export interface TopSellingResponse {
+  pagination: Pagination;
+  units_target: number;
+  top_products: TopProduct[];
+}

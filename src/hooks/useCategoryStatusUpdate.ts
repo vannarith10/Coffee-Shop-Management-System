@@ -1,5 +1,5 @@
 // hooks/useCategoryStatusUpdate.ts
-//
+// WebSocket
 
 import { useEffect } from "react";
 import type { CategoryStatusResponse } from "../types/category";

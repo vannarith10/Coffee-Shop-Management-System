@@ -1,6 +1,6 @@
 // hooks/useProductStockStatusUpdate.ts
 // WebSocket
-//
+
 
 import { useEffect } from "react";
 import type { ProductStock } from "../types/product";

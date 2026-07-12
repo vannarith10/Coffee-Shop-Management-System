@@ -1,7 +1,7 @@
 // components/TopSellingProducts.tsx
 //
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -10,73 +10,37 @@ import {
   YAxis,
   Cell,
 } from "recharts";
-import { getTopSellingProduct } from "../../services/admin.service";
 import { RANGES, type Range } from "../../types/business-analytics";
 import TextLoader from "../ui/TextLoader";
 import { RotateCcw } from "lucide-react";
+import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
 
-interface Product {
-  product_id: string;
-  product_name: string;
-  image_url: string;
-  units_sold: number;
-}
-
-interface TopSellingResponse {
-  pagination: {
-    page: number;
-    size: number;
-    total_pages: number;
-    total_items: number;
-  };
-  units_target: number;
-  top_products: Product[];
-}
 
 export default function TopSellingProductsChart() {
-  const [data, setData] = useState<TopSellingResponse | null>(null);
+
   const [page, setPage] = useState(1);
-  const size = 10;
+  const size = 20;
   const [selectedRange, setSelectedRange] = useState<Range>("ALL");
-  const [isLoading, setIsLoading] = useState(true);
-  const [refetchVersion, setRefetchVersion] = useState(0);
 
-  // Fetching Data
-  useEffect(() => {
-    async function fetchingData() {
-      setIsLoading(true);
-      try {
-        const range = selectedRange;
-        const response = await getTopSellingProduct({ range, page, size });
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300);
-      }
-    }
-    fetchingData();
-  }, [page, size, selectedRange, refetchVersion]);
+  const {topSelling, isLoading, isError, refetch, isRefetching} = useTopSellingProduct({range:selectedRange, page, size});
 
-  //
-  // Handle Refresh | Retry
-  function handleRefresh() {
-    setPage(1);
-    setRefetchVersion((v) => v + 1);
-  }
-  //
-  //
+
+
+  // ==========================
+  // Range Filter
+  // ==========================
   function handleFilterRange(range: Range) {
     setSelectedRange(range);
   }
+  
 
-  // Showing most sold first
-  const filtered = data?.top_products
+  // ======================================
+  // Showing most sold first | Filter
+  // ======================================
+  const filtered = topSelling?.top_products
     .sort((a, b) => b.units_sold - a.units_sold)
     .map((product) => {
-      const percentage = (product.units_sold / data.units_target) * 100;
+      const percentage = (product.units_sold / topSelling.units_target) * 100;
 
       return {
         id: product.product_id,
@@ -106,19 +70,23 @@ export default function TopSellingProductsChart() {
             Volume distribution by unit sales
           </p>
         </div>
-        {/* Refresh */}
+
+        {/* =========================== */}
+        {/* Refresh button*/}
+        {/* =========================== */}
         <div className="flex items-center">
           <button
-            onClick={handleRefresh}
+            onClick={() => refetch()}
             className="font-bold text-sm text-white items-center flex gap-2 bg-sidebar px-3 py-1 rounded-md cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-100 ease-out outline-none"
           >
-            {" "}
-            Refresh <RotateCcw />{" "}
+            {isRefetching ? "Syncing..." : (<>Refresh <RotateCcw /></>)}
           </button>
         </div>
       </div>
 
-      {/* Filter */}
+      {/* ================================= */}
+      {/* Filter range*/}
+      {/* ================================= */}
       <div className="w-full mb-4 flex flex-wrap gap-4">
         {RANGES.map((range) => {
           return (
@@ -134,16 +102,37 @@ export default function TopSellingProductsChart() {
         })}
       </div>
 
+      {/* ================================= */}
       {/* Handle Loading... */}
-      {isLoading && (
+      {/* ================================= */}
+      { isLoading && (
         <div className="w-full text-xl py-10 flex items-center justify-center">
           <TextLoader text="Loading..." />
         </div>
       )}
 
-      {/*  */}
+
+      {/* ================================== */}
+      {/* Error handling */}
+      {/* ================================== */}
+      {isError && (
+        <div className="w-full py-20 flex flex-col justify-center items-center gap-4">
+          <p className="text-lg font-semibold text-text-error">
+            Failed to load product data. Please try again.
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="bg-background-secondary-hover font-bold py-2 px-4 rounded-md flex gap-2 hover:bg-sidebar cursor-pointer active:scale-80 transition-all duration-200 ease-out"
+          >
+            Retry <RotateCcw />
+          </button>
+        </div>
+      )}
+
+      {/* ============================ */}
       {/* Display Data */}
-      {!isLoading && (
+      {/* ============================ */}
+      {!isLoading && !isError && (
         <div className="space-y-6">
           {filtered?.length == 0 ? (
             <div className="w-full flex justify-center items-center py-10 font-bold">
@@ -166,7 +155,7 @@ export default function TopSellingProductsChart() {
                 {/* Progress Bar */}
                 <ResponsiveContainer width="100%" height={14}>
                   <BarChart
-                    data={[{ ...product, target: data?.units_target || 0 }]}
+                    data={[{ ...product, target: topSelling?.units_target || 0 }]}
                     layout="vertical"
                     margin={{
                       top: 0,
@@ -177,7 +166,7 @@ export default function TopSellingProductsChart() {
                   >
                     <XAxis
                       type="number"
-                      domain={[0, data?.units_target || 0]}
+                      domain={[0, topSelling?.units_target || 0]}
                       hide
                     />
 
@@ -222,7 +211,7 @@ export default function TopSellingProductsChart() {
         </div>
 
         <p className="mt-2 text-xs font-bold text-muted-foreground text-text-secondary">
-          Unit Target: {data?.units_target}
+          Unit Target: {topSelling?.units_target}
         </p>
       </div>
       {/*  */}

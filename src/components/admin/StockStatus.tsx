@@ -1,83 +1,36 @@
 // components/StockStatus.tsx
 //
 import { Layers2 } from "lucide-react";
-import type { ProductStock, StockStatusResponse } from "../../types/product";
-import { useEffect, useMemo, useState } from "react";
+import type { ProductStock } from "../../types/product";
+import { useState } from "react";
 import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import { getAllProductsStatus } from "../../services/admin.service";
 import { Ellipsis } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
 import TextLoader from "../ui/TextLoader";
-import { useProductStockStatusUpdate } from "../../hooks/useProductStockStatusUpdate";
-import { updateStockStatusInCache } from "../../utils/data-cache-update";
+import { useStockStatus } from "../../hooks/useStockStatus";
+import { getPageNumbers } from "../../utils/page-numbers";
 
 export default function StockStatus() {
-  const [pagesCache, setPagesCache] = useState<
-    Record<number, StockStatusResponse>
-  >({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const size = 10;
-  const [refetchVersion, setRefetchVersion] = useState(0);
 
-  // Cache
-  const product = useMemo(() => pagesCache[page] ?? null, [pagesCache, page]);
-  // Select a product and pass to Update form
-  const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(
-    null,
-  );
+  // Select a product and pass to Update Form
+  const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(null);
 
-  // API
-  // Fetching Data from API
-  useEffect(() => {
-    // Check if pagesCache alread has this page
-    if (pagesCache[page]) {
-      // No requesting to API
-      return;
-    }
+  // Retreive data from hook
+  const { product, isLoading, isError, refetch } = useStockStatus({page, size});
 
-    async function fetchData() {
-      setIsLoading(true);
-      setIsError(false);
-
-      try {
-        const response = await getAllProductsStatus({ page, size });
-        // setProduct(response);
-        setPagesCache((prev) => ({ ...prev, [page]: response.data }));
-      } catch (error) {
-        console.error(error);
-        setIsError(true);
-      } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300);
-      }
-    }
-    fetchData();
-  }, [refetchVersion, page, size, pagesCache]);
-
-  // Handle Error fetching data
-  // Force re-fetch even if page is already 1
-  function handleRetry() {
-    setPage(1); // Reset to first page
-    setRefetchVersion((v) => v + 1);
+  // Hanle Error fetching data
+  function handleRetry () {
+    setPage(1);
+    refetch();
   }
 
-  //================================
-  // WebSocket - Update Data
-  //================================
-  function handleUpdateStockStatusWebSocket(product: ProductStock) {
-    setPagesCache((prev) => updateStockStatusInCache(prev, product));
-  }
-  useProductStockStatusUpdate({
-    onStockStatusUpdate: handleUpdateStockStatusWebSocket,
-  });
 
-  //
+  // =============================
   // Pagination logic
-  //
+  // =============================
   const currentPage = product?.pagination.page ?? page;
   const totalPages = product?.pagination.total_pages ?? 1;
   const hasPrev = currentPage > 1;
@@ -98,45 +51,15 @@ export default function StockStatus() {
   function handlePageClick(pageNum: number) {
     setPage(pageNum);
   }
-  //
-  //
-  // Get page numbers for pagination list down
-  function getPageNumbers() {
-    const pages: (number | string)[] = [];
-    //
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      // This block to be executed unless the Total Pages > 5
-      pages.push(1);
-      if (currentPage > 3) {
-        pages.push("...");
-      }
-      for (
-        let i = Math.max(2, currentPage - 1);
-        i <= Math.min(totalPages - 1, currentPage + 1);
-        i++
-      ) {
-        pages.push(i);
-      }
 
-      if (currentPage < totalPages - 2) {
-        pages.push("...");
-      }
-      pages.push(totalPages);
-    }
-    //
-    return pages;
-  }
 
   return (
     <>
       <section className="w-full bg-background-secondary text-text-primary rounded-lg mt-4 overflow-hidden border-border border-2">
-        {/*  */}
+        {/* ========================================= */}
         {/* Header of Stock Status Board */}
         {/* Stock Status Title */}
+        {/* ========================================= */}
         <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
           <div className="flex gap-4">
             <Layers2 />
@@ -154,9 +77,10 @@ export default function StockStatus() {
             </div>
           )}
         </div>
-        {/*  */}
-        {/*  */}
+
+        {/* =============================================== */}
         {/* Header of item columns | column name */}
+        {/* =============================================== */}
         <div className="grid grid-cols-6 bg-sidebar text-text-secondary p-4 px-6 text-[10px] xl:text-sm font-bold uppercase">
           <h4 className="col-span-2">Item Name</h4>
           <h4>Category</h4>
@@ -165,16 +89,18 @@ export default function StockStatus() {
           <h4 className="text-right w-full">Action</h4>
         </div>
 
-        {/*  */}
+        {/* ===================================== */}
         {/* Handle Loading */}
-        {isLoading && (
+        {/* ===================================== */}
+        {isLoading && !isError && (
           <div className="w-full py-20 flex justify-center items-center text-xl font-bold ">
             <TextLoader text="Loading..." />
           </div>
         )}
-        {/*  */}
+        {/* ===================================== */}
         {/* Hanlde Error and Retry */}
-        {isError && (
+        {/* ===================================== */}
+        {isError && !isLoading && (
           <div className="w-full py-10 flex flex-col justify-center items-center gap-4">
             <p className="text-lg font-semibold text-text-error">
               Failed to load product stock data. Please try again.
@@ -187,11 +113,12 @@ export default function StockStatus() {
             </button>
           </div>
         )}
-        {/*  */}
+        {/* ================================================= */}
         {/* All items are being displayed here */}
         {/* Display list of products */}
-        {!isLoading &&
-          product?.products.map((p) => {
+        {/* ================================================= */}
+        {!isLoading && !isError &&
+          product?.products.map((p: ProductStock) => {
             const config = STOCK_STATUS_CONFIG[p.status];
             return (
               <div
@@ -233,9 +160,11 @@ export default function StockStatus() {
             );
           })}
 
+        {/* =================================================== */}
         {/* Footer of the Stock Status Board */}
         {/* The bottom of the Stock Status board */}
         {/* Pagination */}
+        {/* =================================================== */}
         <div className="flex justify-between px-6 py-4 border-t-4 border-border">
           {/* PREV */}
           <button
@@ -248,7 +177,7 @@ export default function StockStatus() {
           {/* 1 2 3 ... 4 */}
           {/* Page Numbers */}
           <div className="flex items-center justify-center gap-2">
-            {getPageNumbers().map((pageNum, idx) =>
+            {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
               pageNum === "..." ? (
                 <span
                   key={`ellipsis-${idx}`}
@@ -281,9 +210,11 @@ export default function StockStatus() {
         {/*  */}
       </section>
 
-      {/*  */}
-      {/*  */}
+      {/* ==================================================== */}
+      {/* Form */}
       {/* Render Update Stock Status Model outside the section */}
+      {/* Open this form when we click the restock button */}
+      {/* ==================================================== */}
       {selectedProduct && (
         <UpdateStockStatus
           product={selectedProduct}

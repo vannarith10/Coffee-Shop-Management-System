@@ -1,7 +1,7 @@
 // utils/page-numbers.ts
 
 
-export function getPageNumbers(totalPages:number, currentPage:number) {
+export function getPageNumbers(totalPages:number, currentPage:number): (number | string)[] {
     const pages: (number | string)[] = [];
     //
     if (totalPages <= 5) {
