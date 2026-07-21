@@ -3,10 +3,15 @@
 import type { AxiosResponse } from "axios";
 import api from "../lib/axios";
 import { publicApi } from "../lib/axios";
-import type { TopSellingProductRequest } from "../types/business-analytics";
-import type { PRODUCT_STOCK_STATUS, UpdateProductRequest } from "../types/product";
+import type { Range, TopSellingProductRequest } from "../types/business-analytics";
+import type {
+  AddNewProductRequest,
+  PRODUCT_STOCK_STATUS,
+  UpdateProductRequest,
+} from "../types/product";
 import type { CreateStaffRequest, EditStaffDataRequest } from "../types/staff";
 import type {
+  CATEGORY_TYPE,
   CreateCategoryRequest,
   PatchCategoryRequest,
 } from "../types/category";
@@ -181,7 +186,7 @@ export async function createCategory({
 //
 // GET CATEGORY STATUS
 //
-export async function getCategoryStatus() {
+export async function getCategoryStatusSummary() {
   const res = await api.get("/api/v2/category/category-status");
   return res;
 }
@@ -217,14 +222,28 @@ export async function createStaffAccount({
 export async function getAllProducts({
   page,
   size,
+  categoryType,
+  categoryName,
+  keyword,
 }: {
   page: number;
   size: number;
+  categoryType: CATEGORY_TYPE | "ALL";
+  categoryName: string | null;
+  keyword: string | null;
 }) {
-  const res = await api.get(
-    `/api/v2/product/get-all-products?page=${page}&size=${size}`,
-  );
-  return res;
+  const params: Record<string, string | number> = { page, size };
+  
+  if (keyword !== null) {
+    params.keyword = keyword;
+  }
+  if (categoryType !== "ALL") {
+    params.category_type = categoryType;
+  }
+  if (categoryName !== null) {
+    params.category_name = categoryName;
+  }
+  return await api.get("api/v2/product/get-all-products", { params });
 }
 //
 //
@@ -240,12 +259,71 @@ export async function getASingleProduct({ id }: { id: string }) {
 //
 // Update product | PATCH
 //
-export async function patchProduct ({id, data, image}:{id:string, data:UpdateProductRequest, image?: File | null}) {
+export async function patchProduct({
+  id,
+  data,
+  image,
+}: {
+  id: string;
+  data: UpdateProductRequest;
+  image?: File | null;
+}) {
   const formData = new FormData();
-  formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
   if (image) {
     formData.append("image", image);
   }
   const res = await api.patch(`/api/v2/product/${id}/patch`, formData);
   return res;
+}
+//
+//
+//
+// Get All Category Names
+export async function getAllCategoryNames() {
+  return await api.get("/api/v2/category/names");
+}
+//
+//
+//
+// Add new Product
+//
+export async function addNewProduct({
+  data,
+  image,
+}: {
+  data: AddNewProductRequest;
+  image: File;
+}) {
+  const formData = new FormData();
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
+  formData.append("image", image);
+  return await api.post("/api/v2/product/add-new", formData);
+}
+//
+//
+//
+// Get Sales By Category
+export async function getSalesByCategory ({range}:{range: Range}) {
+    return await api.get(`/api/v2/reports/sales-by-category/${range}`);
+}
+//
+//
+//
+// Get Busiest Hours
+export async function getBusiestHours () {
+  return await api.get(`/api/v2/reports/busiest-hours`);
+}
+//
+//
+//
+// Get Revenue Trends
+export async function getRevenueTrends ({month, year}:{month:number, year:number}) {
+  return await api.get(`/api/v2/reports/revenue-trends/${month}/${year}`)
 }

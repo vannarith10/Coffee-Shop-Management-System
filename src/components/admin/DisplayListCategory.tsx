@@ -1,7 +1,7 @@
 // components/ListCategory.tsx
 //
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Category } from "../../types/category.ts";
 import { Ellipsis, SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
@@ -13,17 +13,22 @@ import { getPageNumbers } from "../../utils/page-numbers.ts";
 export default function ListCategory() {
   const [page, setPage] = useState(1);
   const size = 10;
-  // Receive data from custom hook
-  const { category, isLoading, isError, justUpdatedFieldId } = useCategory(
-    page,
-    size,
-  );
-  //
+  const {
+    category,
+    isLoading,
+    isError,
+    justUpdatedFieldId,
+    justCreatedCategoryId,
+  } = useCategory(page, size);
+
+  const targetRef = useRef<HTMLDivElement | null>(null);
+
   const currentPage = category?.pagination.page ?? page;
   const totalPages = category?.pagination.total_pages ?? 1;
   const totalItems = category?.pagination.total_items ?? 0;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
+
   const handlePrev = () => {
     if (hasPrev) setPage((p) => p - 1);
   };
@@ -39,9 +44,16 @@ export default function ListCategory() {
     null,
   );
 
-  //
-  //
-  //
+  // Scroll to the new Category that just created
+  useEffect(() => {
+  if (justCreatedCategoryId) {
+    targetRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+}, [justCreatedCategoryId]);
+
   return (
     <>
       <section className="rounded-lg overflow-hidden border-2 border-border">
@@ -63,7 +75,7 @@ export default function ListCategory() {
                   Page {currentPage} of {totalPages}
                 </h4>
                 <h4 className="font-semibold text-sm">
-                  Profiles: {totalItems}
+                  Categories: {totalItems}
                 </h4>
               </div>
             )}
@@ -94,10 +106,12 @@ export default function ListCategory() {
           category?.categories?.map((category) => {
             const isActive = category.is_active;
             const justUpdated = category.category_id === justUpdatedFieldId;
+            const justCreated = category.category_id === justCreatedCategoryId;
             return (
               <main
                 key={category.category_id}
-                className={`grid grid-cols-5 items-center-safe text-sm ${justUpdated ? "bg-green-700" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold border-t border-border`}
+                ref={justCreated ? targetRef : null}
+                className={`grid grid-cols-5 items-center-safe text-sm ${justUpdated || justCreated ? "bg-green-700" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold border-t border-border`}
               >
                 {/* Name */}
                 <h2 className="col-span-2 text-lg">{category.category_name}</h2>

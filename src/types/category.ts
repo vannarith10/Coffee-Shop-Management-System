@@ -53,9 +53,18 @@ export interface CreateCategoryRequest {
 }
 
 
-export interface CategoryStatusResponse {
+export interface CategoryStatusSummaryResponse {
     total_categories: number;
     total_drinks: number;
     total_foods: number;
     total_disables: number;
+}
+
+
+
+export interface GetSalesByCategoryResponse {
+    category_id: string;
+    category_name: string;
+    category_type: CATEGORY_TYPE;
+    revenue: number;
 }

@@ -1,8 +1,8 @@
 // pages/admin/CategoryTab.tsx
 //
 import AddNewCategory from "../../components/admin/AddNewCategory";
-import CategoryStatus from "../../components/admin/CategoryStatus";
-import ListCategory from "../../components/admin/ListCategory";
+import CategoryStatus from "../../components/admin/CategoryStatusSummary";
+import ListCategory from "../../components/admin/DisplayListCategory";
 
 export default function CategoryTab() {
   return (

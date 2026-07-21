@@ -1,7 +1,7 @@
 // components/AddNewCategory.tsx
 //
 
-import { SquarePlus } from "lucide-react";
+import { RotateCcw, SquarePlus } from "lucide-react";
 import { useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import {
@@ -14,8 +14,10 @@ import {
 import { toast } from "sonner";
 import { createCategory } from "../../services/admin.service";
 import axios from "axios";
+import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 
 export default function AddNewCategory() {
+  const { refetch, isRefetching } = useCategoryStatusSummary();
   const [isOpen, setIsOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,21 +91,28 @@ export default function AddNewCategory() {
     }
   }
 
-  //
-  //
-  //
+
   return (
     <>
       <section className="w-full flex justify-end">
-        <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="w-full grid grid-cols-2 xl:grid-cols-4 gap-4">
             {/* ===================== */}
             {/* Button Add */}
             {/* ===================== */}
           <button
             onClick={() => setIsOpen(true)}
-            className="col-start-2 lg:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className="col-start-1 xl:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             Add Category <SquarePlus />
+          </button>
+          {/* ------------------- */}
+          {/* Refresh */}
+          {/* ------------------- */}
+          <button
+            onClick={() => refetch()}
+            className="col-start-2 xl:col-start-4 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+          >
+            {isRefetching ? "Syncing..." : (<>Refresh <RotateCcw /></>)}
           </button>
         </div>
       </section>

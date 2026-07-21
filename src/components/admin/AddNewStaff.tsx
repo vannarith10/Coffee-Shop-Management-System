@@ -6,7 +6,7 @@ import { useCallback, useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import { ROLES, type Role } from "../../types/role";
 import { SHIFT_ORDER, type Shift } from "../../types/shift";
-import { STATUSES, type Status } from "../../types/status";
+import { STATUSES, USER_STATUS_COLOR_CONFIG, type Status } from "../../types/status";
 import { DAY_ORDER, type Schedule } from "../../types/schedule";
 import ImageCropForm from "../ui/ImageCropForm";
 import DefaultProfile from "../../assets/user-profile.png";
@@ -51,6 +51,7 @@ export default function AddNewStaff() {
 
   const [image, setImage] = useState<string | null>(null);
   const [preview, setPreview] = useState<string>(DefaultProfile);
+
   const handleInputImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -97,13 +98,16 @@ export default function AddNewStaff() {
     setZoom(Number(e.target.value));
   };
 
+  // =====================
+  // Complete crop
+  // =====================
   const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
     setCroppedAreaPixels(croppedPixels);
   }, []);
 
-  // ============================
+  // =====================================================
   // Handle Submit Form
-  // ============================
+  // =====================================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -227,7 +231,7 @@ export default function AddNewStaff() {
             className="p-10 flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-secondary border-4 border-border-hover rounded-4xl"
           >
             <div>
-              <h2 className="font-bold text-2xl ">Create Category</h2>
+              <h2 className="font-bold text-2xl ">Create Staff Account</h2>
               <p className="text-xs text-text-secondary">
                 Fill in the details to create a new staff account.
               </p>
@@ -420,12 +424,13 @@ export default function AddNewStaff() {
                   <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
                     {STATUSES.map((status) => {
                       const isSelected = status === selectedStatus;
+                      const config = selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
                       return (
                         <button
                           key={status}
                           type="button"
                           onClick={() => setSelectedStatus(status)}
-                          className={`relative py-4 text-xs ${isSelected ? "bg-green-600" : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
+                          className={`relative py-4 text-xs ${isSelected ? config?.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                         >
                           {status === "ON_LEAVE" ? "ON LEAVE" : status}
                         </button>

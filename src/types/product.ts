@@ -71,3 +71,13 @@ export interface TopSellingResponse {
   units_target: number;
   top_products: TopProduct[];
 }
+
+
+export interface AddNewProductRequest {
+  name: string;
+  selling_price: number;
+  cost_price: number;
+  category_name: string;
+  stock_status: PRODUCT_STOCK_STATUS;
+  description: string | null;
+}

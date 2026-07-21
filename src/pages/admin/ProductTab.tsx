@@ -1,6 +1,8 @@
 import React from "react";
 import DisplayProduct from "../../components/admin/DisplayProduct";
 import { Outlet } from "react-router-dom";
+import AddNewProductForm from "../../components/admin/AddNewProductForm";
+import ProductFilter from "../../components/admin/ProductFilter";
 
 const ProductTab = () => {
   return (
@@ -14,6 +16,9 @@ const ProductTab = () => {
         </p>
       </div>
 
+
+      <AddNewProductForm/>
+      <ProductFilter/>
       <DisplayProduct/>
       <Outlet/>
     </div>

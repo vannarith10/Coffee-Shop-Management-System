@@ -12,12 +12,13 @@ import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "../ui/TextLoader";
 import { getPageNumbers } from "../../utils/page-numbers";
 import { useStaff } from "../../hooks/useStaff";
+import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
 
 export default function DisplayStaff() {
-
   const [page, setPage] = useState(1);
-  const size = 10;
-  const {staff, isLoading, isError, isRefetching, refetch, justUpdatedId} = useStaff({page, size});
+  const size = 20;
+  const { staff, isLoading, isError, isRefetching, refetch, justUpdatedId } =
+    useStaff({ page, size });
   const currentPage = staff?.pagination.page ?? page;
   const totalPages = staff?.pagination.total_pages ?? 1;
   const totalItems = staff?.pagination.total_items ?? 0;
@@ -44,9 +45,6 @@ export default function DisplayStaff() {
   function handleRetry() {
     refetch();
   }
-  //
-  // Send user value to Edit Form
-  //
 
   return (
     <>
@@ -64,13 +62,27 @@ export default function DisplayStaff() {
             {/*  */}
             {/* Pages and Items */}
             {!isLoading && !isError && (
-              <div>
-                <h4 className="font-semibold text-xs text-text-secondary">
-                  Page {currentPage} of {totalPages}
-                </h4>
-                <h4 className="font-semibold text-sm">
-                  Profiles: {totalItems}
-                </h4>
+              <div className="flex gap-4">
+                <div>
+                  <h4 className="font-semibold text-xs text-text-secondary">
+                    Page {currentPage} of {totalPages}
+                  </h4>
+                  <h4 className="font-semibold text-sm">
+                    Profiles: {totalItems}
+                  </h4>
+                </div>
+                <button
+                  onClick={() => refetch()}
+                  className="px-4 py-2 flex gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
+                >
+                  {isRefetching ? (
+                    "Syncing..."
+                  ) : (
+                    <>
+                      Refresh <RotateCcw />
+                    </>
+                  )}
+                </button>
               </div>
             )}
           </div>
@@ -161,7 +173,7 @@ export default function DisplayStaff() {
                 {/* STATUS */}
                 {/* ------------------------ */}
                 <div
-                  className={`flex ${staff.status === "ACTIVE" ? "bg-green-600" : staff.status === "INACTIVE" ? "bg-amber-600" : staff.status === "ON_LEAVE" ? "bg-blue-500" : "bg-red-600"} justify-self-center px-2 py-1 rounded-xs`}
+                  className={`flex ${USER_STATUS_COLOR_CONFIG[staff.status].background_color} justify-self-center px-2 py-1 rounded-xs`}
                 >
                   <span className="text-[8px] md:text-[10px] lg:text-xs font-bold text-white whitespace-nowrap">
                     {(staff.status === "ON_LEAVE"

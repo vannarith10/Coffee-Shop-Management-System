@@ -7,52 +7,15 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import TextLoader from "../ui/TextLoader";
-import type { CategoryStatusResponse } from "../../types/category";
-import { useEffect, useState, type JSX } from "react";
-import { getCategoryStatus } from "../../services/admin.service";
-import { useCategoryStatusUpdate } from "../../hooks/useCategoryStatusUpdate";
 import SpotlightCard from "../animation/SpotlightCard";
+import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
+import type { JSX } from "react/jsx-runtime";
 //
 // Showing the numbers on the top of Category Tab
 //
 export default function CategoryStatus() {
-  const [categoryStatus, setCategoryStatus] =
-    useState<CategoryStatusResponse>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  // ==========================
-  // Fetching Data
-  // ==========================
-  useEffect(() => {
-    async function fetch() {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        const res = await getCategoryStatus();
-        setCategoryStatus(res.data);
-      } catch (error) {
-        console.error(error);
-        setIsError(true);
-      } finally {
-        setTimeout(() => setIsLoading(false), 300);
-      }
-    }
-
-    fetch();
-  }, []);
-
-  // =======================================================
-  // WebSocket | Get new status when new Category created
-  // =======================================================
-  function handleUpdateCategoryStatus(
-    newCategoryStatus: CategoryStatusResponse,
-  ) {
-    setCategoryStatus(newCategoryStatus);
-  }
-  useCategoryStatusUpdate({
-    onUpdateCategoryStatus: handleUpdateCategoryStatus,
-  });
+  const { statusSummary, isLoading, isError, isRefetching, refetch } =
+    useCategoryStatusSummary();
 
   return (
     <section className="grid grid-cols-2 xl:grid-cols-4 gap-4">
@@ -100,12 +63,13 @@ export default function CategoryStatus() {
           </div>
         ))}
 
+
       {/* ================================ */}
       {/* Renders Cards */}
       {/* ================================ */}
       {!isLoading &&
         !isError &&
-        Object.entries(categoryStatus ?? {}).map(([key, value]) => {
+        Object.entries(statusSummary ?? {}).map(([key, value]) => {
           const config = ItemMap[key];
           return (
             <SpotlightCard key={key} rounded="lg">

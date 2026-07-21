@@ -34,6 +34,7 @@ import ImageCropForm from "../../components/ui/ImageCropForm";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { useGetASingleProduct } from "../../hooks/useGetASingleProduct";
+import MoneyInput from "../../components/ui/MoneyInput";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -44,8 +45,8 @@ export default function ProductDetailPage() {
   // NEW
   const [newProductName, setNewProductName] = useState<string | null>(null);
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null);
-  const [newPrice, setNewPrice] = useState<number | string | null>(null);
-  const [newCost, setNewCost] = useState<number | string | null>(null);
+  const [newPrice, setNewPrice] = useState<string>("0");
+  const [newCost, setNewCost] = useState<string>("0");
   const [newDescription, setNewDescription] = useState<string | null>(null);
   const [newStockStatus, setNewStockStatus] =
     useState<PRODUCT_STOCK_STATUS | null>(null);
@@ -70,8 +71,8 @@ export default function ProductDetailPage() {
       if (product) {
         setNewProductName(product.name);
         setNewCategoryName(product.category_name);
-        setNewPrice(product.price);
-        setNewCost(product.cost_price);
+        setNewPrice(product.price.toString());
+        setNewCost(product.cost_price.toString());
         setNewDescription(product.description);
         setNewStockStatus(product.stock_status);
         setPreview(product.image_url);
@@ -107,17 +108,17 @@ export default function ProductDetailPage() {
     inputRef.current?.focus();
   };
 
-  // ===========================
-  // Cancel button
-  // ===========================
+  // ===========================================
+  // Cancel button | Set to current values
+  // ===========================================
   const handleCancelButton = () => {
     setIsEditing(false);
     // Reset
     if (product) {
       setNewProductName(product.name);
       setNewCategoryName(product.category_name);
-      setNewPrice(product.price);
-      setNewCost(product.cost_price);
+      setNewPrice(product.price.toString());
+      setNewCost(product.cost_price.toString());
       setNewDescription(product.description);
       setNewStockStatus(product.stock_status);
       setPreview(product.image_url);
@@ -233,7 +234,7 @@ export default function ProductDetailPage() {
     >
       <main
         onClick={(e) => e.stopPropagation()}
-        className=" grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 overflow-y-scroll scrollbar-hide w-[80vw] max-h-[80vh] gap-4 bg-white/60 p-6 border-4 border-border rounded-4xl"
+        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 overflow-y-scroll scrollbar-hide w-[80vw] max-h-[80vh] gap-4 bg-white/60 p-6 border-4 border-border rounded-4xl"
       >
         {/* ---------------------------- */}
         {/* Clost button */}
@@ -244,7 +245,7 @@ export default function ProductDetailPage() {
           }}
           className="fixed top-10 right-10 flex items-center justify-center md:right-20 px-4 py-1 rounded-full cursor-pointer bg-amber-600 hover:bg-amber-700 active:scale-60 active:px-10 transition-all duration-200 ease-out outline-none"
         >
-          Close <X size={20}/>
+          Close <X size={20} />
         </button>
         {/* =================================================== */}
         {/* Image and Date container */}
@@ -291,11 +292,11 @@ export default function ProductDetailPage() {
           {/* --------------------------- */}
           <div className="h-full flex flex-col md:justify-between lg:justify-start gap-6 bg-background-secondary p-4 rounded-lg border-2 border-border ">
             {/* ID */}
-            <div className="flex items-center md:flex-col lg:flex-row md:items-start lg:items-center gap-2">
-              <h4 className="inline-flex justify-self-start gap-2 font-semibold text-text-secondary">
+            <div className="flex items-center md:flex-col 2xl:flex-row md:items-start 2xl:items-center gap-2">
+              <span className="inline-flex justify-self-start gap-2 font-semibold text-text-secondary">
                 <ScanBarcode />
                 ID
-              </h4>
+              </span>
               <div className="flex gap-2 items-center">
                 <h4 className=" truncate text-[10px] lg:text-xs text-text-secondary font-semibold bg-background-secondary-hover px-2 py-1 rounded-sm ">
                   {product?.id}
@@ -326,7 +327,7 @@ export default function ProductDetailPage() {
         {/* ========================================= */}
         {/* Details Container */}
         {/* ========================================= */}
-        <div className="2xl:col-span-2 flex flex-col gap-4 bg-background-secondary rounded-lg p-4 border-2 border-border">
+        <div className="xl:col-span-2 flex flex-col gap-4 bg-background-secondary rounded-lg p-4 border-2 border-border">
           {/* ----------------- */}
           {/* Product Name */}
           {/* ----------------- */}
@@ -337,7 +338,7 @@ export default function ProductDetailPage() {
               value={!isEditing ? product?.name : newProductName!}
               readOnly={!isEditing}
               onChange={(e) => setNewProductName(e.target.value)}
-              className="w-full font-bold text-xl outline-none text-yellow-500"
+              className="w-full font-bold text-2xl outline-none text-text-primary"
             />
           </div>
           {/* ------------------------- */}
@@ -379,29 +380,11 @@ export default function ProductDetailPage() {
               <DollarSign />
               <span className="whitespace-nowrap font-semibold">Price</span>
             </div>
-            <input
-              type="number"
-              min={0}
-              step="0.01"
-              value={!isEditing ? product?.price : newPrice!}
+
+            <MoneyInput
+              value={newPrice}
+              onChange={setNewPrice}
               readOnly={!isEditing}
-              onChange={(e) => {
-                let val = e.target.value;
-
-                // Allow only digits and dots
-                val = val.replace(/[^\d.]/g, "");
-
-                // Allow only one dot
-                const parts = val.split(".");
-                if (parts.length > 2) {
-                  val = parts[0] + "." + parts.slice(1).join("");
-                }
-
-                // Remove leading zeros unless before decimal point
-                val = val.replace(/^0+(?=\d)/, "");
-
-                setNewPrice(val);
-              }}
               className="w-full outline-none font-bold text-xl text-green-600"
             />
           </div>
@@ -413,30 +396,11 @@ export default function ProductDetailPage() {
               <CircleDollarSign />
               <span className="whitespace-nowrap font-semibold">Cost</span>
             </div>
-            <input
-              type="number"
-              min={0}
-              step="0.01"
-              value={product?.cost_price}
+            <MoneyInput
+              value={newCost}
+              onChange={setNewCost}
               readOnly={!isEditing}
-              onChange={(e) => {
-                let val = e.target.value;
-
-                // Allow only digits and dots
-                val = val.replace(/[^\d.]/g, "");
-
-                // Allow only one dot
-                const parts = val.split(".");
-                if (parts.length > 2) {
-                  val = parts[0] + "." + parts.slice(1).join("");
-                }
-
-                // Remove leading zeros unless before decimal point
-                val = val.replace(/^0+(?=\d)/, "");
-
-                setNewCost(val);
-              }}
-              className="w-full outline-none font-bold uppercase text-green-600"
+              className="w-full outline-none font-bold text-xl text-green-600"
             />
           </div>
           {/* ------------------------- */}
@@ -476,7 +440,7 @@ export default function ProductDetailPage() {
                     onClick={() => setNewStockStatus(option.value)}
                     key={option.value}
                     disabled={!isEditing}
-                    className={`relative ${option.border} font-bold text-white text-sm ${isSelected ? `bg-${option.color}` : "bg-background-secondary-hover"} border-2 px-4 py-2 rounded-md transition-all duration-200 ease-out ${isEditing ? "cursor-pointer active:scale-90" : "cursor-not-allowed"}`}
+                    className={`relative  font-bold text-white text-sm ${isSelected ? `bg-${option.color} ${option.border}` : "bg-background-secondary-hover"} border-2 border-border px-4 py-2 rounded-md transition-all duration-200 ease-out ${isEditing ? "cursor-pointer active:scale-90" : "cursor-not-allowed"}`}
                   >
                     {option.label}
                     {isCurrent && (

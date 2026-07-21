@@ -6,7 +6,7 @@ import { getASingleProduct } from "../services/admin.service";
 import axios from "axios";
 import { toast } from "sonner";
 import type { Product } from "../types/product";
-import { useAProductUpdate } from "./useAProductUpdate";
+import { useAProductUpdate } from "./websockets/useAProductUpdate";
 
 export function useGetASingleProduct({ id }: { id: string }) {
   const [product, setProduct] = useState<Product>();
@@ -37,7 +37,6 @@ export function useGetASingleProduct({ id }: { id: string }) {
 
     getProduct();
   }, [id]);
-
 
   // WebSocket Update
   function handleProductUpdate(product: Product) {

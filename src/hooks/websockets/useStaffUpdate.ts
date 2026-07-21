@@ -1,28 +1,35 @@
-// hooks/useAProductUpdate.ts
+// hooks/useStaffUpdate.ts
+// WebSocket
 //
+//======================================================
+// Used to Receive Data from WebSocket and Update Cache
+//======================================================
 
 import { useEffect } from "react";
-import type { Product } from "../types/product";
+import type { Staff } from "../../types/staff";
+import { authStorage } from "../../utils/auth-storage";
 import { Client } from "@stomp/stompjs";
-import { authStorage } from "../utils/auth-storage";
 import { toast } from "sonner";
 
 interface Props {
-  onProductUpdate: (product: Product) => void;
+  //   Receives parameter of type Staff, returns nothing
+  onEmployeeUpdated: (employee: Staff) => void;
 }
 
-export function useAProductUpdate({ onProductUpdate }: Props) {
+export function useStaffUpdate({ onEmployeeUpdated }: Props) {
   useEffect(() => {
     const client = new Client({
       brokerURL: `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${authStorage.getAccessToken()}`,
 
       onConnect: () => {
         console.log("+ + + Connected + + +");
-        client.subscribe("/topic/admin/product-update", (message) => {
+        client.subscribe("/topic/admin/update-employee-details", (message) => {
           try {
-            const product: Product = JSON.parse(message.body);
-            onProductUpdate(product);
-            toast.success("A product has been updated.", { duration: 5000 });
+            const employee: Staff = JSON.parse(message.body);
+            onEmployeeUpdated(employee);
+            toast.success("An employee profile has been updated.", {
+              duration: 3000,
+            });
           } catch (error) {
             console.error(error);
           }
@@ -51,5 +58,5 @@ export function useAProductUpdate({ onProductUpdate }: Props) {
     return () => {
       client.deactivate();
     };
-  }, [onProductUpdate]);
+  }, [onEmployeeUpdated]);
 }

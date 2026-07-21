@@ -12,7 +12,7 @@ import { SHIFT_ORDER, type Shift } from "../../types/shift";
 import { editStaffDetail } from "../../services/admin.service";
 import { base64ToFile } from "../../utils/convertor";
 import { ROLES, type Role } from "../../types/role";
-import { STATUSES, type Status } from "../../types/status";
+import { STATUSES, USER_STATUS_COLOR_CONFIG, type Status } from "../../types/status";
 import { toast } from "sonner";
 import TextLoader from "../ui/TextLoader";
 import { Image } from "lucide-react";
@@ -43,9 +43,11 @@ export default function EditStaffProfile({
   const userId = staff.id;
   const [name, setName] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  // 
   const [phone, setPhone] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
+  // 
   // IMAGE PREVIEW
   const [preview, setPreview] = useState(staff?.image_url || DefaultProfile);
   // CROP STATE
@@ -358,12 +360,13 @@ export default function EditStaffProfile({
               {STATUSES.map((status) => {
                 const isCurrentStatus = status === currentStatus;
                 const isSelected = status === selectedStatus;
+                const config = selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
                 return (
                   <button
                     key={status}
                     type="button"
                     onClick={() => handleSelectStatus(status)}
-                    className={`relative py-4 text-xs ${isSelected ? "bg-green-600" : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
+                    className={`relative py-4 text-xs ${isSelected ? config.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                   >
                     {status === "ON_LEAVE" ? "ON LEAVE" : status}
                     {/* Show current shift label */}

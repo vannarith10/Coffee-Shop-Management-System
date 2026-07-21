@@ -1,4 +1,7 @@
 import React from 'react'
+import SellByCategory from '../../components/admin/SellByCategory'
+import BusiestHours from '../../components/admin/BusiestHours'
+import RevenueTrends from '../../components/admin/RevenueTrends'
 
 const ReportTab = () => {
   return (
@@ -11,6 +14,10 @@ const ReportTab = () => {
           Monthly performance and daily revenue analysis.
         </p>
       </div>
+
+      <SellByCategory/>
+      <BusiestHours/>
+      <RevenueTrends/>
     </div>
   )
 }

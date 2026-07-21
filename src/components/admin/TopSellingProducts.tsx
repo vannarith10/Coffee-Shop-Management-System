@@ -18,7 +18,8 @@ import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
 
 export default function TopSellingProductsChart() {
 
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
+  const page = 1;
   const size = 20;
   const [selectedRange, setSelectedRange] = useState<Range>("ALL");
 

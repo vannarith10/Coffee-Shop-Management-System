@@ -1,0 +1,26 @@
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategoryNames } from "../services/admin.service";
+
+interface NameTypeResponse {
+  category_name: string;
+  category_type: string;
+}
+
+export function useGetAllCategoryNames() {
+  const queryKey = ["all-category-names"];
+
+  const { data, isLoading, isError, isRefetching, refetch } = useQuery<NameTypeResponse[]>({
+    queryKey,
+    queryFn: () => getAllCategoryNames().then((res) => res.data),
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
+  });
+
+  return {
+    categoryNameType: data ?? null,
+    isLoadingCategoryNames: isLoading,
+    isErrorCategoryNames: isError,
+    isRefetchingCategoryNames: isRefetching,
+    refetchCategoryName: refetch,
+  };
+}

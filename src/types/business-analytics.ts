@@ -1,19 +1,25 @@
 // types/business-analytics.ts
 //
 
+import type { BarDatum } from "@nivo/bar";
+
 // Single source of truth
-export const RANGES = ["TODAY", "THIS_WEEK", "THIS_MONTH", "THIS_YEAR", "ALL"] as const;
+export const RANGES = [
+  "TODAY",
+  "THIS_WEEK",
+  "THIS_MONTH",
+  "THIS_YEAR",
+  "ALL",
+] as const;
 
 // Derived type
-export type Range = typeof RANGES[number];
-
+export type Range = (typeof RANGES)[number];
 
 export interface TopSellingProductRequest {
-    range: Range,
-    page: number,
-    size: number
+  range: Range;
+  page: number;
+  size: number;
 }
-
 
 export interface BusinessSummaryResponse {
   summary: {
@@ -32,3 +38,15 @@ export interface BusinessSummaryResponse {
   };
 }
 
+export interface BusiestHoursResponse {
+  days: {
+    id: string;
+    data: { x: string; y: number }[];
+  }[];
+}
+
+
+export interface RevenuTrendsResponse extends BarDatum {
+  day: string,
+  revenue: number;
+}
