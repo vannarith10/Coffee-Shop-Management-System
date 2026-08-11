@@ -41,7 +41,7 @@ const RevenueTrends = () => {
   const isAllZero = chartData.every((item) => item.revenue === 0);
 
   return (
-    <section className="p-6 h-100 lg:h-120 xl:h-150 bg-background-secondary border-2 border-border rounded-lg">
+    <section className="p-6 h-100 lg:h-120 xl:h-150 bg-background-secondary border-2 border-border rounded-lg overflow-y-hidden">
       {/* ================================ */}
       {/* Title */}
       {/* ================================ */}
@@ -130,7 +130,7 @@ const RevenueTrends = () => {
           borderColor={{ from: "color", modifiers: [] }}
           axisBottom={{ tickSize: 0, legendOffset: 32 }}
           axisLeft={{ tickSize: 0, legendOffset: -40 }}
-          margin={{ top: 50, right: 0, bottom: 100, left: 60 }}
+          margin={{ top: 50, right: 0, bottom: 90, left: 20 }}
           // -------------------------------------------
           // Tooltip
           // -------------------------------------------

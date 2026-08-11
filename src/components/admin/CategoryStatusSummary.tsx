@@ -73,7 +73,8 @@ export default function CategoryStatus() {
           const config = ItemMap[key];
           return (
             <SpotlightCard key={key} rounded="lg">
-              <div className="flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
+              <div
+               className="flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
                 <div className="flex justify-between">
                   {/* Title & Icon*/}
                   <h3 className="text-text-secondary font-semibold text-sm">

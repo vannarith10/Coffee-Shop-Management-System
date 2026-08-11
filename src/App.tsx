@@ -20,6 +20,8 @@ import ProductTab from "./pages/admin/ProductTab";
 import ReportTab from "./pages/admin/ReportTab";
 import SettingTab from "./pages/admin/SettingTab";
 import ProductDetailPage from "./pages/admin/ProductDetailPage";
+import CashierLayout from "./layouts/CashierLayout";
+import ConfirmOrder from "./pages/cashier/ConfirmOrder";
 
 
 
@@ -35,6 +37,9 @@ const router = createBrowserRouter([
   {
     element: <PrivateRoute/>,
     children: [
+      // -----------------------------------------------------
+      // ADMIN ROUTE
+      // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.ADMIN]}/>,
         children: [
@@ -80,15 +85,31 @@ const router = createBrowserRouter([
           }
         ]
       },
+      // -----------------------------------------------------
+      // CASHIER ROUTE
+      // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.CASHIER]}/>,
         children: [
           {
             path: "/cashier",
-            element: <CashierDashboard/>
+            element: <CashierLayout/>,
+            children: [
+              {
+                index: true,
+                element: <CashierDashboard/>
+              },
+              {
+                path: "confirm-order/:id",
+                element: <ConfirmOrder/>,
+              }
+            ]
           }
         ]
       },
+      // -----------------------------------------------------
+      // BARISTA ROUTE
+      // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.BARISTA]}/>,
         children: [

@@ -12,10 +12,15 @@ import { SHIFT_ORDER, type Shift } from "../../types/shift";
 import { editStaffDetail } from "../../services/admin.service";
 import { base64ToFile } from "../../utils/convertor";
 import { ROLES, type Role } from "../../types/role";
-import { STATUSES, USER_STATUS_COLOR_CONFIG, type Status } from "../../types/status";
+import {
+  STATUSES,
+  USER_STATUS_COLOR_CONFIG,
+  type Status,
+} from "../../types/status";
 import { toast } from "sonner";
 import TextLoader from "../ui/TextLoader";
-import { Image } from "lucide-react";
+import { Feather, Image, Trash2, X } from "lucide-react";
+import { useDeleteStaff } from "../../hooks/useDeleteStaff";
 
 interface UpdateStaffProfile {
   isOpen: boolean;
@@ -28,6 +33,8 @@ export default function EditStaffProfile({
   onClose,
   staff,
 }: UpdateStaffProfile) {
+  const { mutate: deleteStaff, isPending } = useDeleteStaff();
+  const [isDeletingStaff, setIsDeletingStaff] = useState(false);
   // SCHEDULES & SHIFT STATE
   const currentSchedules = staff.schedules; // EX: ['SATURDAY', 'THURSDAY', 'WEDNESDAY', 'TUESDAY', 'MONDAY']
   const [schedules, setSchedules] = useState<Schedule[]>(currentSchedules);
@@ -43,11 +50,11 @@ export default function EditStaffProfile({
   const userId = staff.id;
   const [name, setName] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  // 
+  //
   const [phone, setPhone] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
-  // 
+  //
   // IMAGE PREVIEW
   const [preview, setPreview] = useState(staff?.image_url || DefaultProfile);
   // CROP STATE
@@ -158,10 +165,18 @@ export default function EditStaffProfile({
     }
   }
 
+  function handleDeleteStaff() {
+    deleteStaff(staff.id, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  }
+
   return (
     <section
       onClick={onClose}
-      className="fixed inset-0 z-30 bg-black/10 backdrop-blur-xs flex justify-center items-center"
+      className="fixed inset-0 z-30 bg-black/10 backdrop-blur-lg flex justify-center items-center"
     >
       {/*  */}
       {/*  */}
@@ -170,8 +185,29 @@ export default function EditStaffProfile({
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[90vh] w-[80vw] overflow-y-auto scrollbar-hide flex flex-col gap-10 items-center p-6 bg-background-secondary rounded-2xl border-4 border-border"
+        className="max-h-[90vh] w-[80vw] overflow-y-auto scrollbar-hide flex flex-col gap-10 items-center p-10 bg-background-secondary-hover rounded-xl border-4 border-white"
       >
+        {/* ------------------ */}
+        {/* Form Title */}
+        {/* ------------------ */}
+        <div className="w-full flex justify-between items-start">
+          <div>
+            <h2 className="font-bold text-2xl ">Edit Staff Account</h2>
+            <p className="text-xs text-text-secondary">
+              Fill in the details to edit a staff account.
+            </p>
+          </div>
+          {/* ------------ */}
+          {/* Button close */}
+          {/* ------------ */}
+          <button
+            type="button"
+            onClick={() => setTimeout(() => onClose(), 200)}
+            className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
+          >
+            <X />
+          </button>
+        </div>
         {/* --------------------------- */}
         {/* IMAGE */}
         {/* --------------------------- */}
@@ -360,7 +396,8 @@ export default function EditStaffProfile({
               {STATUSES.map((status) => {
                 const isCurrentStatus = status === currentStatus;
                 const isSelected = status === selectedStatus;
-                const config = selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
+                const config =
+                  selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
                 return (
                   <button
                     key={status}
@@ -380,6 +417,18 @@ export default function EditStaffProfile({
               })}
             </div>
           </div>
+        </div>
+        {/* ======================================= */}
+        {/* Button Delete */}
+        {/* ======================================= */}
+        <div className="w-full border-t border-border pt-4">
+          <button
+            type="button"
+            onClick={() => setIsDeletingStaff(true)}
+            className="flex gap-2 items-center px-8 py-4 bg-text-error/70 hover:bg-text-error rounded-md cursor-pointer outline-none active:scale-80 transition-all duration-300 ease-out"
+          >
+            <Trash2 /> Delete Account
+          </button>
         </div>
         {/* ======================================= */}
         {/* BUTTONS: CANCEL & SUBMIT */}
@@ -405,6 +454,48 @@ export default function EditStaffProfile({
             )}
           </button>
         </div>
+
+        {/* ========================================== */}
+        {/* ========================================== */}
+        {/* Delete Staff Dialog Box */}
+        {/* ========================================== */}
+        {/* ========================================== */}
+        {isDeletingStaff && (
+          <div className="fixed inset-0 z-100 backdrop-blur-xs flex justify-center items-center">
+            <div className="w-60 flex flex-col gap-4 items-center rounded-xl p-10 border-2 border-white bg-sidebar">
+              <div className="p-4 bg-background-secondary-hover rounded-full">
+                <Trash2 />
+              </div>
+              <h2 className="font-bold text-xl whitespace-nowrap">
+                Delete Staff?
+              </h2>
+              {/* ------------- */}
+              {/* Button Delete */}
+              {/* ------------- */}
+              <button
+                type="button"
+                onClick={handleDeleteStaff}
+                disabled={isPending}
+                className="font-bold w-full py-2 text-text-secondary border border-border hover:border-border-hover rounded-md bg-text-error/50 hover:bg-text-error cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              >
+                {isPending ? "Deleting..." : "Delete"}
+              </button>
+              {/* ------------- */}
+              {/* Button Cancel */}
+              {/* ------------- */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDeletingStaff(false);
+                  document.body.classList.remove("overflow-hidden");
+                }}
+                className="font-bold w-full py-2 text-text-secondary border border-border hover:border-border-hover rounded-md bg-background-secondary-hover/50 hover:bg-background-secondary-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </form>
       {/*  */}
       {/*  */}

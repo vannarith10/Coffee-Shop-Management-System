@@ -234,19 +234,24 @@ export default function ProductDetailPage() {
     >
       <main
         onClick={(e) => e.stopPropagation()}
-        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 overflow-y-scroll scrollbar-hide w-[80vw] max-h-[80vh] gap-4 bg-white/60 p-6 border-4 border-border rounded-4xl"
+        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 overflow-y-scroll scrollbar-hide w-[80vw] max-h-[80vh] gap-4 bg-background-secondary-hover p-10 border-4 border-white rounded-xl"
       >
-        {/* ---------------------------- */}
-        {/* Clost button */}
-        {/* ---------------------------- */}
-        <button
-          onClick={() => {
-            setTimeout(() => handleClose(), 200);
-          }}
-          className="fixed top-10 right-10 flex items-center justify-center md:right-20 px-4 py-1 rounded-full cursor-pointer bg-amber-600 hover:bg-amber-700 active:scale-60 active:px-10 transition-all duration-200 ease-out outline-none"
-        >
-          Close <X size={20} />
-        </button>
+        {/* ----------------- */}
+        {/* Form Title */}
+        {/* ----------------- */}
+        <div className="col-span-1 lg:col-span-2 xl:col-span-3 w-full flex justify-between items-center">
+          <h2 className="font-bold text-2xl ">Product Detail</h2>
+          {/* ------------ */}
+          {/* Button close */}
+          {/* ------------ */}
+          <button
+            type="button"
+            onClick={() => setTimeout(() => handleClose(), 200)}
+            className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
+          >
+            <X />
+          </button>
+        </div>
         {/* =================================================== */}
         {/* Image and Date container */}
         {/* =================================================== */}

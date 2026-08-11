@@ -1,6 +1,6 @@
 // components/DisplayStaff.tsx
 //
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
 import type { Staff } from "../../types/staff";
@@ -11,20 +11,28 @@ import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "../ui/TextLoader";
 import { getPageNumbers } from "../../utils/page-numbers";
-import { useStaff } from "../../hooks/useStaff";
+import { useStaff } from "../../hooks/useGetStaffProfiles";
 import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
 
 export default function DisplayStaff() {
   const [page, setPage] = useState(1);
   const size = 20;
-  const { staff, isLoading, isError, isRefetching, refetch, justUpdatedId } =
-    useStaff({ page, size });
+  const {
+    staff,
+    isLoading,
+    isError,
+    isRefetching,
+    refetch,
+    justUpdatedId,
+    justAddedId,
+  } = useStaff({ page, size });
   const currentPage = staff?.pagination.page ?? page;
   const totalPages = staff?.pagination.total_pages ?? 1;
   const totalItems = staff?.pagination.total_items ?? 0;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+  const targetRef = useRef<HTMLDivElement | null>(null);
 
   function handlePrev() {
     if (hasPrev) {
@@ -45,6 +53,15 @@ export default function DisplayStaff() {
   function handleRetry() {
     refetch();
   }
+
+  useEffect(() => {
+    if (justAddedId) {
+      targetRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [justAddedId]);
 
   return (
     <>
@@ -105,10 +122,12 @@ export default function DisplayStaff() {
         {!isLoading &&
           staff?.staffs.map((staff) => {
             const isUpdated = staff.id === justUpdatedId;
+            const justAdded = staff.id === justAddedId;
             return (
               <main
+                ref={staff.id === justAddedId ? targetRef : null}
                 key={staff.id}
-                className={`grid grid-cols-6 items-center-safe ${isUpdated ? "bg-green-700 hover:bg-green-600" : "bg-background-secondary "} hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
+                className={`grid grid-cols-6 items-center-safe ${isUpdated || justAdded ? "bg-green-700 hover:bg-green-600" : "bg-background-secondary "} hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
               >
                 {/* ====================================== */}
                 {/* PROFILE : img, name, username, email */}

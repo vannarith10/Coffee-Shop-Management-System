@@ -194,12 +194,12 @@ export default function AddNewProductForm() {
       {isOpen && (
         <section
           onClick={onClose}
-          className="fixed z-100 inset-0 backdrop-blur-xs flex justify-center items-center"
+          className="fixed z-100 inset-0 backdrop-blur-lg flex justify-center items-center"
         >
           <form
             onSubmit={(e) => handleSubmit(e)}
             onClick={(e) => e.stopPropagation()}
-            className={` w-[80vw] h-[90vh] overflow-y-scroll scrollbar-hide flex flex-col gap-4 bg-background-secondary p-10 rounded-2xl border-4 border-border transition-all duration-200 ease-out`}
+            className={` w-[80vw] h-[90vh] overflow-y-scroll scrollbar-hide flex flex-col gap-4 bg-background-secondary-hover p-10 rounded-xl border-4 border-white transition-all duration-200 ease-out`}
           >
             <div className="w-full flex items-center justify-between border-b border-border pb-4">
               <h2 className="font-bold text-2xl lg:text-4xl">

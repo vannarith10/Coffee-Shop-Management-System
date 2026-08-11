@@ -12,6 +12,7 @@ import {
 import TextLoader from "../ui/TextLoader";
 import { patchCategory } from "../../services/admin.service";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 interface EditCategory {
   isOpen: boolean;
@@ -75,7 +76,7 @@ export default function EditCategory({
   return (
     <section
       onClick={onClose}
-      className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-xs flex justify-center items-center"
+      className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-lg flex justify-center items-center"
     >
       {/* =================== */}
       {/* Form */}
@@ -83,13 +84,28 @@ export default function EditCategory({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
-        className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-secondary p-10 rounded-4xl border-4 border-border-hover"
+        className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-secondary-hover p-10 rounded-xl border-4 border-white"
       >
-        <h2 className="font-bold text-2xl">Edit Category</h2>
+        {/* ----------------- */}
+        {/* Form Title */}
+        {/* ----------------- */}
+        <div className="w-full flex justify-between items-center">
+          <h2 className="font-bold text-2xl ">Edit Category</h2>
+          {/* ------------ */}
+          {/* Button close */}
+          {/* ------------ */}
+          <button
+            type="button"
+            onClick={() => setTimeout(() => onClose(), 200)}
+            className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
+          >
+            <X />
+          </button>
+        </div>
+        {/* ================================= */}
+        {/* Name input*/}
+        {/* ================================= */}
         <div className="flex flex-col gap-6">
-          {/* ================================= */}
-          {/* Name input*/}
-          {/* ================================= */}
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="name" className="text-xs font-bold">
               NAME
@@ -154,9 +170,6 @@ export default function EditCategory({
                 })}
               </select>
             </div>
-
-
-
           </div>
         </div>
         {/* ================================ */}

@@ -3,7 +3,10 @@
 import type { AxiosResponse } from "axios";
 import api from "../lib/axios";
 import { publicApi } from "../lib/axios";
-import type { Range, TopSellingProductRequest } from "../types/business-analytics";
+import type {
+  Range,
+  TopSellingProductRequest,
+} from "../types/business-analytics";
 import type {
   AddNewProductRequest,
   PRODUCT_STOCK_STATUS,
@@ -15,6 +18,7 @@ import type {
   CreateCategoryRequest,
   PatchCategoryRequest,
 } from "../types/category";
+import type { ShopLogoUpdateResponse, UpdateShopInfoRequest } from "../types/shop-setting";
 
 interface ApiError {
   message: string;
@@ -36,10 +40,7 @@ export const getAllEmployeeProfiles = async () => {
 // Get shop's image and name
 //
 export const getShopImageAndName = async () => {
-  const response = await publicApi.get(
-    "/api/v2/shop-profile/shop-name/shop-image",
-  );
-  return response.data;
+  return await publicApi.get("/api/v2/shop-profile/shop-name/shop-image");
 };
 //
 //
@@ -197,10 +198,10 @@ export async function getCategoryStatusSummary() {
 //
 export async function createStaffAccount({
   data,
-  file,
+  image,
 }: {
   data: CreateStaffRequest;
-  file?: File | null;
+  image?: File | null;
 }) {
   const formData = new FormData();
   formData.append(
@@ -208,8 +209,8 @@ export async function createStaffAccount({
     new Blob([JSON.stringify(data)], { type: "application/json" }),
   );
 
-  if (file) {
-    formData.append("image", file);
+  if (image) {
+    formData.append("image", image);
   }
   const res = await api.post("/api/v2/employee/create-account", formData);
   return res;
@@ -218,6 +219,7 @@ export async function createStaffAccount({
 //
 //
 // Get all product
+// Filter
 //
 export async function getAllProducts({
   page,
@@ -233,7 +235,7 @@ export async function getAllProducts({
   keyword: string | null;
 }) {
   const params: Record<string, string | number> = { page, size };
-  
+
   if (keyword !== null) {
     params.keyword = keyword;
   }
@@ -283,6 +285,7 @@ export async function patchProduct({
 //
 //
 // Get All Category Names
+//
 export async function getAllCategoryNames() {
   return await api.get("/api/v2/category/names");
 }
@@ -301,7 +304,8 @@ export async function addNewProduct({
   const formData = new FormData();
   formData.append(
     "data",
-    new Blob([JSON.stringify(data)], { type: "application/json" }),
+    new Blob([JSON.stringify(data)], 
+    { type: "application/json" }),
   );
   formData.append("image", image);
   return await api.post("/api/v2/product/add-new", formData);
@@ -310,20 +314,78 @@ export async function addNewProduct({
 //
 //
 // Get Sales By Category
-export async function getSalesByCategory ({range}:{range: Range}) {
-    return await api.get(`/api/v2/reports/sales-by-category/${range}`);
+//
+export async function getSalesByCategory({ range }: { range: Range }) {
+  return await api.get(`/api/v2/reports/sales-by-category/${range}`);
 }
 //
 //
 //
 // Get Busiest Hours
-export async function getBusiestHours () {
+//
+export async function getBusiestHours() {
   return await api.get(`/api/v2/reports/busiest-hours`);
 }
 //
 //
 //
 // Get Revenue Trends
-export async function getRevenueTrends ({month, year}:{month:number, year:number}) {
-  return await api.get(`/api/v2/reports/revenue-trends/${month}/${year}`)
+//
+export async function getRevenueTrends({
+  month,
+  year,
+}: {
+  month: number;
+  year: number;
+}) {
+  return await api.get(`/api/v2/reports/revenue-trends/${month}/${year}`);
+}
+//
+//
+//
+// Get Shop Info
+//
+export async function getShopInfo() {
+  return await api.get("/api/v2/shop-profile");
+}
+//
+//
+// void doens't need to return
+// Delete Shop Logo
+//
+export async function deleteShopLogo(): Promise<void> {
+  await api.delete("/api/v2/shop-profile/delete-logo");
+}
+//
+//
+//
+// Update Shop Logo
+//
+export async function updateShopLogo(
+  image: File,
+): Promise<ShopLogoUpdateResponse> {
+  const formData = new FormData();
+  formData.append("image", image);
+  return await api.put("/api/v2/shop-profile/update-logo", formData);
+}
+//
+//
+//
+// Update Shop Info
+//
+export async function updateShopInfo(data: UpdateShopInfoRequest): Promise<void> {
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(data)], 
+    { type: "application/json" }),);
+  
+  await api.patch("/api/v2/shop-profile/update", formData);
+}
+//
+//
+//
+//
+// Delete Profile
+//
+export async function deleteProfile (id:string): Promise<void> {
+  await api.delete(`/api/v2/employee/${id}/delete`);
 }

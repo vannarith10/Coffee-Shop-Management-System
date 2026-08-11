@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllCategoryNames } from "../services/admin.service";
 
 interface NameTypeResponse {
+  category_id: string;
   category_name: string;
   category_type: string;
 }

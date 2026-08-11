@@ -49,3 +49,16 @@ export interface CreateStaffRequest {
   schedules: Schedule[];
   status: Status;
 }
+
+export interface CreateStaffResponse {
+  id: string;
+  name: string;
+  username: string;
+  role: Role;
+  shift: Shift;
+  schedules: Schedule[];
+  email: string;
+  phone_number: string;
+  status: Status;
+  image_url: string;
+}

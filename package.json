@@ -23,7 +23,7 @@
     "axios": "^1.18.1",
     "colorthief": "^3.4.0",
     "dayjs": "^1.11.21",
-    "framer-motion": "^12.42.0",
+    "framer-motion": "^12.43.0",
     "lucide-react": "^1.21.0",
     "motion": "^12.42.2",
     "node-vibrant": "^4.0.4",
@@ -36,6 +36,7 @@
     "stompjs": "^2.3.3",
     "styled-components": "^6.4.2",
     "tailwindcss": "^4.3.1",
+    "tw-shimmer": "^0.4.12",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

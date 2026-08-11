@@ -81,3 +81,27 @@ export interface AddNewProductRequest {
   stock_status: PRODUCT_STOCK_STATUS;
   description: string | null;
 }
+
+
+
+// --------------------------------
+// Cashier | Product Menu Response
+// --------------------------------
+export interface ProductMenuResponse {
+  pagination: Pagination;
+  items: ProductMenuItem[];
+}
+
+// --------------------------------
+// Cashier | Product Menu Item
+// --------------------------------
+export interface ProductMenuItem {
+  id: string;
+  name: string;
+  price: number;
+  image_url: string;
+  description: string;
+  category_type: CATEGORY_TYPE;
+  category_name: string;
+  in_stock: boolean;
+}

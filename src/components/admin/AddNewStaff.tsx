@@ -1,12 +1,16 @@
 // components/AddNewStaff.tsx
 //
 
-import { SquarePlus } from "lucide-react";
+import { SquarePlus, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import { ROLES, type Role } from "../../types/role";
 import { SHIFT_ORDER, type Shift } from "../../types/shift";
-import { STATUSES, USER_STATUS_COLOR_CONFIG, type Status } from "../../types/status";
+import {
+  STATUSES,
+  USER_STATUS_COLOR_CONFIG,
+  type Status,
+} from "../../types/status";
 import { DAY_ORDER, type Schedule } from "../../types/schedule";
 import ImageCropForm from "../ui/ImageCropForm";
 import DefaultProfile from "../../assets/user-profile.png";
@@ -15,17 +19,26 @@ import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { toast } from "sonner";
 import type { CreateStaffRequest } from "../../types/staff";
-import { createStaffAccount } from "../../services/admin.service";
-import axios from "axios";
 import { Image } from "lucide-react";
+import { useCreateStaff } from "../../hooks/useCreateStaff";
 
 export default function AddNewStaff() {
+  const { mutate: createStaff, isPending, isError } = useCreateStaff();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const onClose = () => {
     setIsOpen(false);
+    // Clear memory
+    setStaffName(null);
+    setUsername(null);
+    setPassword(null);
+    setConfirmPassword(null);
+    setSchedules([]);
+    setImage(null);
+    setPreview(DefaultProfile);
+    setSelectedRole(null);
+    setSelectedShift(null);
+    setSelectedStatus(null);
   };
 
   if (isOpen) {
@@ -59,6 +72,7 @@ export default function AddNewStaff() {
       setImage(url);
     }
   };
+
   // CROP STATE
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -161,6 +175,12 @@ export default function AddNewStaff() {
       return;
     }
 
+    // Image check
+    if (file == null) {
+      toast.warning("Image profile needed", { duration: 3000 });
+      return;
+    }
+
     // Build data
     const data: CreateStaffRequest = {
       full_name: staffName,
@@ -172,34 +192,14 @@ export default function AddNewStaff() {
       status: selectedStatus,
     };
 
-    try {
-      const response = await createStaffAccount({
-        data: data,
-        file: file ?? null,
-      });
-      if (response.status == 201) {
-        toast.success("New staff account created " + staffName, {
-          duration: 5000,
-        });
-        setImage(null);
-        setZoom(0);
-        document.body.classList.remove("overflow-hidden");
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const errData = error.response?.data as {
-          message: string;
-          status: number;
-          timestamp: string;
-          detail: string;
-        };
-        toast.error(errData?.detail ?? "Unexpected error");
-      }
-      console.error(error);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
+    createStaff(
+      { data: data, image: file },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      },
+    );
   };
 
   return (
@@ -223,18 +223,33 @@ export default function AddNewStaff() {
       {isOpen && (
         <section
           onClick={() => setIsOpen(false)}
-          className="fixed z-30 inset-0 backdrop-blur-sm py-40 flex justify-center items-center"
+          className="fixed z-30 inset-0 backdrop-blur-lg py-40 flex justify-center items-center"
         >
           <form
             onSubmit={(e) => handleSubmit(e)}
             onClick={(e) => e.stopPropagation()}
-            className="p-10 flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-secondary border-4 border-border-hover rounded-4xl"
+            className="p-10 flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-secondary-hover border-4 border-white rounded-xl"
           >
-            <div>
-              <h2 className="font-bold text-2xl ">Create Staff Account</h2>
-              <p className="text-xs text-text-secondary">
-                Fill in the details to create a new staff account.
-              </p>
+            {/* ------------------ */}
+            {/* Form Title */}
+            {/* ------------------ */}
+            <div className="w-full flex justify-between items-start">
+              <div>
+                <h2 className="font-bold text-2xl ">Create Staff Account</h2>
+                <p className="text-xs text-text-secondary">
+                  Fill in the details to create a new staff account.
+                </p>
+              </div>
+              {/* ------------ */}
+              {/* Button close */}
+              {/* ------------ */}
+              <button
+                type="button"
+                onClick={() => setTimeout(() => onClose(), 200)}
+                className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
+              >
+                <X />
+              </button>
             </div>
 
             {/* =================================== */}
@@ -258,6 +273,7 @@ export default function AddNewStaff() {
                     NAME
                   </label>
                   <input
+                    spellCheck={false}
                     onChange={(e) => setStaffName(e.target.value)}
                     placeholder="Vyra Vannarith"
                     type="text"
@@ -272,6 +288,7 @@ export default function AddNewStaff() {
                     USERNAME
                   </label>
                   <input
+                    spellCheck={false}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="vyra.vannarith"
                     type="text"
@@ -346,7 +363,7 @@ export default function AddNewStaff() {
                     IMAGE
                   </label>
                   {/* CLICKABLE IMAGE */}
-                  <label htmlFor="imageUpload" className="cursor-pointer">
+                  <label htmlFor="imageUpload" className="cursor-pointer w-fit">
                     <div className="relative w-40 h-40 xl:w-60 xl:h-60 rounded-md overflow-hidden border-2 border-border hover:border-border-hover">
                       <img
                         src={preview}
@@ -424,7 +441,9 @@ export default function AddNewStaff() {
                   <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
                     {STATUSES.map((status) => {
                       const isSelected = status === selectedStatus;
-                      const config = selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
+                      const config =
+                        selectedStatus &&
+                        USER_STATUS_COLOR_CONFIG[selectedStatus];
                       return (
                         <button
                           key={status}
@@ -448,17 +467,18 @@ export default function AddNewStaff() {
               <button
                 type="button"
                 onClick={() => onClose()}
-                className="bg-gray-600/50 text-sm lg:text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out"
+                className="bg-gray-600/50 text-sm lg:text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-300 ease-out outline-none"
               >
                 Cancel
               </button>
               <button
+                disabled={isPending}
                 type="submit"
-                className={`col-span-2 ${isError ? "bg-amber-600" : "bg-green-600"} text-sm lg:text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
+                className={`col-span-2 ${isError ? "bg-amber-600" : "bg-green-600"} text-sm lg:text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-300 ease-out outline-none`}
               >
                 {isError ? (
                   "Try again"
-                ) : isLoading && !isError ? (
+                ) : isPending ? (
                   <TextLoader text="Submitting..." />
                 ) : (
                   "Submit"

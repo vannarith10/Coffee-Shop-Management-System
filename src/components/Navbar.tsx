@@ -1,21 +1,20 @@
 // components/Navbar.tsx
 //
-import LOGO from "../assets/vr-nobackground.png";
+import NoImage from "../assets/no-image.webp"
 import ErrorImage from "../assets/error-image.jpg";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Loader from "./ui/Loader";
-import { getShopImageAndName } from "../services/admin.service";
 import MenuSwitch from "./ui/MenuSwitch";
 import { links } from "../constants/navLinks";
 import { NavLink } from "react-router-dom";
 import ThemeSwitch from "./ui/ThemeSwitch";
 import LogoutButton from "./ui/LogoutButton";
+import { useGetShopNameAndLogo } from "../hooks/useGetShopNameAndLogo";
+import TextLoader from "./ui/TextLoader";
 
 export default function Navbar() {
-  const [shopName, setShopName] = useState<string | null>(null);
-  const [image, setImage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const { data, isLoading, isError, isRefetching, refetch } =
+    useGetShopNameAndLogo();
   const [open, setOpen] = useState(false);
 
   // Disable scrolling screen
@@ -24,21 +23,6 @@ export default function Navbar() {
   } else {
     document.body.classList.remove("overflow-hidden");
   }
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getShopImageAndName();
-        setShopName(data.name);
-        setImage(data.image_url);
-      } catch (error) {
-        console.error(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    }
-    fetchData();
-  }, []);
 
   return (
     <nav
@@ -55,18 +39,39 @@ export default function Navbar() {
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full overflow-hidden ${isLoading ? "p-2" : ""}`}
             >
-              {isLoading ? (
+              {(isLoading || isRefetching) ? (
                 <Loader />
               ) : (
                 <img
-                  src={isError ? ErrorImage : image || LOGO}
+                  src={isError ? ErrorImage : data?.image_url || NoImage}
                   alt="Shop logo"
-                  className="w-full h-full rounded-full object-cover border border-border bg-gray-400"
+                  className="w-full h-full rounded-full object-cover border-2 border-white bg-gray-400"
                 />
               )}
             </div>
+
+            {/* ======================== */}
+            {/* Shop Name */}
+            {/* ======================== */}
             <h1 className="font-bold text-text-primary uppercase transition-all duration-300">
-              {shopName || "SHOP NAME"}
+              {(isLoading || isRefetching) && !isError ? (
+                <TextLoader text="Loading" />
+              ) : (
+                data?.name
+              )}
+
+              {/* handle error */}
+              {isError && (
+                <div className="flex gap-2">
+                  <p className="text-text-error">Error</p>
+                  <button
+                    onClick={() => refetch()}
+                    className="font-light bg-background-secondary hover:bg-background-secondary-hover px-2 rounded-md cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+                  >
+                    Reload
+                  </button>
+                </div>
+              )}
             </h1>
           </div>
           <MenuSwitch handleOpen={() => setOpen(!open)} open={open} />

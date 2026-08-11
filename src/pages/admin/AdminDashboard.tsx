@@ -7,7 +7,7 @@ import StockStatus from "../../components/admin/StockStatus";
 export default function AdminDashboard() {
   return (
     <div className="w-full h-full mt-20 md:mt-0 p-4">
-      <h2 className="text-xl md:text-2xl font-extrabold text-text-primary">
+      <h2 className="text-xl md:text-4xl font-extrabold text-text-primary">
         Business Analytics
       </h2>
       <p className="text-text-secondary mb-4 text-xs md:text-sm">

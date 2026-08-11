@@ -212,7 +212,6 @@ export default function StockStatus() {
 
       {/* ==================================================== */}
       {/* Form */}
-      {/* Render Update Stock Status Model outside the section */}
       {/* Open this form when we click the restock button */}
       {/* ==================================================== */}
       {selectedProduct && (

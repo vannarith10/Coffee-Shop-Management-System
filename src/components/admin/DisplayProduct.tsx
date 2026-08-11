@@ -41,15 +41,15 @@ export default function DisplayProduct() {
   // ==============
   // Scroll up
   // ==============
-  const scrollToComponent = () => {
-    targetRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+  // const scrollToComponent = () => {
+  //   targetRef.current?.scrollIntoView({
+  //     behavior: "smooth",
+  //     block: "start",
+  //   });
+  // };
 
   useEffect(() => {
-    scrollToComponent();
+    // scrollToComponent();
   }, [page]);
 
   useEffect(() => {

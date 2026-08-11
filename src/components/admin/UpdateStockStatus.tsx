@@ -107,7 +107,7 @@ export default function UpdateStockStatus({
               return (
                 <label
                   key={option.value}
-                  className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all active:scale-80 duration-100 ease-out ${
+                  className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all active:scale-90 duration-300 ease-out ${
                     isSelected
                       ? `${option.border} ${option.bg}`
                       : "border-background-secondary hover:border-background-secondary-hover"
@@ -131,8 +131,9 @@ export default function UpdateStockStatus({
               );
             })}
           </div>
-          {/*  */}
-          {/* Bottom Buttons */}
+          {/* ============================================= */}
+          {/* Bottom Buttons | Cance & Update*/}
+          {/* ============================================= */}
           <div className="grid grid-cols-3 gap-4">
             <button
               onClick={() => onClose()}

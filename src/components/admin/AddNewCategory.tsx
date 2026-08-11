@@ -1,7 +1,7 @@
 // components/AddNewCategory.tsx
 //
 
-import { RotateCcw, SquarePlus } from "lucide-react";
+import { RotateCcw, SquarePlus, X } from "lucide-react";
 import { useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import {
@@ -30,7 +30,7 @@ export default function AddNewCategory() {
     document.body.classList.add("overflow-hidden");
   }
   //========================
-  // on Close 
+  // on Close
   //========================
   function onClose() {
     setIsOpen(false);
@@ -91,14 +91,13 @@ export default function AddNewCategory() {
     }
   }
 
-
   return (
     <>
       <section className="w-full flex justify-end">
         <div className="w-full grid grid-cols-2 xl:grid-cols-4 gap-4">
-            {/* ===================== */}
-            {/* Button Add */}
-            {/* ===================== */}
+          {/* ===================== */}
+          {/* Button Add */}
+          {/* ===================== */}
           <button
             onClick={() => setIsOpen(true)}
             className="col-start-1 xl:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
@@ -112,7 +111,13 @@ export default function AddNewCategory() {
             onClick={() => refetch()}
             className="col-start-2 xl:col-start-4 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
-            {isRefetching ? "Syncing..." : (<>Refresh <RotateCcw /></>)}
+            {isRefetching ? (
+              "Syncing..."
+            ) : (
+              <>
+                Refresh <RotateCcw />
+              </>
+            )}
           </button>
         </div>
       </section>
@@ -124,14 +129,29 @@ export default function AddNewCategory() {
       {isOpen && (
         <section
           onClick={onClose}
-          className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-xs flex justify-center items-center"
+          className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-lg flex justify-center items-center"
         >
           <form
             onSubmit={(e) => handleSubmit(e)}
             onClick={(e) => e.stopPropagation()}
-            className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] bg-background-secondary p-10 rounded-4xl border-4 border-border-hover flex flex-col gap-6"
+            className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] bg-background-secondary-hover p-10 rounded-xl border-4 border-white flex flex-col gap-6"
           >
-            <h2 className="font-bold text-2xl ">Create Category</h2>
+            {/* ----------------- */}
+            {/* Form Title */}
+            {/* ----------------- */}
+            <div className="w-full flex justify-between items-center">
+              <h2 className="font-bold text-2xl ">Create Category</h2>
+              {/* ------------ */}
+              {/* Button close */}
+              {/* ------------ */}
+              <button
+                type="button"
+                onClick={() => setTimeout(() => onClose(), 200)}
+                className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
+              >
+                <X />
+              </button>
+            </div>
             {/* ========================= */}
             {/* Category Types */}
             {/* ========================= */}
@@ -144,7 +164,7 @@ export default function AddNewCategory() {
                   const isSelected = type === selectedType;
                   return (
                     <button
-                        key={type}
+                      key={type}
                       onClick={() => setSelectedType(type)}
                       type="button"
                       className={`px-8 py-4 font-bold ${isSelected ? "bg-green-600" : "bg-background-secondary"} border-2 border-border rounded-md cursor-pointer hover:border-border-hover active:scale-90 transition-all duration-200 ease-out`}
@@ -177,19 +197,19 @@ export default function AddNewCategory() {
                 STATUS
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {CategoryStatusOptions.map((status) => {
-                    const isSelected = status.value === selectedStatus;
-                    return (
-                      <button
-                        key={status.label}
-                        onClick={() => setSelectedStatus(status.value)}
-                        type="button"
-                        className={`${isSelected ? "bg-green-600" : "bg-background-secondary"} px-8 py-4 font-bold border-2 border-border rounded-md cursor-pointer hover:border-border-hover active:scale-90 transition-all duration-200 ease-out`}
-                      >
-                        {status.label}
-                      </button>
-                    );
-                  })}
+                {CategoryStatusOptions.map((status) => {
+                  const isSelected = status.value === selectedStatus;
+                  return (
+                    <button
+                      key={status.label}
+                      onClick={() => setSelectedStatus(status.value)}
+                      type="button"
+                      className={`${isSelected ? "bg-green-600" : "bg-background-secondary"} px-8 py-4 font-bold border-2 border-border rounded-md cursor-pointer hover:border-border-hover active:scale-90 transition-all duration-200 ease-out`}
+                    >
+                      {status.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
