@@ -1,3 +1,4 @@
+//
 // App.tsx
 //
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -22,117 +23,133 @@ import SettingTab from "./pages/admin/SettingTab";
 import ProductDetailPage from "./pages/admin/ProductDetailPage";
 import CashierLayout from "./layouts/CashierLayout";
 import ConfirmOrder from "./pages/cashier/ConfirmOrder";
-
-
+import { GlassFilter } from "./components/ui/GlassFilter";
+import { websocketManager } from "./websocket/websocket-manager";
+import { useEffect } from "react";
+import { authStorage } from "./utils/auth-storage";
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <PublicRoute><LoginPage/></PublicRoute>,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: "/unauthorized",
-    element: <UnauthorizedPage/>,
+    element: <UnauthorizedPage />,
   },
   {
-    element: <PrivateRoute/>,
+    element: <PrivateRoute />,
     children: [
       // -----------------------------------------------------
       // ADMIN ROUTE
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.ADMIN]}/>,
+        element: <RoleRoute allowedRoles={[Role.ADMIN]} />,
         children: [
           {
             path: "/admin",
-            element: <AdminLayout/>,
+            element: <AdminLayout />,
             children: [
               {
                 index: true,
-                element: <AdminDashboard/>,
+                element: <AdminDashboard />,
               },
               {
                 path: "staff",
-                element: <StaffTab/>
+                element: <StaffTab />,
               },
               {
                 path: "category",
-                element: <CategoryTab/>
+                element: <CategoryTab />,
               },
               {
                 path: "inventory",
-                element: <InventoryTab/>
+                element: <InventoryTab />,
               },
               {
                 path: "products",
-                element: <ProductTab/>,
+                element: <ProductTab />,
                 children: [
                   {
                     path: ":id",
-                    element: <ProductDetailPage/>
-                  }
-                ]
+                    element: <ProductDetailPage />,
+                  },
+                ],
               },
               {
                 path: "reports",
-                element: <ReportTab/>
+                element: <ReportTab />,
               },
               {
                 path: "settings",
-                element: <SettingTab/>
-              }
-            ]
-          }
-        ]
+                element: <SettingTab />,
+              },
+            ],
+          },
+        ],
       },
       // -----------------------------------------------------
       // CASHIER ROUTE
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.CASHIER]}/>,
+        element: <RoleRoute allowedRoles={[Role.CASHIER]} />,
         children: [
           {
             path: "/cashier",
-            element: <CashierLayout/>,
+            element: <CashierLayout />,
             children: [
               {
                 index: true,
-                element: <CashierDashboard/>
+                element: <CashierDashboard />,
               },
               {
                 path: "confirm-order/:id",
-                element: <ConfirmOrder/>,
-              }
-            ]
-          }
-        ]
+                element: <ConfirmOrder />,
+              },
+            ],
+          },
+        ],
       },
       // -----------------------------------------------------
       // BARISTA ROUTE
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.BARISTA]}/>,
+        element: <RoleRoute allowedRoles={[Role.BARISTA]} />,
         children: [
           {
             path: "/barista",
-            element: <BaristaDashboard/>
-          }
-        ]
-      }
-    ]
+            element: <BaristaDashboard />,
+          },
+        ],
+      },
+    ],
   },
   // Catch-All 404 route
   {
     path: "*",
-    element: <PageNotFound/>
-  }
+    element: <PageNotFound />,
+  },
 ]);
 
-
 function App() {
+  const isAuthenticated = !!authStorage.getUser();
+  useEffect(() => {
+    if (!isAuthenticated) {
+      websocketManager.disconnect();
+      return;
+    }
+
+    websocketManager.connect();
+  }, [isAuthenticated]);
+
   return (
     <div className="w-screen min-w-100 min-h-screen bg-background-primary transition-colors duration-500 ease-out">
-      <RouterProvider router={router}/>
+      <GlassFilter />
+      <RouterProvider router={router} />
       <Toaster position="top-center" richColors />
     </div>
   );

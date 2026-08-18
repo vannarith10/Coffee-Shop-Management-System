@@ -1,10 +1,13 @@
 import { ResponsiveBar } from "@nivo/bar";
-import MonthYearPicker from "../ui/MonthYearPicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetRevenueTrends } from "../../hooks/useGetRevenueTrends";
 import { DefaultRevenueTrends } from "../../utils/default-values";
 import TextLoader from "../ui/TextLoader";
 import { RotateCcw } from "lucide-react";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
 
 const months = [
   "January",
@@ -30,12 +33,23 @@ const RevenueTrends = () => {
   const [m, y] = formated.split("/");
   const [month, setMonth] = useState<number>(Number(m));
   const [year, setYear] = useState<number>(Number(y));
+  const [value, setValue] = useState<Dayjs>(dayjs());
+  const [monthOpen, setMonthOpen] = useState(false);
+  const [yearOpen, setYearOpen] = useState(false);
 
-  const { data, isLoading, isError, isRefetching, refetch } = useGetRevenueTrends({
-    month: month,
-    year: year,
-  });
+  useEffect(() => {
+    if (!value) return;
+    (() => {
+      setMonth(value?.month() + 1);
+      setYear(value?.year());
+    })();
+  }, [value]);
 
+  const { data, isLoading, isError, isRefetching, refetch } =
+    useGetRevenueTrends({
+      month: month,
+      year: year,
+    });
 
   const chartData = data ?? DefaultRevenueTrends;
   const isAllZero = chartData.every((item) => item.revenue === 0);
@@ -53,14 +67,64 @@ const RevenueTrends = () => {
           </p>
         </div>
 
-        <MonthYearPicker
-          month={month}
-          year={year}
-          onChange={(month, year) => {
-            setMonth(month);
-            setYear(year);
-          }}
-        />
+        {/* --------------------------- */}
+        {/* Date picker */}
+        {/* --------------------------- */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setMonthOpen(true)}
+            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+          >
+            {value.format("MMMM")}
+          </button>
+          <button
+            onClick={() => setYearOpen(true)}
+            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+          >
+            {value.format("YYYY")}
+          </button>
+          <button
+            onClick={() => setValue(dayjs())}
+            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+          >
+            Now
+          </button>
+        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* MONTH */}
+          <DatePicker
+            open={monthOpen}
+            onClose={() => setMonthOpen(false)}
+            views={["month"]}
+            value={value}
+            onChange={(newValue) => {
+              if (newValue) {
+                setValue(value.month(newValue.month()));
+              }
+              setMonthOpen(false);
+            }}
+            slotProps={{
+              textField: { sx: { display: "none" } },
+            }}
+          />
+
+          {/* YEAR */}
+          <DatePicker
+            open={yearOpen}
+            onClose={() => setYearOpen(false)}
+            views={["year"]}
+            value={value}
+            onChange={(newValue) => {
+              if (newValue) {
+                setValue(value.year(newValue.year()));
+              }
+              setYearOpen(false);
+            }}
+            slotProps={{
+              textField: { sx: { display: "none" } },
+            }}
+          />
+        </LocalizationProvider>
       </div>
 
       {/* ================================== */}
@@ -68,7 +132,7 @@ const RevenueTrends = () => {
       {/* ================================== */}
       {(isLoading || isRefetching) && (
         <div className="h-full flex pb-10 justify-center items-center">
-          <TextLoader text="Loading"/>
+          <TextLoader text="Loading" />
         </div>
       )}
 
@@ -92,10 +156,13 @@ const RevenueTrends = () => {
       {/* ------------------------------- */}
       {/* Handle empty array[] */}
       {/* ------------------------------- */}
-      {isAllZero && (!isLoading && !isRefetching && !isError) && (
+      {isAllZero && !isLoading && !isRefetching && !isError && (
         <div className="w-full h-full flex justify-center items-center pb-10">
-          <h4 className="text-text-secondary">
-            No revenue data available for <span className="font-bold text-text-primary">{months[month - 1]} {year}</span>
+          <h4 className="text-text-secondary lg:text-xl">
+            No revenue data available for{" "}
+            <span className="font-bold text-text-primary shimmer shimmer-color-pink-400 shimmer-duration-1000">
+              {months[month - 1]} {year}
+            </span>
           </h4>
         </div>
       )}

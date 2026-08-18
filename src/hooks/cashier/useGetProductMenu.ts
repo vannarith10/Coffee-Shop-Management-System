@@ -1,10 +1,12 @@
+//
 // hooks/cashier/useGetProducts.ts
-
+//
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { CATEGORY_TYPE } from "../../types/category";
 import { getMenu } from "../../services/cashier.service";
+import type { ProductMenuResponse } from "../../types/product";
 
-export function useGetProducts({
+export function useGetProductMenu ({
   size,
   categoryType,
   categoryName,
@@ -15,14 +17,15 @@ export function useGetProducts({
   categoryName: string | null;
   keyword: string | null;
 }) {
-  return useInfiniteQuery({
+  // Infinite scrolling support
+  return useInfiniteQuery<ProductMenuResponse>({
     queryKey: ["product-menu", size, categoryType, categoryName, keyword],
 
     initialPageParam: 1,
 
     queryFn: ({ pageParam }) =>
       getMenu({
-        page: pageParam,
+        page: pageParam as number,
         size,
         categoryType,
         categoryName,

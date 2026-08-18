@@ -1,5 +1,8 @@
+//
+// components/cashier/Menu
+//
 import { useEffect, useRef } from "react";
-import { useGetProducts } from "../../hooks/cashier/useGetProductMenu";
+import { useGetProductMenu } from "../../hooks/cashier/useGetProductMenu";
 import { useProductFilter } from "../../hooks/useProductFilter";
 import NoImage from "../../assets/no-image.webp";
 import { motion } from "framer-motion";
@@ -7,8 +10,8 @@ import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import type { ProductMenuItem } from "../../types/product";
 
-
 const Menu = () => {
+  const { addToCart } = useCartStore();
   const size = 20;
   const loadMoreRef = useRef(null);
   const { selectedCategoryName, selectedCategoryType, keyword } =
@@ -22,7 +25,7 @@ const Menu = () => {
     isLoading,
     isError,
     refetch,
-  } = useGetProducts({
+  } = useGetProductMenu({
     size,
     categoryType: selectedCategoryType,
     categoryName: selectedCategoryName,
@@ -35,34 +38,31 @@ const Menu = () => {
 
   useEffect(() => {
     if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      console.log(
+        "Intersecting:",
+        entry.isIntersecting,
+        "Fetching:",
+        isFetchingNextPage,
+        "HasNext:",
+        hasNextPage,
+      );
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        rootMargin: "200px",
-      },
-    );
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        console.log("FETCH NEXT PAGE");
+        fetchNextPage();
+      }
+    });
 
     observer.observe(loadMoreRef.current);
 
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-
-  // ===============================
-  // Cart Storage Management
-  // ===============================
-  const {addToCart} = useCartStore();
-
   // Handle add to cart
-  function handleAddToCart (product: ProductMenuItem) {
+  function handleAddToCart(product: ProductMenuItem) {
     addToCart(product);
   }
-
 
   // ==========================
   // Handle loading
@@ -129,20 +129,22 @@ const Menu = () => {
         {/* Display all item cards here */}
         {/* =============================== */}
         {products.map((i, idx) => {
+          const isOut = i.stock_status === "OUT_OF_STOCK";
           return (
             <motion.button
               key={i.id}
               initial={{ opacity: 0, scale: 0.8, y: -100, x: 0 }}
               animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-              transition={{ 
+              transition={{
                 type: "spring",
                 stiffness: 60,
                 damping: 6,
-                duration: 0.3, 
-                delay: idx * 0.06
+                duration: 0.3,
+                delay: (idx % size) * 0.05,
               }}
               onClick={() => handleAddToCart(i)}
-              className="flex flex-col items-start gap-2 border-2 border-border p-4 rounded-2xl bg-background-secondary hover:bg-background-secondary-hover cursor-pointer active:scale-80 outline-none transition-all duration-300 ease-out"
+              disabled={isOut}
+              className={`flex flex-col items-start gap-2 ${isOut ? "bg-pink-600/50" : "shimmer shimmer-bg shimmer-color-blue-300/50 shimmer-duration-3000 bg-background-secondary hover:bg-background-secondary-hover active:scale-80"} border border-border p-4 rounded-2xl cursor-pointer outline-none transition-all duration-300 ease-out`}
             >
               <div className="relative w-full max-w-full aspect-square">
                 {/* product image */}
@@ -152,8 +154,17 @@ const Menu = () => {
                   loading="lazy"
                   className="w-full h-full object-cover rounded-lg"
                 />
+                {isOut && (
+                  <div className="absolute inset-0 bg-gray-500/60 rounded-lg flex items-center justify-center">
+                    <span className="font-bold text-sm lg:text-xl text-pink-300">
+                      OUT
+                    </span>
+                  </div>
+                )}
                 {/* product price */}
-                <span className="absolute text-white right-2 top-2 font-bold text-sm bg-red-400 px-2 py-1 rounded-md">
+                <span
+                  className={`absolute ${isOut ? "bg-pink-500" : "bg-red-400"} text-white right-2 top-2 font-bold text-sm px-2 py-1 rounded-md`}
+                >
                   ${i.price}
                 </span>
               </div>

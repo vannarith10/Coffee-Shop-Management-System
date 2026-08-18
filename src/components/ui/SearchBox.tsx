@@ -12,7 +12,7 @@ const SearchBox = ({ value, onChange, onClear }: SearchInputProps) => {
 
   return (
     <div
-      className={`${isFocusing ? "border-green-500" : "border-border-hover"} w-full flex items-center px-4 py-2 gap-4 border-2 rounded-md`}
+      className={`${isFocusing ? "border-green-500" : "border-border-hover"} w-full flex items-center px-4 py-2 gap-4 border rounded-md`}
     >
       <Search />
       <input

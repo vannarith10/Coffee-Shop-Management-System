@@ -1,3 +1,4 @@
+//
 // components/DisplayStaff.tsx
 //
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +14,9 @@ import TextLoader from "../ui/TextLoader";
 import { getPageNumbers } from "../../utils/page-numbers";
 import { useStaff } from "../../hooks/useGetStaffProfiles";
 import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
+import { AnimatePresence } from "framer-motion";
+import { COLORS } from "../../utils/colors";
+import { ROLES } from "../../types/role";
 
 export default function DisplayStaff() {
   const [page, setPage] = useState(1);
@@ -55,13 +59,13 @@ export default function DisplayStaff() {
   }
 
   useEffect(() => {
-    if (justAddedId) {
+    if (justAddedId || justUpdatedId) {
       targetRef.current?.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
-  }, [justAddedId]);
+  }, [justAddedId, justUpdatedId]);
 
   return (
     <>
@@ -123,11 +127,16 @@ export default function DisplayStaff() {
           staff?.staffs.map((staff) => {
             const isUpdated = staff.id === justUpdatedId;
             const justAdded = staff.id === justAddedId;
+            const roleColor = COLORS[ROLES.indexOf(staff.role)];
             return (
               <main
-                ref={staff.id === justAddedId ? targetRef : null}
+                ref={
+                  staff.id === justAddedId || staff.id === justUpdatedId
+                    ? targetRef
+                    : null
+                }
                 key={staff.id}
-                className={`grid grid-cols-6 items-center-safe ${isUpdated || justAdded ? "bg-green-700 hover:bg-green-600" : "bg-background-secondary "} hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
+                className={`grid grid-cols-6 items-center-safe ${isUpdated || justAdded ? "shimmer shimmer-bg shimmer-color-blue-400 shimmer-duration-2000" : ""} bg-background-secondary  hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
               >
                 {/* ====================================== */}
                 {/* PROFILE : img, name, username, email */}
@@ -146,14 +155,17 @@ export default function DisplayStaff() {
                       @{staff.username || "username"}
                     </h5>
                     <h3 className="text-[10px] whitespace-normal break-all pr-2">
-                      {staff.email || "example@gmail.com"}
+                      {staff.email || null}
                     </h3>
                   </div>
                 </div>
                 {/* ------------------- */}
                 {/* ROLE */}
                 {/* ------------------- */}
-                <h3 className="text-[8px] md:text-[10px] lg:text-xs bg-amber-600 inline-flex justify-self-center px-2 py-1 rounded-xs font-bold text-left">
+                <h3
+                  style={{ backgroundColor: roleColor }}
+                  className={`text-[8px] md:text-[10px] lg:text-xs inline-flex justify-self-center px-2 py-1 rounded-xs font-bold text-left`}
+                >
                   {staff.role}
                 </h3>
                 {/* --------------------- */}
@@ -292,20 +304,22 @@ export default function DisplayStaff() {
       </section>
 
       {/* =============================== */}
-      {/* =============================== */}
+      {/* */}
       {/* FORM: Open Form Edit */}
+      {/* */}
       {/* =============================== */}
-      {/* =============================== */}
-      {selectedStaff && (
-        <EditStaffProfile
-          isOpen={true}
-          onClose={() => {
-            setSelectedStaff(null);
-            document.body.classList.remove("overflow-hidden");
-          }}
-          staff={selectedStaff}
-        />
-      )}
+      <AnimatePresence>
+        {selectedStaff && (
+          <EditStaffProfile
+            isOpen={true}
+            staff={selectedStaff}
+            onClose={() => {
+              setSelectedStaff(null);
+              document.body.classList.remove("overflow-hidden");
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

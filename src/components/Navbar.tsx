@@ -1,8 +1,9 @@
+//
 // components/Navbar.tsx
 //
-import NoImage from "../assets/no-image.webp"
+import NoImage from "../assets/no-image.webp";
 import ErrorImage from "../assets/error-image.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "./ui/Loader";
 import MenuSwitch from "./ui/MenuSwitch";
 import { links } from "../constants/navLinks";
@@ -11,27 +12,30 @@ import ThemeSwitch from "./ui/ThemeSwitch";
 import LogoutButton from "./ui/LogoutButton";
 import { useGetShopNameAndLogo } from "../hooks/useGetShopNameAndLogo";
 import TextLoader from "./ui/TextLoader";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const { data, isLoading, isError, isRefetching, refetch } =
     useGetShopNameAndLogo();
   const [open, setOpen] = useState(false);
 
-  // Disable scrolling screen
-  if (open) {
-    document.body.classList.add("overflow-hidden");
-  } else {
-    document.body.classList.remove("overflow-hidden");
-  }
+  useEffect(() => {
+    // open === true => add "overflow-hidden"
+    // open === false => remove "overflow-hidden"
+    // toggle now can add and remove
+    document.body.classList.toggle("overflow-hidden", open);
+
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [open]);
 
   return (
     <nav
-      className={`z-90 fixed md:hidden w-screen top-0 ${open ? "h-screen flex flex-col justify-between" : "h-20 ease-in"} px-4 py-4 bg-sidebar transition-all duration-500 ease-out`}
+      className={`z-90 fixed md:hidden w-screen top-0 ${open ? "h-screen overflow-y-scroll scrollbar-hide flex flex-col gap-y-4 justify-between" : "h-20 ease-in"} px-4 py-4 bg-sidebar transition-all duration-500 ease-out shimmer shimmer-bg shimmer-color-blue-300 shimmer-duration-9000`}
     >
       {/*  */}
       {/*  */}
       <section
-        className={`w-full ${open ? "mt-10 gap-10" : ""} flex flex-col items-center justify-between transition-all duration-300 ease-out`}
+        className={` w-full ${open ? "mt-10 gap-10" : ""} flex flex-col items-center justify-between transition-all duration-300 ease-out`}
       >
         {/* Logo and Name */}
         <div className="w-full flex justify-between items-center">
@@ -39,7 +43,7 @@ export default function Navbar() {
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full overflow-hidden ${isLoading ? "p-2" : ""}`}
             >
-              {(isLoading || isRefetching) ? (
+              {isLoading || isRefetching ? (
                 <Loader />
               ) : (
                 <img
@@ -53,7 +57,7 @@ export default function Navbar() {
             {/* ======================== */}
             {/* Shop Name */}
             {/* ======================== */}
-            <h1 className="font-bold text-text-primary uppercase transition-all duration-300">
+            <h1 className="font-bold shimmer shimmer-color-orange-500 text-foreground/40 uppercase transition-all duration-300">
               {(isLoading || isRefetching) && !isError ? (
                 <TextLoader text="Loading" />
               ) : (
@@ -79,34 +83,57 @@ export default function Navbar() {
         {/* ================================== */}
         {/* List of menu */}
         {/* ================================== */}
-        <div className={`${open ? "w-full flex flex-col gap-4" : "hidden"}`}>
-          {links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <NavLink
-                key={link.label}
-                to={link.path}
-                end={link.end}
-                onClick={() => setOpen(false)}
-                className={(props) =>
-                  `${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md outline-none transition-all duration-300 ease-out`
-                }
-              >
-                {Icon && <Icon />}
-                {link.label}
-              </NavLink>
-            );
-          })}
-        </div>
+        {open && (
+          <div className={"w-full flex flex-col gap-4"}>
+            {links.map((link, idx) => {
+              const Icon = link.icon;
+              return (
+                <motion.div
+                  key={link.label}
+                  initial={{ scale: 0.8, opacity: 0, x: 50 }}
+                  animate={{ scale: 1, opacity: 1, x: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 8,
+                    delay: idx * 0.1,
+                  }}
+                  className="w-full"
+                >
+                  <NavLink
+                    to={link.path}
+                    end={link.end}
+                    onClick={() => setOpen(false)}
+                    className={(props) =>
+                      `${navlink(props)} font-semibold flex items-center gap-4 text-text-primary py-2 rounded-md outline-none transition-all duration-300 ease-out`
+                    }
+                  >
+                    {Icon && <Icon />}
+                    {link.label}
+                  </NavLink>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Bottom buttons */}
-      <section className={`${open ? "" : "hidden"}`}>
-        <div className="w-full flex flex-col gap-4">
+      {open && (
+        <motion.div
+          initial={{ scale: 0.2, opacity: 0, y: 50 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 50,
+            damping: 4,
+          }}
+          className="w-full flex flex-col items-center gap-4"
+        >
           <ThemeSwitch />
           <LogoutButton />
-        </div>
-      </section>
+        </motion.div>
+      )}
       {/*  */}
       {/*  */}
     </nav>
@@ -115,5 +142,5 @@ export default function Navbar() {
 
 const navlink = ({ isActive }: { isActive: boolean }) =>
   isActive
-    ? "bg-background-secondary hover:bg-background-secondary border-l-4 pl-2"
+    ? "bg-background-secondary hover:bg-background-secondary border-l-4 pl-2 shimmer shimmer-bg shimmer-color-pink-300 shimmer-duration-3000"
     : "hover:bg-background-secondary-hover pl-6";

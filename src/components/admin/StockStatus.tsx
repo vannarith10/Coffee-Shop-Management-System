@@ -10,23 +10,28 @@ import UpdateStockStatus from "./UpdateStockStatus";
 import TextLoader from "../ui/TextLoader";
 import { useStockStatus } from "../../hooks/useStockStatus";
 import { getPageNumbers } from "../../utils/page-numbers";
+import { AnimatePresence } from "framer-motion";
 
 export default function StockStatus() {
   const [page, setPage] = useState(1);
   const size = 10;
 
   // Select a product and pass to Update Form
-  const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(
+    null,
+  );
 
   // Retreive data from hook
-  const { product, isLoading, isError, refetch } = useStockStatus({page, size});
+  const { product, isLoading, isError, refetch } = useStockStatus({
+    page,
+    size,
+  });
 
   // Hanle Error fetching data
-  function handleRetry () {
+  function handleRetry() {
     setPage(1);
     refetch();
   }
-
 
   // =============================
   // Pagination logic
@@ -51,7 +56,6 @@ export default function StockStatus() {
   function handlePageClick(pageNum: number) {
     setPage(pageNum);
   }
-
 
   return (
     <>
@@ -117,7 +121,8 @@ export default function StockStatus() {
         {/* All items are being displayed here */}
         {/* Display list of products */}
         {/* ================================================= */}
-        {!isLoading && !isError &&
+        {!isLoading &&
+          !isError &&
           product?.products.map((p: ProductStock) => {
             const config = STOCK_STATUS_CONFIG[p.status];
             return (
@@ -214,16 +219,18 @@ export default function StockStatus() {
       {/* Form */}
       {/* Open this form when we click the restock button */}
       {/* ==================================================== */}
-      {selectedProduct && (
-        <UpdateStockStatus
-          product={selectedProduct}
-          isOpen={true}
-          onClose={() => {
-            setSelectedProduct(null);
-            document.body.classList.remove("overflow-hidden");
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProduct && (
+          <UpdateStockStatus
+            product={selectedProduct}
+            isOpen={true}
+            onClose={() => {
+              setSelectedProduct(null);
+              document.body.classList.remove("overflow-hidden");
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

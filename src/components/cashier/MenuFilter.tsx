@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+//
+//  components/cashier/MenuFilter.tsx
+//
+import { useEffect, useState } from "react";
 import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
 import { useProductFilter } from "../../hooks/useProductFilter";
 import { motion } from "framer-motion";
+import SearchBox from "../ui/SearchBox";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const filters: { value: ProductFilter; background_color: string }[] = [
   {
@@ -32,9 +37,13 @@ const MenuFilter = () => {
     setSelectedCategoryName,
   } = useProductFilter();
 
-  //========================================================================================
+  // const { keyword, setKeyword } = useProductFilter();
+  const [inputValue, setInputValue] = useState(keyword ?? "");
+  const debouncedKeyword = useDebounce(inputValue, 500);
+
+  //=====================================================================
   // Clear 'selectedCategoryName', 'keyword' when we switch category type
-  //========================================================================================
+  //=====================================================================
   useEffect(() => {
     (() => {
       setSelectedCategoryName(null);
@@ -47,6 +56,38 @@ const MenuFilter = () => {
     categoryNameType,
   ]);
 
+  // =====================================
+  // Debounce handles setKeyword
+  // handle send request when user stops typing
+  // =====================================
+  useEffect(() => {
+    // setKeyword gets value from debouncedKeyword, and debouncedKeyword gets from inputValue
+    setKeyword(debouncedKeyword);
+  }, [debouncedKeyword, setKeyword]);
+
+  // When filtering, we set keyword to "" empty string
+  // but the input box still showing the text
+  // so this block will clear that text
+  // Finally, if "keywork" = empty then text box will be empty too
+  useEffect(() => {
+    (() => {
+      if (keyword == "" || keyword == null) {
+        setInputValue("");
+      }
+    })();
+  }, [keyword]);
+
+  // Handle set input value
+  function handleInputOnChange(value: string) {
+    setInputValue(value);
+  }
+
+  // Handle clear input
+  function handleClearInput() {
+    setKeyword(null);
+    setInputValue("");
+  }
+
   const filteredCategory =
     categoryNameType?.filter((c) => c.category_type === selectedCategoryType) ??
     [];
@@ -58,6 +99,11 @@ const MenuFilter = () => {
 
   return (
     <section className="w-full flex flex-col p-4 gap-4">
+      <SearchBox
+        value={inputValue}
+        onChange={handleInputOnChange}
+        onClear={handleClearInput}
+      />
       {/* ======================================= */}
       {/* Category types */}
       {/* ======================================= */}

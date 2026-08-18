@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { useCreateOrder } from "../../hooks/cashier/useCreateOrder";
 import type { CreateOrderRequest } from "../../types/order";
 import { useNavigate } from "react-router-dom";
+import MyPopupForm from "../animation/MyPopupForm";
+import FormHeader from "../animation/FormHeader";
 
 interface Props {
   onClose: () => void;
@@ -81,80 +83,10 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
   }
 
   return (
-    <motion.div
-      onClick={onClose}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      layout
-      transition={{
-        layout: {
-          type: "spring",
-          stiffness: 100,
-          damping: 10,
-        },
-        duration: 0.5,
-      }}
-      exit={{
-        opacity: 0,
-        transition: {
-          duration: 1,
-        },
-      }}
-      className="fixed z-99 inset-0 backdrop-blur-lg py-40 flex justify-center items-center"
-    >
-      <motion.div
+    <MyPopupForm onClose={onClose}>
+      <div
         onClick={(e) => e.stopPropagation()}
-        //
-        initial={{
-          opacity: 1,
-          x: 500,
-          y: 480,
-          rotateY: 20,
-          rotateZ: 20,
-          skewY: 50,
-          scaleX: 0.5,
-          scaleY: 0.1,
-          borderRadius: 1000,
-        }}
-        //
-        animate={{
-          opacity: 1,
-          x: 0,
-          y: 0,
-          rotateY: 0,
-          rotateX: 0,
-          rotateZ: 0,
-          skewY: 0,
-          skewX: 0,
-          scaleX: 1,
-          scaleY: 1,
-          borderRadius: 30,
-        }}
-        //
-        exit={{
-          opacity: 1,
-          x: 800,
-          y: 800,
-          skewY: 50,
-          scaleX: 0.2,
-          scaleY: 0.01,
-          borderRadius: 500,
-          transition: {
-            duration: 1,
-          },
-        }}
-        transition={{
-          duration: 0.5,
-          ease: "easeOut",
-          type: "spring",
-          stiffness: 100,
-          damping: 16,
-        }}
-        style={{
-          transformOrigin: "left center",
-          transformPerspective: 1500,
-        }}
-        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2"
+        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xl overflow-y-scroll scrollbar-hide"
       >
         {/* =========================== */}
         {/* Children elements stay here */}
@@ -178,15 +110,11 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
           {/* -------------------------- */}
           {/* Header */}
           {/* -------------------------- */}
-          <div className="flex justify-between items-center border-b border-border p-6 ">
-            <h2 className="font-bold text-xl">Choose Payment Method</h2>
-            <button
-              onClick={onClose}
-              className="hover:bg-gray-600 rounded-full"
-            >
-              <X size={28} />
-            </button>
-          </div>
+          <FormHeader
+            title="Choose Payment Method"
+            onClose={onClose}
+            className="bg-background-secondary"
+          />
 
           {/* ---------------------- */}
           {/* ---------------------- */}
@@ -344,8 +272,8 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
             </div>
           </div>
         </motion.div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </MyPopupForm>
   );
 };
 

@@ -9,6 +9,8 @@ import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { useUpdateShopLogo } from "../../hooks/useUpdateShopLogo";
+import MyPopupForm from "../animation/MyPopupForm";
+import { AnimatePresence } from "framer-motion";
 
 const ShopBranding = () => {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -163,34 +165,36 @@ const ShopBranding = () => {
       {/* Delete Logo Form */}
       {/* =========================================== */}
       {/* =========================================== */}
-      {isRemove && (
-        <div className="fixed inset-0 z-100 backdrop-blur-xs flex justify-center items-center">
-          <div className="w-60 flex flex-col gap-4 items-center rounded-xl p-10 border-2 border-white bg-sidebar">
-            <div className="p-4 bg-background-secondary-hover rounded-full">
-              <Feather />
+      <AnimatePresence>
+        {isRemove && (
+          <MyPopupForm onClose={() => setIsRemove(false)}>
+            <div className="w-60 flex flex-col gap-4 items-center rounded-xl p-10 border-2 border-white bg-sidebar">
+              <div className="p-4 bg-background-secondary-hover rounded-full">
+                <Feather />
+              </div>
+              <h2 className="font-bold text-xl text-white whitespace-nowrap">
+                Delete logo?
+              </h2>
+              <button
+                onClick={handleRemoveLogo}
+                disabled={isPending}
+                className="font-bold text-white w-full py-2 border border-border hover:border-border-hover rounded-md bg-text-error/50 hover:bg-text-error cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              >
+                {isPending ? "Deleting..." : "Delete"}
+              </button>
+              <button
+                onClick={() => {
+                  setIsRemove(false);
+                  document.body.classList.remove("overflow-hidden");
+                }}
+                className="font-bold w-full py-2 text-white border border-border hover:border-border-hover rounded-md bg-background-secondary-hover/50 hover:bg-background-secondary-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              >
+                Cancel
+              </button>
             </div>
-            <h2 className="font-bold text-xl text-white whitespace-nowrap">
-              Delete logo?
-            </h2>
-            <button
-              onClick={handleRemoveLogo}
-              disabled={isPending}
-              className="font-bold text-white w-full py-2 border border-border hover:border-border-hover rounded-md bg-text-error/50 hover:bg-text-error cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
-            >
-              {isPending ? "Deleting..." : "Delete"}
-            </button>
-            <button
-              onClick={() => {
-                setIsRemove(false);
-                document.body.classList.remove("overflow-hidden");
-              }}
-              className="font-bold w-full py-2 text-white border border-border hover:border-border-hover rounded-md bg-background-secondary-hover/50 hover:bg-background-secondary-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+          </MyPopupForm>
+        )}
+      </AnimatePresence>
 
       {/* ============================ */}
       {/* Form Image */}

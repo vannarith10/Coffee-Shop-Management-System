@@ -48,7 +48,7 @@ export function useStaff({ page, size }: { page: number; size: number }) {
     if (!justUpdatedId) return;
     const timer = setTimeout(() => {
       setJustUpdatedId(null);
-    }, 5000);
+    }, 6000);
     return () => clearTimeout(timer);
   }, [justUpdatedId]);
 

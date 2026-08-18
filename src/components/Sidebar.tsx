@@ -1,3 +1,4 @@
+//
 // components/Sidebar.tsx
 //
 import NoImage from "../assets/no-image.webp"
@@ -39,7 +40,7 @@ export default function Sidebar() {
           {/* ======================== */}
           {/* Shop Name */}
           {/* ======================== */}
-          <h1 className="font-bold text-text-primary uppercase  transition-all duration-300">
+          <h1 className="font-bold shimmer shimmer-color-orange-500 text-foreground/40 uppercase  transition-all duration-300">
             {(isLoading || isRefetching) && !isError ? <TextLoader text="Loading" /> : data?.name}
 
             {/* handle error */}
@@ -83,7 +84,7 @@ export default function Sidebar() {
       {/*  */}
       {/*  */}
       <section>
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4 items-center">
           <ThemeSwitch />
           <LogoutButton />
         </div>
@@ -96,5 +97,5 @@ export default function Sidebar() {
 
 const navlink = ({ isActive }: { isActive: boolean }) =>
   isActive
-    ? "bg-background-secondary hover:bg-background-secondary border-l-4 pl-2"
+    ? "bg-background-secondary hover:bg-background-secondary border-l-4 pl-2 shimmer shimmer-bg shimmer-color-pink-300 shimmer-duration-3000"
     : "hover:bg-background-secondary-hover pl-6";

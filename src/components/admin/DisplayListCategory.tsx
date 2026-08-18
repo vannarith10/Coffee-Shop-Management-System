@@ -9,6 +9,7 @@ import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
 import { useCategory } from "../../hooks/useCategory.ts";
 import { getPageNumbers } from "../../utils/page-numbers.ts";
+import { AnimatePresence } from "framer-motion";
 
 export default function ListCategory() {
   const [page, setPage] = useState(1);
@@ -46,13 +47,13 @@ export default function ListCategory() {
 
   // Scroll to the new Category that just created
   useEffect(() => {
-  if (justCreatedCategoryId) {
-    targetRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-}, [justCreatedCategoryId]);
+    if (justCreatedCategoryId) {
+      targetRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [justCreatedCategoryId]);
 
   return (
     <>
@@ -195,16 +196,17 @@ export default function ListCategory() {
       {/* =============================== */}
       {/* To Open Form Edit */}
       {/* =============================== */}
-      {selectedCategory && (
-        <EditCategory
-          category={selectedCategory}
-          isOpen={true}
-          onClose={() => {
-            setSelectedCategory(null);
-            document.body.classList.remove("overflow-hidden");
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {selectedCategory && (
+          <EditCategory
+            category={selectedCategory}
+            isOpen={true}
+            onClose={() => {
+              setSelectedCategory(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -18,7 +18,10 @@ import type {
   CreateCategoryRequest,
   PatchCategoryRequest,
 } from "../types/category";
-import type { ShopLogoUpdateResponse, UpdateShopInfoRequest } from "../types/shop-setting";
+import type {
+  ShopLogoUpdateResponse,
+  UpdateShopInfoRequest,
+} from "../types/shop-setting";
 
 interface ApiError {
   message: string;
@@ -116,29 +119,7 @@ export async function getAllStaffProfiles({
 }
 //
 //
-//
-// UPDATE STAFF PROFILE
-//
-export async function editStaffDetail({
-  userId,
-  data,
-  file,
-}: {
-  userId: string;
-  data: EditStaffDataRequest;
-  file?: File | null;
-}) {
-  const formData = new FormData();
-  formData.append(
-    "data",
-    new Blob([JSON.stringify(data)], { type: "application/json" }),
-  );
-  if (file) {
-    formData.append("image", file);
-  }
-  const response = api.patch(`/api/v2/employee/${userId}/edit`, formData);
-  return response;
-}
+
 //
 //
 //
@@ -304,8 +285,7 @@ export async function addNewProduct({
   const formData = new FormData();
   formData.append(
     "data",
-    new Blob([JSON.stringify(data)], 
-    { type: "application/json" }),
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
   );
   formData.append("image", image);
   return await api.post("/api/v2/product/add-new", formData);
@@ -373,11 +353,15 @@ export async function updateShopLogo(
 //
 // Update Shop Info
 //
-export async function updateShopInfo(data: UpdateShopInfoRequest): Promise<void> {
+export async function updateShopInfo(
+  data: UpdateShopInfoRequest,
+): Promise<void> {
   const formData = new FormData();
-  formData.append("data", new Blob([JSON.stringify(data)], 
-    { type: "application/json" }),);
-  
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
+
   await api.patch("/api/v2/shop-profile/update", formData);
 }
 //
@@ -386,6 +370,6 @@ export async function updateShopInfo(data: UpdateShopInfoRequest): Promise<void>
 //
 // Delete Profile
 //
-export async function deleteProfile (id:string): Promise<void> {
+export async function deleteProfile(id: string): Promise<void> {
   await api.delete(`/api/v2/employee/${id}/delete`);
 }

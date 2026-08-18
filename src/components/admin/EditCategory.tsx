@@ -13,6 +13,10 @@ import TextLoader from "../ui/TextLoader";
 import { patchCategory } from "../../services/admin.service";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import MyPopupForm from "../animation/MyPopupForm";
+import { AnimatePresence } from "framer-motion";
+import MyDialogClose from "../animation/MyDialogClose";
+import FormHeader from "../animation/FormHeader";
 
 interface EditCategory {
   isOpen: boolean;
@@ -33,9 +37,6 @@ export default function EditCategory({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  if (isOpen) {
-    document.body.classList.add("overflow-hidden");
-  }
 
   //=======================
   // Submit
@@ -74,38 +75,30 @@ export default function EditCategory({
 
   if (!isOpen) return null;
   return (
-    <section
-      onClick={onClose}
-      className="fixed inset-0 h-screen w-screen z-30 backdrop-blur-lg flex justify-center items-center"
-    >
+    <MyPopupForm onClose={onClose}>
       {/* =================== */}
       {/* Form */}
       {/* =================== */}
+
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
-        className="w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-secondary-hover p-10 rounded-xl border-4 border-white"
+        className="overflow-y-scroll scrollbar-hide w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-primary rounded-4xl border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
       >
         {/* ----------------- */}
         {/* Form Title */}
         {/* ----------------- */}
-        <div className="w-full flex justify-between items-center">
-          <h2 className="font-bold text-2xl ">Edit Category</h2>
-          {/* ------------ */}
-          {/* Button close */}
-          {/* ------------ */}
-          <button
-            type="button"
-            onClick={() => setTimeout(() => onClose(), 200)}
-            className="w-10 flex justify-center items-center aspect-square rounded-full border-2 border-border hover:rotate-90 hover:border-border-hover active:scale-70 active:border-text-error outline-none transition-all duration-200 ease-out"
-          >
-            <X />
-          </button>
-        </div>
+        <FormHeader
+          title="Edit Category"
+          onClose={onClose}
+          className="w-full sticky top-0 z-100"
+        />
+
+
         {/* ================================= */}
         {/* Name input*/}
         {/* ================================= */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 p-6">
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="name" className="text-xs font-bold">
               NAME
@@ -176,7 +169,7 @@ export default function EditCategory({
         {/* Buttons */}
         {/* Submit */}
         {/* ================================ */}
-        <div className="w-full grid grid-cols-3 gap-6 pt-6">
+        <div className="w-full grid grid-cols-3 gap-6 p-6">
           <button
             type="button"
             onClick={() => onClose()}
@@ -198,6 +191,6 @@ export default function EditCategory({
           </button>
         </div>
       </form>
-    </section>
+    </MyPopupForm>
   );
 }

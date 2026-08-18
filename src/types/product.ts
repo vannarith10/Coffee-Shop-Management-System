@@ -103,5 +103,6 @@ export interface ProductMenuItem {
   description: string;
   category_type: CATEGORY_TYPE;
   category_name: string;
-  in_stock: boolean;
+  is_available: boolean;
+  stock_status: PRODUCT_STOCK_STATUS;
 }

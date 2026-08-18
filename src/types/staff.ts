@@ -33,6 +33,7 @@ export interface EditStaffDataRequest {
   name: string | null;
   username: string | null;
   password: string | null;
+  email: string | null;
   role: Role | null;
   status: Status | null;
   shift_type: Shift | null;

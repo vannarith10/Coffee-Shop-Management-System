@@ -37,41 +37,31 @@ const ConfirmOrder = () => {
       <motion.div
         initial={{
           opacity: 1,
-          rotateY: 20,
-          rotateZ: 20,
-          skewY: 50,
-          scaleX: 0.3,
-          scaleY: 0.3,
+          scale: 0.2
         }}
         //
         animate={{
           opacity: 1,
-          rotateY: 0,
-          rotateX: 0,
-          rotateZ: 0,
-          skewY: 0,
-          skewX: 0,
-          scaleX: 1,
-          scaleY: 1,
+          scale: 1
         }}
         //
         transition={{
           duration: 1,
           ease: "easeOut",
           type: "spring",
-          stiffness: 80,
-          damping: 20,
+          stiffness: 120,
+          damping: 14,
         }}
         style={{
           transformOrigin: "left center",
           transformPerspective: 1500,
         }}
-        className="w-full h-full z-100 fixed flex bg-background-primary p-6 gap-6"
+        className="w-full h-full z-100 fixed flex flex-col md:flex-row bg-background-primary p-6 gap-6 overflow-y-scroll scrollbar-hide"
       >
-        <div className="h-full w-2/5 ">
+        <div className="h-full w-full md:w-2/5 ">
           <ConfirmSummary id={id!} />
         </div>
-        <div className="h-full w-3/5 ">
+        <div className="h-full w-full md:w-3/5 ">
           <ConfirmFinalize id={id!} />
         </div>
       </motion.div>

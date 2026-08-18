@@ -30,7 +30,7 @@ const ConfirmSummary = ({ id }: { id: string }) => {
   // Loading handling
   if (isLoading || isFetching) {
     return (
-      <div className="w-full h-full bg-background-secondary rounded-xl p-10">
+      <div className="w-full h-full bg-background-secondary rounded-xl p-10 border-2 border-border">
         <div className="w-full flex items-center justify-start ">
           <h3 className="flex items-center gap-2 text-lg font-bold">
             <BadgeDollarSign /> Payment Summary
@@ -68,11 +68,11 @@ const ConfirmSummary = ({ id }: { id: string }) => {
   // Error handling
   if (isError) {
     return (
-      <div className="w-full h-full bg-background-secondary rounded-xl p-10 flex flex-col justify-center items-center">
+      <div className="w-full h-full bg-background-secondary rounded-xl p-10 flex flex-col justify-center items-center border-2 border-border">
         <h3 className="font-bold text-foreground/40 text-xl shimmer shimmer-color-orange-500">
           Something went wrong
         </h3>
-        <div className="w-full flex flex-col gap-2 justify-center items-start py-10 ">
+        <div className="w-full flex flex-col gap-2 justify-center items-start mt-10 p-4 bg-background-secondary-hover rounded-lg">
           {/* Status code */}
           <p className="font-semibold text-sm">
             <span className="font-bold text-amber-500 ">Status Code: </span>
@@ -91,7 +91,7 @@ const ConfirmSummary = ({ id }: { id: string }) => {
         </div>
 
         <div className="w-full flex justify-center py-10 items-center">
-          <button onClick={() => navigate(-1)} className="flex font-semibold text-lg gap-2 items-center justify-center px-10 py-5 bg-background-secondary-hover cursor-pointer rounded-lg active:scale-80 outline-none transition-all duration-300 ease-out">
+          <button onClick={() => navigate("/cashier")} className="flex font-semibold text:sm lg:text-lg gap-2 items-center justify-center px-10 py-5 bg-background-secondary-hover cursor-pointer rounded-lg active:scale-80 outline-none transition-all duration-300 ease-out">
             Back <ChevronsDown />
           </button>
         </div>

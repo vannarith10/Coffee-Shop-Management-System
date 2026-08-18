@@ -11,12 +11,12 @@ import TextLoader from "../ui/TextLoader";
 import { useAdminProduct } from "../../hooks/useAdminProduct";
 import { useProductFilter } from "../../hooks/useProductFilter";
 
-
 export default function DisplayProduct() {
   const [page, setPage] = useState(1);
   const size = 20;
 
-  const { selectedCategoryName, selectedCategoryType, keyword } = useProductFilter();
+  const { selectedCategoryName, selectedCategoryType, keyword } =
+    useProductFilter();
 
   const { products, isLoading, isError, isRefetching, refetch } =
     useAdminProduct({
@@ -165,7 +165,7 @@ export default function DisplayProduct() {
                 <button
                   key={product.id}
                   onClick={() => {
-                    setTimeout(() => navigate(`${product.id}`), 300);
+                    navigate(`${product.id}`);
                   }}
                   className={`relative grid grid-cols-5 w-full items-center-safe bg-cover bg-center  p-4 cursor-pointer active:px-20 overflow-hidden hover:pl-10 transition-all duration-300 ease-out`}
                   style={{ backgroundImage: `url(${product.image_url})` }}
@@ -220,11 +220,12 @@ export default function DisplayProduct() {
                 </button>
               );
             })
-          ) : ( keyword === null ?
+          ) : keyword === null ? (
             <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
-              No product data of category type {selectedCategoryType} and category name {selectedCategoryName}
+              No product data of category type {selectedCategoryType} and
+              category name {selectedCategoryName}
             </div>
-            :
+          ) : (
             <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
               Product name "{keyword}" not found
             </div>

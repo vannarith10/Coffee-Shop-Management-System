@@ -20,6 +20,8 @@
 
   --text-error: #800000;
   --spot-light: #194a7a;
+
+  --black-and-white: #000000;
 }
 
 
@@ -41,6 +43,8 @@
 
   --text-error: #d74a49;
   --spot-light: #d1dbe4;
+
+  --black-and-white: #ffffff;
 }
 
 
@@ -62,6 +66,8 @@
 
   --color-text-error: var(--text-error);
   --color-spot-light: var(--spot-light);
+
+  --color-black-and-white: var(--black-and-white);
 }
 
 
@@ -81,4 +87,21 @@ body {
 }
 
 
+/* Animate Background Color */
+.gradient-background {
+  background: linear-gradient(300deg, #000000, var(--color-background-primary), var(--color-background-secondary), #12FF00);
+  background-size: 240% 240%;
+  animation: gradient-animation 14s ease infinite;
+}
 
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

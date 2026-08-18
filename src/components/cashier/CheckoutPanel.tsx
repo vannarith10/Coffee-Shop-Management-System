@@ -1,4 +1,4 @@
-import { ClockFading, Minus, Plus, Trash2 } from "lucide-react";
+import { ClockFading, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import DefaultImage from "../../assets/image-default.jpg";
 import { CATEGORY_COLOR_CONFIG } from "../../types/category";
@@ -7,11 +7,11 @@ import { useEffect, useRef } from "react";
 import Checkout from "./Checkout";
 
 // style header buttons
-const myBtn = `flex gap-2 items-center justify-center px-4 py-2 w-full rounded-md font-bold text-sm active:scale-80 transition-all duration-300 ease-out outline-none`;
+const myBtn = `text-white flex gap-2 items-center justify-center px-4 py-2 w-full rounded-md font-bold text-sm active:scale-80 transition-all duration-300 ease-out outline-none`;
 
 const CheckoutPanel = () => {
   const cart = useCartStore((state) => state.cart);
-  const { increase, decrease, clearCart } = useCartStore();
+  const { increase, decrease, clearCart, removeFromCart } = useCartStore();
   const hasItem = cart.length > 0;
 
   // Scroll to item
@@ -39,7 +39,9 @@ const CheckoutPanel = () => {
         <h3 className="font-bold text-lg">Current Order</h3>
         <div className="w-full flex gap-4 ">
           {/* Button history */}
-          <button className={`${myBtn} bg-background-secondary-hover cursor-pointer`}>
+          <button
+            className={`${myBtn} bg-background-secondary-hover cursor-pointer`}
+          >
             <ClockFading size={16} /> History
           </button>
           {/* Button clear cart */}
@@ -56,6 +58,7 @@ const CheckoutPanel = () => {
       {/* ============================= */}
       {/* Checkout Items */}
       {/* ============================= */}
+
       <div className="h-full min-h-20 max-h-full flex flex-col gap-2 p-2 justify-start overflow-y-scroll scrollbar-hide ">
         <AnimatePresence mode="sync">
           {cart.map((item, idx) => {
@@ -73,7 +76,7 @@ const CheckoutPanel = () => {
                     // For exit
                     type: "spring",
                     stiffness: 100,
-                    damping: 20,
+                    damping: 10,
                   },
                   // For entrance
                   type: "spring",
@@ -85,10 +88,10 @@ const CheckoutPanel = () => {
                   },
                 }}
                 exit={{
-                  opacity: 0,
-                  y: -100,
+                  opacity: 1,
+                  x: 600,
                   transition: {
-                    duration: 0.2,
+                    duration: 0.4,
                   },
                 }}
                 className="h-20 max-h-20 w-full  bg-background-secondary/50 hover flex items-center gap-2 border-2 border-border-hover rounded-xl p-2 outline-none"
@@ -150,13 +153,20 @@ const CheckoutPanel = () => {
                   {/* item price */}
                   {/* ---------------------------- */}
                   <div className="h-full flex flex-col gap-2 items-end justify-center ">
-                    <span className=" font-bold text-xs bg-red-500 px-2 rounded-sm">
+                    <span className=" font-bold text-xs text-white bg-red-500 px-2 rounded-sm">
                       ${item.price}
                     </span>
-                    <span className="font-bold text-sm bg-green-600 px-2 rounded-sm">
+                    <span className="font-bold text-sm text-white bg-green-600 px-2 rounded-sm">
                       ${(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
+                  {/* Button remove from card */}
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    className="bg-amber-500 p-2 rounded-full text-white hover:bg-amber-600 cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               </motion.div>
             );
