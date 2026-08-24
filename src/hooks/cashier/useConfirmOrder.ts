@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../../types/error";
-import { confirmOrder } from "../../services/cashier.service";
+import { confirmOrder } from "../../services/cashier/order";
 
 
 export function useConfirmOrder() {

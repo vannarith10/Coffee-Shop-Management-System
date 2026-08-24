@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSalesByCategory } from "../services/admin.service";
+import { getSalesByCategory } from "../services/admin/category";
 import type { GetSalesByCategoryResponse } from "../types/category";
 import { RANGES, type Range } from "../types/business-analytics";
 import { useEffect } from "react";

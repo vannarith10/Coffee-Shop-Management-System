@@ -3,8 +3,10 @@
 //
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { CATEGORY_TYPE } from "../../types/category";
-import { getMenu } from "../../services/cashier.service";
+import { getMenu } from "../../services/cashier/menu";
 import type { ProductMenuResponse } from "../../types/product";
+
+
 
 export function useGetProductMenu ({
   size,

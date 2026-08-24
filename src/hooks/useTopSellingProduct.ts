@@ -3,7 +3,7 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { Range } from "../types/business-analytics";
-import { getTopSellingProduct } from "../services/admin.service";
+import { getTopSellingProduct } from "../services/admin/product";
 import type { TopSellingResponse } from "../types/product";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";

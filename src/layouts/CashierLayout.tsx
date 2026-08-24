@@ -1,4 +1,4 @@
-import React from 'react'
+//
 import Navbar from '../components/cashier/Navbar'
 import { Outlet } from 'react-router-dom'
 

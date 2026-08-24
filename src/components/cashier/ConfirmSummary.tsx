@@ -118,6 +118,7 @@ const ConfirmSummary = ({ id }: { id: string }) => {
             const selectedPaymentMethod = payment.value === paymentMethod;
             return (
               <div
+                key={payment.value}
                 className={`${selectedPaymentMethod ? "shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-2000 bg-green-600/50 border border-green-600" : "bg-background-secondary-hover"} w-full aspect-square flex justify-center items-center rounded-lg`}
               >
                 <span className="font-bold text-sm md:text-lg xl:text-2xl flex flex-col lg:flex-row items-center gap-2">

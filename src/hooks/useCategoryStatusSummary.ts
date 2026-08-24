@@ -2,7 +2,7 @@
 // Tanstack
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCategoryStatusSummary } from "../services/admin.service";
+import { getCategoryStatusSummary } from "../services/admin/category";
 import type { CategoryStatusSummaryResponse } from "../types/category";
 import { useCategoryStatusUpdate } from "./websockets/useCategoryStatusSummaryUpdate";
 

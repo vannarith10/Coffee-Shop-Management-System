@@ -2,7 +2,7 @@
 // Tanstack
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllStaffProfiles } from "../services/admin.service";
+import { getAllStaffProfiles } from "../services/admin/staff";
 import { useCallback, useEffect, useState } from "react";
 import { useStaffUpdate } from "./websockets/useStaffUpdate";
 import type { Staff, StaffProfileResponse } from "../types/staff";

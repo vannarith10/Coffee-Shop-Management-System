@@ -2,7 +2,7 @@
 // Tanstack
 
 import { useQuery } from "@tanstack/react-query"
-import { getBusinessSummary } from "../services/admin.service";
+import { getBusinessSummary } from "../services/admin/analytic";
 import type { BusinessSummaryResponse } from "../types/business-analytics";
 
 

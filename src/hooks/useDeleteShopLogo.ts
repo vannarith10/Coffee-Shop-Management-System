@@ -1,7 +1,7 @@
 // hooks/useDeleteShopLogo.ts
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteShopLogo } from "../services/admin.service";
+import { deleteShopLogo } from "../services/admin/shop";
 import { type BackendErrorDetail } from "../types/error";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";

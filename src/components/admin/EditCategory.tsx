@@ -10,7 +10,7 @@ import {
   type PatchCategoryRequest,
 } from "../../types/category";
 import TextLoader from "../ui/TextLoader";
-import { patchCategory } from "../../services/admin.service";
+import { patchCategory } from "../../services/admin/category";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import MyPopupForm from "../animation/MyPopupForm";

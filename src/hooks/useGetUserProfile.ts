@@ -3,8 +3,6 @@ import { getUserProfile } from "../services/user.service";
 import type { GetUserProfileResponse } from "../types/user";
 
 
-
-
 export function useGetUserProfile () {
 
     const queryKey = ["user-profile"];

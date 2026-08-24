@@ -8,12 +8,12 @@ export default function AppProvider({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient();
 
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
           <MantineProvider>{children}</MantineProvider>
-        </QueryClientProvider>
-      </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

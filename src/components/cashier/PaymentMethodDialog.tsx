@@ -86,7 +86,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
     <MyPopupForm onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xl overflow-y-scroll scrollbar-hide"
+        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xl "
       >
         {/* =========================== */}
         {/* Children elements stay here */}
@@ -113,7 +113,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
           <FormHeader
             title="Choose Payment Method"
             onClose={onClose}
-            className="bg-background-secondary"
+            className="bg-background-secondary rounded-t-4xl"
           />
 
           {/* ---------------------- */}
@@ -121,7 +121,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
           {/* Content */}
           {/* ---------------------- */}
           {/* ---------------------- */}
-          <div className="w-full h-full flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
+          <div className="w-full h-full flex flex-col md:flex-row p-6 gap-6 overflow-y-scroll scrollbar-hide">
             {/* ================================================= */}
             {/* summary */}
             {/* ================================================= */}
@@ -173,7 +173,10 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
                     item.price * item.quantity
                   ).toFixed(2);
                   return (
-                    <div className="border border-border p-2 flex gap-2 w-full justify-between rounded-md">
+                    <div
+                      key={item.id}
+                      className="border border-border p-2 flex gap-2 w-full justify-between rounded-md"
+                    >
                       <div className="flex gap-2">
                         <div className="aspect-square w-10 max-w-10">
                           <img

@@ -2,7 +2,38 @@
 // services/admin/staff.ts
 //
 import api from "../../lib/axios";
-import type { EditStaffDataRequest } from "../../types/staff";
+import type { CreateStaffRequest, EditStaffDataRequest } from "../../types/staff";
+
+
+
+
+
+//
+// Get employee profiles
+//
+export const getAllEmployeeProfiles = async () => {
+  const response = await api.get("/api/v2/employee/profiles?page=1&size=20");
+  return response.data;
+};
+
+
+//
+// Get All Staff Profiles
+//
+export async function getAllStaffProfiles({
+  page,
+  size,
+}: {
+  page: number;
+  size: number;
+}) {
+  const response = await api.get(
+    `/api/v2/employee/profiles?page=${page}&size=${size}`,
+  );
+  return response;
+}
+
+
 
 //
 // UPDATE STAFF PROFILE
@@ -38,4 +69,37 @@ export async function editStaffDetail({
 
 
   await api.patch(`/api/v2/employee/${userId}/edit`, formData);
+}
+
+
+
+//
+// Create Staff Account
+//
+export async function createStaffAccount({
+  data,
+  image,
+}: {
+  data: CreateStaffRequest;
+  image?: File | null;
+}) {
+  const formData = new FormData();
+  formData.append(
+    "data",
+    new Blob([JSON.stringify(data)], { type: "application/json" }),
+  );
+
+  if (image) {
+    formData.append("image", image);
+  }
+  return await api.post("/api/v2/employee/create-account", formData);
+}
+
+
+
+//
+// Delete Staff Profile
+//
+export async function deleteProfile(id: string): Promise<void> {
+  await api.delete(`/api/v2/employee/${id}/delete`);
 }

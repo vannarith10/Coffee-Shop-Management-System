@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllCategoryNames } from "../services/admin.service";
+import { getAllCategoryNames } from "../services/admin/category";
 
 interface NameTypeResponse {
   category_id: string;

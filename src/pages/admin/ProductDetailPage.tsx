@@ -5,7 +5,7 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { patchProduct } from "../../services/admin.service";
+import { patchProduct } from "../../services/admin/product";
 import type {
   PRODUCT_STOCK_STATUS,
   UpdateProductRequest,

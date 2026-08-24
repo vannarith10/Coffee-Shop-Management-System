@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-shimmer";
 
-
 :root {
   --text-primary: #000000;
   --text-secondary: #262626;
@@ -13,7 +12,7 @@
   --background-primary-hover: #b8b8e6;
   --background-secondary-hover: #8f8fdb;
 
-   --sidebar: #6f6fbf;
+  --sidebar: #6f6fbf;
 
   --border: #4b4b8d;
   --border-hover: #1a1a3a;
@@ -24,29 +23,27 @@
   --black-and-white: #000000;
 }
 
-
 .dark {
   --text-primary: #ececf4;
   --text-secondary: #d9d6ef;
   --text-primary-hover: #b7b3e8;
   --text-secondary-hover: #41414b;
 
-  --background-primary: #0A0D15;
-  --background-secondary: #182C39;
-  --background-primary-hover: #182C39;
-  --background-secondary-hover: #1F3C4D;
+  --background-primary: #0a0d15;
+  --background-secondary: #182c39;
+  --background-primary-hover: #182c39;
+  --background-secondary-hover: #1f3c4d;
 
-  --sidebar: #2D5067;
+  --sidebar: #2d5067;
 
-  --border: #2D5067;
-  --border-hover: #3B6B81;
+  --border: #2d5067;
+  --border-hover: #3b6b81;
 
   --text-error: #d74a49;
   --spot-light: #d1dbe4;
 
   --black-and-white: #ffffff;
 }
-
 
 @theme {
   --color-text-primary: var(--text-primary);
@@ -70,26 +67,32 @@
   --color-black-and-white: var(--black-and-white);
 }
 
-
-/* This makes the scrollbar sit in a reserved gutter rather than overlapping the content */
-html {
-  scrollbar-gutter: stable;
-}
-
-
-
 body {
   color: var(--text-primary);
+  background-color: var(--color-background-primary);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
 
-
 /* Animate Background Color */
 .gradient-background {
-  background: linear-gradient(300deg, #000000, var(--color-background-primary), var(--color-background-secondary), #12FF00);
+  background: linear-gradient(
+    300deg,
+    #000000,
+    var(--color-background-primary),
+    var(--color-background-secondary),
+    #12ff00
+  );
   background-size: 240% 240%;
   animation: gradient-animation 14s ease infinite;
 }

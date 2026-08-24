@@ -1,7 +1,7 @@
 // hooks/useUpdateShopLogo.ts
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateShopLogo } from "../services/admin.service";
+import { updateShopLogo } from "../services/admin/shop";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";

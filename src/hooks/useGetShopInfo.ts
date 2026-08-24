@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getShopInfo } from "../services/admin.service";
+import { getShopInfo } from "../services/admin/shop";
 import type { ShopInfo } from "../types/shop-setting";
 
 

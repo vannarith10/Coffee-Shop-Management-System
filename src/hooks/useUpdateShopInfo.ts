@@ -1,7 +1,7 @@
 // hooks/useUpdateShopInfo.ts
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateShopInfo } from "../services/admin.service";
+import { updateShopInfo } from "../services/admin/shop";
 import type { UpdateShopInfoRequest } from "../types/shop-setting";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";

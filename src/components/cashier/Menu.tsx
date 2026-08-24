@@ -39,17 +39,7 @@ const Menu = () => {
   useEffect(() => {
     if (!loadMoreRef.current) return;
     const observer = new IntersectionObserver(([entry]) => {
-      console.log(
-        "Intersecting:",
-        entry.isIntersecting,
-        "Fetching:",
-        isFetchingNextPage,
-        "HasNext:",
-        hasNextPage,
-      );
-
       if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        console.log("FETCH NEXT PAGE");
         fetchNextPage();
       }
     });

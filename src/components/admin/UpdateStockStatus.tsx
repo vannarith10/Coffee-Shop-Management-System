@@ -7,7 +7,7 @@ import type { PRODUCT_STOCK_STATUS } from "../../types/product";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
 import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import { updateStockStatus } from "../../services/admin.service";
+import { updateStockStatus } from "../../services/admin/stock";
 import TextLoader from "../ui/TextLoader";
 import MyPopupForm from "../animation/MyPopupForm";
 

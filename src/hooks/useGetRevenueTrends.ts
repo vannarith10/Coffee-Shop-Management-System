@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getRevenueTrends } from "../services/admin.service";
+import { getRevenueTrends } from "../services/admin/report";
 import type { RevenuTrendsResponse } from "../types/business-analytics";
 
 

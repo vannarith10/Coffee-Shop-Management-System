@@ -7,7 +7,7 @@ import {
   type CreateCashOrderResponse,
   type CreateOrderRequest,
 } from "../../types/order";
-import { createCashOrder } from "../../services/cashier.service";
+import { createCashOrder } from "../../services/cashier/order";
 import { toast } from "sonner";
 
 

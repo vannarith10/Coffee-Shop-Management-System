@@ -1,7 +1,7 @@
 // hooks/useCreateStaff.ts
 
 import { useMutation } from "@tanstack/react-query";
-import { createStaffAccount } from "../services/admin.service";
+import { createStaffAccount } from "../services/admin/staff";
 import type { CreateStaffRequest, CreateStaffResponse } from "../types/staff";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";

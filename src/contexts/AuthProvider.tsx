@@ -7,6 +7,7 @@ import { refreshAccessToken } from "../services/auth.service";
 import type { RefreshResponse } from "../types/auth";
 import type { UserInfo } from "../types/auth";
 import useCartStore from "../hooks/cashier/useCartStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   //
@@ -15,6 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [checkingUser, setCheckingUser] = useState(true);
   const { clearCart } = useCartStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -86,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     authStorage.remove();
     setUser(null);
     clearCart();
+    queryClient.clear();
   }
 
   //

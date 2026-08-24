@@ -1,7 +1,7 @@
 // hooks/cashier/useGetOrderInfo
 
 import { useQuery } from "@tanstack/react-query";
-import { getOrderInfo } from "../../services/cashier.service";
+import { getOrderInfo } from "../../services/cashier/order";
 import type { GetOrderInfoResponse } from "../../types/order";
 import type { BackendErrorDetail } from "../../types/error";
 import type { AxiosError } from "axios";

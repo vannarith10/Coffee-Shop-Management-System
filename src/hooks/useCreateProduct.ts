@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AddNewProductRequest } from "../types/product";
-import { addNewProduct } from "../services/admin.service";
+import { addNewProduct } from "../services/admin/product";
 import { toast } from "sonner";
 import axios from "axios";
 import type { BackendErrorDetail } from "../types/error";

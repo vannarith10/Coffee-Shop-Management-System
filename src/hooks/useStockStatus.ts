@@ -6,7 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { getAllProductsStatus } from "../services/admin.service";
+import { getAllProductsStatus } from "../services/admin/product";
 import { useProductStockStatusUpdate } from "./websockets/useStockStatusWebSocket";
 import type { ProductStock, StockStatusResponse } from "../types/product";
 import { useEffect } from "react";

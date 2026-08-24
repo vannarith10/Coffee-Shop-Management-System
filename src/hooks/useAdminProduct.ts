@@ -3,7 +3,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AdminProductResponse } from "../types/product";
-import { getAllProducts } from "../services/admin.service";
+import { getAllProducts } from "../services/admin/product";
 import { useEffect } from "react";
 import type { CATEGORY_TYPE } from "../types/category";
 

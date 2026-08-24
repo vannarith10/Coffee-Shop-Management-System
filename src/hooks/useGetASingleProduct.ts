@@ -2,7 +2,7 @@
 //
 
 import { useEffect, useState } from "react";
-import { getASingleProduct } from "../services/admin.service";
+import { getASingleProduct } from "../services/admin/product";
 import axios from "axios";
 import { toast } from "sonner";
 import type { Product } from "../types/product";

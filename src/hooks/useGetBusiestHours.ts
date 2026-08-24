@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { type BusiestHoursResponse } from "../types/business-analytics";
-import { getBusiestHours } from "../services/admin.service";
+import { getBusiestHours } from "../services/admin/report";
 
 
 export function useGetBusiestHours () {

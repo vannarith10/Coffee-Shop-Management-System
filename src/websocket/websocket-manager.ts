@@ -75,8 +75,6 @@ class WebSocketManager {
   }
 
   subscribe(destination: string, handler: MessageHandler): () => void {
-    // console.log("subscribe called:", destination);
-
     let entry = this.subscriptions.get(destination);
 
     if (!entry) {
@@ -108,10 +106,8 @@ class WebSocketManager {
       current.handlers.delete(handler);
 
       if (current.handlers.size === 0) {
-        console.log(`--- Unsubscribing from ${destination} ---`);
-
+        console.log(`--- Unsubscribing ---`);
         current.stompSubscription?.unsubscribe();
-
         this.subscriptions.delete(destination);
       }
     };
@@ -122,13 +118,6 @@ class WebSocketManager {
     entry: SubscriptionEntry,
   ) {
     const client = this.client;
-
-    // console.log("createStompSubscription", {
-    //   destination,
-    //   connected: client?.connected,
-    //   active: client?.active,
-    //   hasSubscription: !!entry.stompSubscription,
-    // });
 
     if (!client) {
       return;
@@ -142,8 +131,6 @@ class WebSocketManager {
       return;
     }
 
-    // console.log(`+++ Subscribing to: ${destination}`);
-
     entry.stompSubscription = client.subscribe(destination, (message) => {
       entry.handlers.forEach((handler) => {
         try {
@@ -155,6 +142,7 @@ class WebSocketManager {
     });
   }
 
+  
   private restoreSubscriptions() {
     console.log("Restoring WebSocket subscriptions...");
 

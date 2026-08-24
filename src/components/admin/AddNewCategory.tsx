@@ -12,7 +12,7 @@ import {
   type CreateCategoryRequest,
 } from "../../types/category";
 import { toast } from "sonner";
-import { createCategory } from "../../services/admin.service";
+import { createCategory } from "../../services/admin/category";
 import axios from "axios";
 import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 import MyPopupForm from "../animation/MyPopupForm";
