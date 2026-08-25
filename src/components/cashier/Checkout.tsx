@@ -1,6 +1,8 @@
 //
 // components/cashier/Checkout.tsx
 //
+// Display the checkout information under checkout items
+//
 import { useState } from "react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import PaymentMethodDialog from "./PaymentMethodDialog";

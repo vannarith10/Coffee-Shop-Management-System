@@ -4,19 +4,23 @@
 import type { BaristaOrderItem } from "../../types/barista/order";
 import { formatDateTime } from "../../utils/dateFormatter";
 
+
 interface Props {
   order: BaristaOrderItem;
   onClick: () => void;
   buttonText: string;
+  onCancel: () => void;
 }
 
 const BorderColor = {
   QUEUED: "border-gray-400",
   PREPARING: "border-amber-500",
   DONE: "border-green-500",
+  CANCELLED: "border-red-600",
 } as const;
 
-const OrderCard = ({ order, onClick, buttonText }: Props) => {
+
+const OrderCard = ({ order, onClick, buttonText, onCancel }: Props) => {
   return (
     <div
       className={`border ${BorderColor[order.status]} ${order.status === "PREPARING" && "shimmer shimmer-bg shimmer-color-blue-300 shimmer-duration-3000"} pb-4 rounded-xl overflow-hidden hover:bg-background-secondary-hover hover:-translate-y-2 transition-all duration-300 ease-out`}
@@ -68,15 +72,20 @@ const OrderCard = ({ order, onClick, buttonText }: Props) => {
         </p>
       </div>
       {/* Action button */}
-      <div
-        className="
-                    px-4 mt-4
-                "
-      >
+      <div className="w-full px-4 mt-4 flex gap-2">
+        {order.status !== "DONE" && (
+          <button
+            onClick={onCancel}
+            className=" w-1/3 bg-red-500 hover:bg-red-600 active:bg-red-700 cursor-pointer active:scale-80 outline-none py-4 font-bold text-lg transition-all duration-300 ease-out"
+          >
+            Cancel
+          </button>
+        )}
+        {/* Action button */}
         <button
           onClick={onClick}
           className="
-                    w-full
+                    w-2/3
                     py-4
                     font-bold text-lg
                     bg-green-600

@@ -4,7 +4,7 @@
 import type { Pagination } from "../pagination";
 
 
-export type RetrieveOrderStatus = "QUEUED" | "PREPARING" | "DONE";
+export type RetrieveOrderStatus = "QUEUED" | "PREPARING" | "DONE" | "CANCELLED";
 
 
 export interface BaristaOrderQueue {

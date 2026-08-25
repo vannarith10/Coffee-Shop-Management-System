@@ -7,7 +7,7 @@ import QueueOrder from "../../components/barista/QueueOrder";
 
 export default function BaristaDashboard() {
   return (
-    <div className="h-screen max-h-screen w-screen">
+    <div className="h-screen max-h-screen w-screen border-2">
       <Navbar />
       <div className="h-full w-full flex flex-col gap-4 overflow-y-scroll scrollbar-hide p-4">
         <PreparingOrder/>

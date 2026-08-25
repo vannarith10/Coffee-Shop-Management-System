@@ -9,7 +9,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUpdateOrderStatus } from "../../hooks/barista/useUpdateOrderStatus";
 import { toast } from "sonner";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
-import type { BaristaOrderQueue } from "../../types/barista/order";
+import type {
+  BaristaOrderItem,
+  BaristaOrderQueue,
+} from "../../types/barista/order";
+import { useGetQueuedOrder } from "../../hooks/websockets/order/useGetQueuedOrder";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -20,8 +24,14 @@ const breakpointColumnsObj = {
 
 const QueueOrder = () => {
   const size = 20;
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useRetrieveOrder({ size: size, status: "QUEUED" });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isRefetching,
+  } = useRetrieveOrder({ size: size, status: "QUEUED" });
   const queued = data?.pages.flatMap((page) => page.barista_order_items) ?? [];
   const loadMoreRef = useRef(null);
   const { mutate: updateStatus } = useUpdateOrderStatus();
@@ -41,38 +51,92 @@ const QueueOrder = () => {
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Update Status
+  //
+  // Remove an order from Queue data catche that status = QUEUED
+  //
+  function handleRemoveOrderFromQueue(id: string) {
+    queryClient.setQueryData<InfiniteData<BaristaOrderQueue>>(
+      ["barista-order", size, "QUEUED"],
+      (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            barista_order_items: page.barista_order_items.filter(
+              (o) => o.order_id !== id,
+            ),
+          })),
+        };
+      },
+    );
+  }
+
+  //
+  // Adds new arriving order to the catche
+  //
+  function handleAddOrderToQueue(order: BaristaOrderItem) {
+    queryClient.setQueryData<InfiniteData<BaristaOrderQueue>>(
+      ["barista-order", size, "QUEUED"],
+      (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          pages: old.pages.map((page, index) => {
+            const isLastPage = index === old.pages.length - 1;
+
+            return isLastPage
+              ? {
+                  ...page,
+                  barista_order_items: [...page.barista_order_items, order],
+                }
+              : page;
+          }),
+        };
+      },
+    );
+  }
+
+  // WebSocket - update
+  useGetQueuedOrder({onQueuedUpdate: handleAddOrderToQueue});
+
+
+
+  // Update Status QUEUE -> PREPARING
   function handleUpdateStatus(id: string) {
     updateStatus(
       { id: id, status: "PREPARING" },
       {
         onError: (error) => {
-          toast.error(error.response?.data.detail, { duration: 3000 });
+          toast.error(error.response?.data.detail, { duration: 5000 });
         },
 
         onSuccess: () => {
-          toast.success(
-            "Start preparing order " +
-              "#" +
-              queued.find((o) => o.order_id === id)?.order_number,
-          );
+          handleRemoveOrderFromQueue(id);
+        },
+      },
+    );
+  }
 
-          queryClient.setQueryData<InfiniteData<BaristaOrderQueue>>(
-            ["barista-order", size, "QUEUED"],
-            (old) => {
-              if (!old) return old;
+  // Cancel order
+  function handleCancelOrder(id: string) {
+    updateStatus(
+      { id: id, status: "CANCELLED" },
+      {
+        onError: (error) => {
+          toast.error(error.response?.data.detail, { duration: 5000 });
+        },
 
-              return {
-                ...old,
-                pages: old.pages.map((page) => ({
-                  ...page,
-                  barista_order_items: page.barista_order_items.filter(
-                    (o) => o.order_id !== id,
-                  ),
-                })),
-              };
-            },
+        onSuccess: () => {
+          toast.info(
+            "Order #" +
+              queued.find((q) => q.order_id === id)?.order_number +
+              " has been cancelled",
           );
+          // remove from catche
+          handleRemoveOrderFromQueue(id);
         },
       },
     );
@@ -80,7 +144,15 @@ const QueueOrder = () => {
 
   return (
     <div className="bg-background-secondary p-6 rounded-lg">
-      <h3 className="font-bold text-lg uppercase ">Queue</h3>
+      <h3 className=" flex justify-between items-center ">
+        <span className="font-bold text-lg uppercase">Queue</span>
+        <button
+          onClick={() => refetch()}
+          className="font-bold px-4 py-2 bg-background-secondary-hover cursor-pointer hover:bg-sidebar active:scale-80 outline-none transition-all duration-300 ease-out"
+        >
+          {isRefetching ? "Refreshing..." : "Refresh"}
+        </button>
+      </h3>
 
       {queued.length === 0 && (
         <div className="w-full py-10 flex justify-center items-center">
@@ -117,6 +189,7 @@ const QueueOrder = () => {
               <OrderCard
                 order={order}
                 onClick={() => handleUpdateStatus(order.order_id)}
+                onCancel={() => handleCancelOrder(order.order_id)}
                 buttonText="Start Preparing"
               />
             </motion.div>

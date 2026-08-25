@@ -147,7 +147,7 @@ function App() {
   }, [isAuthenticated]);
 
   return (
-    <div className="w-screen min-w-100 min-h-screen bg-background-primary transition-colors duration-500 ease-out">
+    <div className="w-screen min-w-80 min-h-screen bg-background-primary transition-colors duration-500 ease-out">
       <GlassFilter />
       <RouterProvider router={router} />
       <Toaster position="top-center" richColors />

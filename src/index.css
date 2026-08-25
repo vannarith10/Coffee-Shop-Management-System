@@ -67,6 +67,8 @@
   --color-black-and-white: var(--black-and-white);
 }
 
+
+
 body {
   color: var(--text-primary);
   background-color: var(--color-background-primary);
@@ -76,13 +78,16 @@ body {
   overscroll-behavior-y: none;
 }
 
+
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
 
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
+
 
 /* Animate Background Color */
 .gradient-background {

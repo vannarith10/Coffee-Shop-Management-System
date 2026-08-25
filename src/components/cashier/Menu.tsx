@@ -113,7 +113,7 @@ const Menu = () => {
       {/* Without this, motion animation will run only once when components mount */}
       <section
         key={selectedCategoryType}
-        className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 pt-0"
+        className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 pt-0"
       >
         {/* =============================== */}
         {/* Display all item cards here */}

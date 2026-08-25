@@ -1,3 +1,8 @@
+//
+// components/cashier/CheckoutPanel.tsx
+// 
+// * Displays checkout items
+//
 import { ClockFading, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import DefaultImage from "../../assets/image-default.jpg";
@@ -94,7 +99,7 @@ const CheckoutPanel = () => {
                     duration: 0.4,
                   },
                 }}
-                className="h-20 max-h-20 w-full  bg-background-secondary/50 hover flex items-center gap-2 border-2 border-border-hover rounded-xl p-2 outline-none"
+                className="h-20 max-h-20 w-full  bg-background-secondary/50 hover flex items-center gap-2 border border-border-hover rounded-xl p-2 outline-none"
               >
                 {/* -------------------------------------- */}
                 {/* Item Image */}
