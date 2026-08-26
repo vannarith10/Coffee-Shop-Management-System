@@ -103,7 +103,7 @@ const ConfirmSummary = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="w-full h-full bg-background-secondary rounded-xl p-10">
+    <div className="w-full h-full bg-background-secondary rounded-xl p-10 border-2 border-border">
       <div className="w-full flex items-center justify-start ">
         <h3 className="flex items-center gap-2 text-lg font-bold">
           <BadgeDollarSign /> Payment Summary

@@ -6,7 +6,6 @@ import { useConfirmOrder } from "../../hooks/cashier/useConfirmOrder";
 import { toast } from "sonner";
 import useCartStore from "../../hooks/cashier/useCartStore";
 
-
 const ConfirmFinalize = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch, isFetching } = useGetOrderInfo(
     id!,
@@ -17,7 +16,6 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
 
   function handleConfirmOrder() {
     confirmOrder(id, {
-
       onError: (error) => {
         toast.error(`${error.response?.data.detail}`, {
           duration: 3000,
@@ -31,12 +29,15 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
           id: "confirm-order-success",
         });
         clearCart();
-        setTimeout(() => navigate("/cashier"), 1000);
+
+        navigate("/cashier", { replace: true });
       },
     });
   }
 
+  // --------------------------
   // Loading handling
+  // --------------------------
   if (isLoading || isFetching) {
     return (
       <div className="w-full h-full bg-background-secondary rounded-xl flex flex-col gap-6 p-10 justify-center items-center border-2 border-border">
@@ -63,7 +64,9 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
     );
   }
 
+  // --------------------
   // Error handling
+  // --------------------
   if (isError) {
     return (
       <div className="w-full h-full bg-background-secondary rounded-xl flex flex-col gap-6 justify-center items-center border-2 border-border">
@@ -83,8 +86,10 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
         <Waiting />
       </div>
 
-      <h2 className="font-bold text-4xl uppercase">Finalize Order</h2>
-      <p className="font-semibold text-sm text-text-secondary text-center">
+      <h2 className="font-bold text-xl md:text-2xl xl:text-4xl uppercase">
+        Finalize Order
+      </h2>
+      <p className="font-semibold text-sm text-text-secondary text-center px-4">
         Confirm receipt of{" "}
         <span className="text-green-600 font-bold text-lg">
           ${data?.total_price}
@@ -96,13 +101,19 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
         to barista station.
       </p>
 
+      {/* ---------------------
+            Button Confirm
+      -----------------------*/}
       <button
         onClick={handleConfirmOrder}
-        className="shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1500 uppercase bg-green-600/30 hover:bg-green-600/70 py-10 px-20 text-sm lg:text-xl font-bold rounded-lg cursor-pointer active:scale-80 outline-none transition-all duration-300 ease-out"
+        className=" uppercase bg-green-600/30 hover:bg-green-600/70 py-10 px-10 md:px-20 text-sm lg:text-xl font-bold rounded-lg cursor-pointer active:scale-80 outline-none transition-all duration-300 ease-out shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1500"
       >
         {isConfirming ? "Confirming..." : "Confirm & Send to Barista"}
       </button>
 
+      {/* ---------------------
+            Button Cancel
+      -----------------------*/}
       <button
         onClick={() => navigate(-1)}
         className="font-semibold text-text-error cursor-pointer hover:underline underline-offset-4 active:scale-80 transition-all duration-200 ease-out"

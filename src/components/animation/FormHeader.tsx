@@ -10,11 +10,11 @@ interface Props {
 
 const FormHeader = ({ title, onClose, className, description }: Props) => {
   return (
-    <div
+    <h2
       className={`flex justify-between items-center bg-background-primary border-b border-border p-6 ${className}`}
     >
       <div className="flex flex-col">
-          <h2 className="font-bold text-xl">{title ?? "Form"}</h2>
+          <span className="font-bold text-lg md:text-xl">{title ?? "Form"}</span>
           <p className="text-xs text-text-secondary">{description}</p>
       </div>
       <button
@@ -24,7 +24,7 @@ const FormHeader = ({ title, onClose, className, description }: Props) => {
       >
         <X size={28} />
       </button>
-    </div>
+    </h2>
   );
 };
 

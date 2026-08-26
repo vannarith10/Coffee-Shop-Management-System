@@ -86,7 +86,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
     <MyPopupForm onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xl "
+        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xls "
       >
         {/* =========================== */}
         {/* Children elements stay here */}
@@ -167,7 +167,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
               {/* --------------------------------- */}
               {/* items summary */}
               {/* --------------------------------- */}
-              <div className="mt-4 flex flex-col gap-2 w-full h-full overflow-y-scroll scrollbar-hide border-t border-border pt-4">
+              <div className="mt-4 flex flex-col gap-2 w-full md:h-full overflow-y-scroll scrollbar-hide border-t border-border pt-4">
                 {cart.map((item) => {
                   const totalPricePerItem = (
                     item.price * item.quantity

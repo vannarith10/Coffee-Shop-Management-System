@@ -59,7 +59,7 @@ const Menu = () => {
   // ==========================
   if (isLoading) {
     return (
-      <div className="grid grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
         {Array.from({ length: 20 }).map((_, idx) => (
           <div
             key={idx}
