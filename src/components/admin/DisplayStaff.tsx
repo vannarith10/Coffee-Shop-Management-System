@@ -75,15 +75,15 @@ export default function DisplayStaff() {
         {/* ======================== */}
         <header>
           {/* Icon & Pagination Info */}
-          <div className="w-full p-6 flex justify-between items-start bg-background-secondary-hover">
+          <div className="w-full p-6 flex flex-col gap-4 justify-between items-start bg-background-secondary-hover">
             <div className="flex gap-4 ">
               <ContactRound />
-              <h3 className="font-semibold">Employee Profiles</h3>
+              <h3 className="font-semibold text-nowrap">Employee Profiles</h3>
             </div>
             {/*  */}
             {/* Pages and Items */}
             {!isLoading && !isError && (
-              <div className="flex flex-col md:flex-row items-end gap-4">
+              <div className="w-full flex justify-between items-center gap-4">
                 <div>
                   <h4 className="font-semibold text-xs text-text-secondary">
                     Page {currentPage} of {totalPages}
@@ -94,28 +94,18 @@ export default function DisplayStaff() {
                 </div>
                 <button
                   onClick={() => refetch()}
-                  className="px-4 py-2 flex gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
+                  className="px-4 py-2 text-sm flex items-center gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
                 >
                   {isRefetching ? (
                     "Syncing..."
                   ) : (
                     <>
-                      Refresh <RotateCcw />
+                      Refresh <RotateCcw size={20} />
                     </>
                   )}
                 </button>
               </div>
             )}
-          </div>
-          {/* ========================= */}
-          {/* Colum Titles */}
-          {/* ========================= */}
-          <div className="grid grid-cols-6 bg-sidebar py-4 px-4 font-bold uppercase text-sm">
-            <h2 className="col-span-2">Profile</h2>
-            <h2 className="text-center">Role</h2>
-            <h2>Schedule</h2>
-            <h2 className="text-center">Status</h2>
-            <h2 className="text-end">Action</h2>
           </div>
         </header>
         {/* ================================ */}
@@ -136,61 +126,90 @@ export default function DisplayStaff() {
                     : null
                 }
                 key={staff.id}
-                className={`grid grid-cols-6 items-center-safe ${isUpdated || justAdded ? "shimmer shimmer-bg shimmer-color-blue-400 shimmer-duration-2000" : ""} bg-background-secondary  hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
+                className={`grid grid-cols-5 items-center-safe p-4 gap-4 ${isUpdated || justAdded ? "shimmer shimmer-bg shimmer-color-blue-400 shimmer-duration-2000" : ""} bg-background-secondary  hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
               >
                 {/* ====================================== */}
                 {/* PROFILE : img, name, username, email */}
                 {/* ====================================== */}
-                <div className="flex items-center gap-4 col-span-2  py-4">
+                <div className="flex items-start gap-4 col-span-4 ">
+                  {/* image */}
                   <img
                     src={staff.image_url || DefaultProfile}
                     alt="profile"
                     className="w-10 h-10 lg:w-14 lg:h-14 rounded-full border-2 border-border object-cover"
                   />
-                  <div>
-                    <h3 className="text-xs font-bold">
-                      {staff.name || "User Name"}
-                    </h3>
-                    <h5 className="text-[10px] whitespace-normal break-all">
-                      @{staff.username || "username"}
-                    </h5>
-                    <h3 className="text-[10px] whitespace-normal break-all pr-2">
-                      {staff.email || null}
-                    </h3>
+                  {/* ------------------------
+                            user info
+                  ------------------------- */}
+                  <div className="flex flex-col gap-1">
+                    <div>
+                      {/* name */}
+                      <h4 className="text-xs font-bold text-nowrap">
+                        {staff.name || "User Name"}
+                      </h4>
+                      {/* username */}
+                      <h5 className="text-[10px] whitespace-normal break-all">
+                        @{staff.username || "username"}
+                      </h5>
+                    </div>
+
+                    {/* status */}
+                    <span
+                      className={`${USER_STATUS_COLOR_CONFIG[staff.status].background_color} w-fit p-1 px-2 rounded-xs text-[8px] md:text-[10px] lg:text-xs font-bold text-white whitespace-nowrap`}
+                    >
+                      {(staff.status === "ON_LEAVE"
+                        ? "ON LEAVE"
+                        : staff.status) || "Pending..."}
+                    </span>
+
+                    {/* email */}
+                    <span className="text-nowrap text-[10px] whitespace-nowrap break-all ">
+                      {staff.email || "example@gmail.com"}
+                    </span>
                   </div>
                 </div>
-                {/* ------------------- */}
-                {/* ROLE */}
-                {/* ------------------- */}
-                <h3
-                  style={{ backgroundColor: roleColor }}
-                  className={`text-[8px] md:text-[10px] lg:text-xs inline-flex justify-self-center px-2 py-1 rounded-xs font-bold text-left`}
+
+                {/* -----------------------
+                            Edit
+                ------------------------ */}
+                <button
+                  onClick={() => setSelectedStaff(staff)}
+                  className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
                 >
-                  {staff.role}
-                </h3>
-                {/* --------------------- */}
-                {/* SHIFT */}
-                {/* --------------------- */}
-                <div className="flex flex-col gap-1">
-                  <div className="bg-sidebar px-2 py-1 justify-self-center inline-block w-fit rounded-xs">
-                    <h3 className="text-[8px] md:text-[10px] lg:text-xs text-white font-bold whitespace-nowrap break-all">
-                      {staff.shift === "FULL_DAY" ? "FULL DAY" : staff.shift}
+                  <UserRoundPen />
+                </button>
+
+                {/* ------------------------------------
+                        Role & Shift & Schedules
+                ------------------------------------- */}
+                <div className="row-start-2 col-span-5 flex gap-1 ">
+                  <div className="flex flex-col gap-1">
+                    {/* Role */}
+                    <h5
+                      style={{ backgroundColor: roleColor }}
+                      className={` text-[8px] md:text-[10px] lg:text-xs inline-flex justify-self-center items-center px-2 py-1 rounded-xs font-bold text-left`}
+                    >
+                      {staff.role}
+                    </h5>
+                    {/* shift type */}
+                    <h3 className="bg-green-600 flex items-center px-2 py-1 rounded-xs text-[8px] md:text-[10px] lg:text-xs text-white font-bold whitespace-nowrap break-all">
+                      {staff.shift.replace("_", " ")}
                     </h3>
                   </div>
+
                   {/* ----------------------------------- */}
                   {/* SCHEDULE */}
                   {/* List down working days */}
                   {/* ----------------------------------- */}
-                  <ul className="flex gap-1 flex-wrap text-[8px]">
+                  <ul className="w-full flex gap-1 flex-wrap text-[8px] ">
                     {/* Order day from Mon to Sun not showing random*/}
                     {DAY_ORDER.map((day) => {
                       if (!staff.schedules.includes(day)) return null;
-
                       const config = SCHEDULE_CONFIG[day];
                       return (
                         <li
                           key={config.label}
-                          className="bg-sidebar text-white px-1 rounded-xs"
+                          className="flex items-center bg-sidebar text-white px-4 rounded-xs font-bold  "
                         >
                           {config.label}
                         </li>
@@ -198,30 +217,6 @@ export default function DisplayStaff() {
                     })}
                   </ul>
                 </div>
-                {/*  */}
-
-                {/* ------------------------ */}
-                {/* STATUS */}
-                {/* ------------------------ */}
-                <div
-                  className={`flex ${USER_STATUS_COLOR_CONFIG[staff.status].background_color} justify-self-center px-2 py-1 rounded-xs`}
-                >
-                  <span className="text-[8px] md:text-[10px] lg:text-xs font-bold text-white whitespace-nowrap">
-                    {(staff.status === "ON_LEAVE"
-                      ? "ON LEAVE"
-                      : staff.status) || "Pending..."}
-                  </span>
-                </div>
-                {/* ================================ */}
-                {/* ACTION | Button */}
-                {/* EDIT */}
-                {/* ================================ */}
-                <button
-                  onClick={() => setSelectedStaff(staff)}
-                  className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
-                >
-                  <UserRoundPen />
-                </button>
               </main>
             );
           })}
@@ -249,14 +244,14 @@ export default function DisplayStaff() {
             </button>
           </div>
         )}
-        {/* ================= */}
-        {/* FOOTER */}
-        {/* ================= */}
+
+        {/* ------------------------------------
+                      Footer
+                    Prev & Next
+        ------------------------------------- */}
         <footer>
-          <div className="flex bg-background-secondary justify-between px-6 py-4 border-t-4 border-border">
-            {/* =================== */}
-            {/* PREV */}
-            {/* =================== */}
+          <div className="flex bg-background-secondary-hover justify-between px-6 py-6 border-t border-border-hover">
+            {/* Prev */}
             <button
               onClick={handlePrev}
               disabled={!hasPrev}
@@ -288,9 +283,7 @@ export default function DisplayStaff() {
                 ),
               )}
             </div>
-            {/* ================= */}
-            {/* NEXT */}
-            {/* ================= */}
+            {/* Next */}
             <button
               onClick={handleNext}
               disabled={!hasNext}
