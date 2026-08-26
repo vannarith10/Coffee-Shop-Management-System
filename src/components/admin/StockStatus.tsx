@@ -85,10 +85,10 @@ export default function StockStatus() {
         {/* =============================================== */}
         {/* Header of item columns | column name */}
         {/* =============================================== */}
-        <div className="grid grid-cols-4 bg-sidebar text-text-secondary p-4 px-6 text-[10px] xl:text-sm font-bold uppercase">
-          <h4 className="col-span-2">Item Name/Category</h4>
+        <div className="grid grid-cols-4 bg-sidebar text-text-secondary p-4 px-6 text-[10px] md:text-sm xl:text-sm font-bold uppercase">
+          <h4 className="col-span-2">Item Name / Category</h4>
           <h4>Current Stock</h4>
-          <h4 className="text-right w-full">Status/Action</h4>
+          <h4 className="text-right w-full">Status / Action</h4>
         </div>
 
         {/* ===================================== */}
@@ -126,7 +126,7 @@ export default function StockStatus() {
             return (
               <div
                 key={p.id}
-                className=" grid grid-cols-4 items-center px-6 py-4 text-xs xl:text-base border-t border-border hover:bg-background-secondary-hover"
+                className=" grid grid-cols-4 items-center px-6 py-4 text-xs xl:text-base border-t border-border-hover hover:bg-background-secondary-hover"
               >
 
 
@@ -157,13 +157,13 @@ export default function StockStatus() {
                   className={` w-full flex flex-col gap-2 `}
                 >
                   {/* status label */}
-                  <span className={`${config.colorClass}  py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}>
+                  <span className={`${config.colorClass} w-fit px-4 py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}>
                     {config.label}
                   </span>
                   {/* Update Stock Status Button */}
                   <button
                     onClick={() => setSelectedProduct(p)}
-                    className="py-1 lg:px-6 bg-green-600 text-white text-sm font-bold justify-self-end cursor-pointer hover:scale-110 active:scale-90 focus:outline-none transition-all duration-300 ease-out"
+                    className="py-1 lg:px-6 bg-green-600 text-white text-sm font-bold justify-self-end cursor-pointer hover:bg-green-700 active:scale-80 focus:outline-none transition-all duration-300 ease-out"
                   >
                     Restock
                   </button>
@@ -178,7 +178,7 @@ export default function StockStatus() {
         {/* The bottom of the Stock Status board */}
         {/* Pagination */}
         {/* =================================================== */}
-        <div className="flex justify-between px-6 py-4 border-t-4 border-border">
+        <footer className="flex justify-between px-6 py-6 bg-background-secondary-hover border-t border-border-hover">
           {/* PREV */}
           <button
             onClick={handlePrev}
@@ -218,7 +218,7 @@ export default function StockStatus() {
           >
             Next
           </button>
-        </div>
+        </footer>
 
         {/*  */}
       </section>

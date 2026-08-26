@@ -187,7 +187,7 @@ export default function DisplayStaff() {
                     {/* Role */}
                     <h5
                       style={{ backgroundColor: roleColor }}
-                      className={` text-[8px] md:text-[10px] lg:text-xs inline-flex justify-self-center items-center px-2 py-1 rounded-xs font-bold text-left`}
+                      className={` text-[8px] md:text-[10px] lg:text-xs inline-flex justify-center items-center px-2 py-1 rounded-xs font-bold text-left`}
                     >
                       {staff.role}
                     </h5>
