@@ -52,9 +52,9 @@ const Navbar = () => {
     <nav
       className={` ${isOpen ? "fixed inset-0 pt-10" : "sticky"} flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-4 p-4 z-90 top-0 w-full bg-sidebar transition-all duration-300 ease-out shimmer shimmer-bg shimmer-color-background-primary shimmer-duration-10000`}
     >
-      {/* =========================== */}
-      {/* Logo & Name */}
-      {/* =========================== */}
+      {/* ----------------------------
+             Shop Logo & Name
+        ---------------------------- */}
       <div className="w-full flex justify-between items-center ">
         <ShopProfile
           data={data}
@@ -75,9 +75,9 @@ const Navbar = () => {
         hidden={!isOpen}
         className="md:hidden h-full flex flex-col items-center gap-10 w-full pt-10 border-t border-gray-400"
       >
-        {/* ============================== */}
-        {/* Cashier profile */}
-        {/* ============================== */}
+        {/* ----------------------------
+                User profile
+        ---------------------------- */}
         <UserProfile
           data={profile}
           isLoading={isProfileLoading}
@@ -85,9 +85,9 @@ const Navbar = () => {
           refetch={handleRefetch}
         />
 
-        {/* ======================= */}
-        {/* Switch & Logout */}
-        {/* ======================= */}
+        {/* ------------------------------------
+                   Switch & Logout
+        ------------------------------------- */}
         <div className=" flex flex-col h-full justify-between items-center pb-10 gap-4 ">
           {/* Theme switch */}
           <ThemeSwitch />
@@ -108,9 +108,9 @@ const Navbar = () => {
       
       -------------------------*/}
       <div className="h-full md:h-fit hidden md:flex shrink-0 items-center gap-4 ">
-        {/* ============================== */}
-        {/* Cashier profile */}
-        {/* ============================== */}
+        {/* ----------------------------
+                User profile
+        ---------------------------- */}
         <UserProfile
           data={profile}
           isLoading={isProfileLoading}
@@ -118,9 +118,9 @@ const Navbar = () => {
           refetch={handleRefetch}
         />
 
-        {/* ======================= */}
-        {/* Switch & Logout */}
-        {/* ======================= */}
+        {/* ------------------------------------
+                   Switch & Logout
+        ------------------------------------- */}
         <div className=" flex justify-between items-center gap-4 ">
           {/* Theme switch */}
           <ThemeSwitch />

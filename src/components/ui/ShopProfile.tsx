@@ -27,6 +27,9 @@ const ShopProfile = ({
   return (
     <div className=" flex justify-between items-center">
       <div className="flex gap-2 items-center md:gap-4">
+        {/* ---------------------
+              Shop logo
+          -------------------- */}
         <div
           className={` w-12 h-12 shrink-0 flex items-center justify-center rounded-lg overflow-hidden ${isLoading ? "p-2" : ""}`}
         >
@@ -43,9 +46,9 @@ const ShopProfile = ({
           )}
         </div>
 
-        {/* ======================== */}
-        {/* Shop Name */}
-        {/* ======================== */}
+        {/* ---------------------
+              Shop name
+          -------------------- */}
         <div className="flex items-center">
             <h1 className="font-bold text-sm md:text-lg shimmer shimmer-color-orange-500 text-text-primary uppercase transition-all duration-300">
               {(isLoading || isRefetching) && !isError ? (

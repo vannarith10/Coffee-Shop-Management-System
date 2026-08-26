@@ -1,18 +1,15 @@
 //
 // components/Navbar.tsx
 //
-import NoImage from "../assets/no-image.webp";
-import ErrorImage from "../assets/error-image.jpg";
 import { useEffect, useState } from "react";
-import Loader from "./ui/Loader";
 import MenuSwitch from "./ui/MenuSwitch";
 import { links } from "../constants/navLinks";
 import { NavLink } from "react-router-dom";
 import ThemeSwitch from "./ui/ThemeSwitch";
 import LogoutButton from "./ui/LogoutButton";
 import { useGetShopNameAndLogo } from "../hooks/useGetShopNameAndLogo";
-import TextLoader from "./ui/TextLoader";
 import { motion } from "framer-motion";
+import ShopProfile from "./ui/ShopProfile";
 
 export default function Navbar() {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -30,61 +27,30 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`z-90 fixed md:hidden w-screen top-0 ${open ? "h-screen overflow-y-scroll scrollbar-hide flex flex-col gap-y-4 justify-between" : "h-20 ease-in"} px-4 py-4 bg-sidebar transition-all duration-500 ease-out shimmer shimmer-bg shimmer-color-blue-300 shimmer-duration-9000`}
+      className={` z-90 w-full md:hidden ${open ? " fixed inset-0 overflow-y-scroll scrollbar-hide flex flex-col justify-start gap-10 pt-10 " : "sticky top-0 "} px-4 py-4 bg-sidebar transition-all duration-500 ease-out shimmer shimmer-bg shimmer-color-blue-300 shimmer-duration-9000`}
     >
-      {/*  */}
-      {/*  */}
-      <section
-        className={` w-full ${open ? "mt-10 gap-10" : ""} flex flex-col items-center justify-between transition-all duration-300 ease-out`}
-      >
-        {/* Logo and Name */}
-        <div className="w-full flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div
-              className={`w-12 h-12 flex items-center justify-center rounded-full overflow-hidden ${isLoading ? "p-2" : ""}`}
-            >
-              {isLoading || isRefetching ? (
-                <Loader />
-              ) : (
-                <img
-                  src={isError ? ErrorImage : data?.image_url || NoImage}
-                  alt="Shop logo"
-                  className="w-full h-full rounded-full object-cover border-2 border-white bg-gray-400"
-                />
-              )}
-            </div>
 
-            {/* ======================== */}
-            {/* Shop Name */}
-            {/* ======================== */}
-            <h1 className="font-bold shimmer shimmer-color-orange-500 text-foreground/40 uppercase transition-all duration-300">
-              {(isLoading || isRefetching) && !isError ? (
-                <TextLoader text="Loading" />
-              ) : (
-                data?.name
-              )}
-
-              {/* handle error */}
-              {isError && (
-                <div className="flex gap-2">
-                  <p className="text-text-error">Error</p>
-                  <button
-                    onClick={() => refetch()}
-                    className="font-light bg-background-secondary hover:bg-background-secondary-hover px-2 rounded-md cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
-                  >
-                    Reload
-                  </button>
-                </div>
-              )}
-            </h1>
-          </div>
+        {/* -----------------------------
+                 Logo and Name
+        ------------------------------ */}
+        <div className="w-full flex justify-between items-center ">
+          <ShopProfile
+            isLoading={isLoading}
+            isError={isError}
+            isRefetching={isRefetching}
+            data={data}
+            refetch={refetch}
+          />
           <MenuSwitch handleOpen={() => setOpen(!open)} open={open} />
         </div>
-        {/* ================================== */}
-        {/* List of menu */}
-        {/* ================================== */}
+
+
+
+        {/* --------------------------------------
+                    Nav menu items
+        --------------------------------------- */}
         {open && (
-          <div className={"w-full flex flex-col gap-4"}>
+          <div className={"w-full flex flex-col gap-4 "}>
             {links.map((link, idx) => {
               const Icon = link.icon;
               return (
@@ -95,7 +61,7 @@ export default function Navbar() {
                   transition={{
                     type: "spring",
                     stiffness: 100,
-                    damping: 8,
+                    damping: 10,
                     delay: idx * 0.1,
                   }}
                   className="w-full"
@@ -116,26 +82,26 @@ export default function Navbar() {
             })}
           </div>
         )}
-      </section>
 
-      {/* Bottom buttons */}
+
+      {/* ------------------------------------
+                Theme & Logout
+      ------------------------------------- */}
       {open && (
         <motion.div
-          initial={{ scale: 0.2, opacity: 0, y: 50 }}
+          initial={{ scale: 0.5, opacity: 0, y: 50 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{
             type: "spring",
             stiffness: 50,
-            damping: 4,
+            damping: 10,
           }}
-          className="w-full flex flex-col items-center gap-4"
+          className="w-full h-full flex flex-col justify-between items-center "
         >
           <ThemeSwitch />
           <LogoutButton />
         </motion.div>
       )}
-      {/*  */}
-      {/*  */}
     </nav>
   );
 }

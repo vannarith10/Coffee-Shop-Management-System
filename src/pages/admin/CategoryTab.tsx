@@ -6,7 +6,7 @@ import ListCategory from "../../components/admin/DisplayListCategory";
 
 export default function CategoryTab() {
   return (
-    <div className="w-full h-full mt-20 md:mt-0 p-4 flex flex-col gap-4">
+    <div className="w-full h-full p-4 flex flex-col gap-4">
       <div>
         <h1 className="text-2xl xl:text-4xl font-extrabold">
           Category Management

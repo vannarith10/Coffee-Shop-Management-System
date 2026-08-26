@@ -62,7 +62,7 @@ export default function TopSellingProductsChart() {
     <section className="w-full rounded-lg border-2 border-border bg-background-secondary p-6 mt-4">
       {/*  */}
       {/* Header */}
-      <div className="mb-6 flex justify-between">
+      <div className="mb-6 flex justify-between items-start">
         <div>
           <h3 className="text-lg font-bold text-text-primary">
             Top Selling Products
