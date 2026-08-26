@@ -4,7 +4,6 @@
 import type { BaristaOrderItem } from "../../types/barista/order";
 import { formatDateTime } from "../../utils/dateFormatter";
 
-
 interface Props {
   order: BaristaOrderItem;
   onClick: () => void;
@@ -18,7 +17,6 @@ const BorderColor = {
   DONE: "border-green-500",
   CANCELLED: "border-red-600",
 } as const;
-
 
 const OrderCard = ({ order, onClick, buttonText, onCancel }: Props) => {
   return (
@@ -76,18 +74,20 @@ const OrderCard = ({ order, onClick, buttonText, onCancel }: Props) => {
         {order.status !== "DONE" && (
           <button
             onClick={onCancel}
-            className=" w-1/3 bg-red-500 hover:bg-red-600 active:bg-red-700 cursor-pointer active:scale-80 outline-none py-4 font-bold text-lg transition-all duration-300 ease-out"
+            className=" w-1/3 bg-red-500 hover:bg-red-600 active:bg-red-700 cursor-pointer active:scale-80 outline-none py-4 font-bold text-sm transition-all duration-300 ease-out"
           >
             Cancel
           </button>
         )}
-        {/* Action button */}
+        {/* -----------------------
+              Action button 
+        ------------------------*/}
         <button
           onClick={onClick}
           className="
                     w-2/3
                     py-4
-                    font-bold text-lg
+                    font-bold text-sm
                     bg-green-600
                     cursor-pointer transition-all
                     hover:bg-green-700 active:bg-green-800 active:scale-80 outline-none duration-300 ease-out

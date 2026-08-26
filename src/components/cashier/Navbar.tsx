@@ -25,8 +25,7 @@ const Navbar = () => {
 
   const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  // const isMobile = useMediaQuery("(max-width: 768px)");
-  // const menuVisible = isMobile && isOpen;
+
 
   //   click once, refetch all
   function handleRefetch() {
