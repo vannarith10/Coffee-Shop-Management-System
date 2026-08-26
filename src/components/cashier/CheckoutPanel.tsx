@@ -1,9 +1,9 @@
 //
 // components/cashier/CheckoutPanel.tsx
-// 
+//
 // * Displays checkout items
 //
-import { ClockFading, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { ClockFading, Minus, Plus, Trash2 } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import DefaultImage from "../../assets/image-default.jpg";
 import { CATEGORY_COLOR_CONFIG } from "../../types/category";
@@ -36,7 +36,7 @@ const CheckoutPanel = () => {
   }, [cart]);
 
   return (
-    <section className="scrollbar-hide h-full flex flex-col justify-between overflow-y-scroll w-full border-l border-border">
+    <section className="scrollbar-hide h-full flex flex-col justify-between overflow-y-scroll w-full md:border-l border-border ">
       {/* ============================ */}
       {/* Checkout header */}
       {/* ============================ */}
@@ -63,8 +63,7 @@ const CheckoutPanel = () => {
       {/* ============================= */}
       {/* Checkout Items */}
       {/* ============================= */}
-
-      <div className="h-full min-h-20 max-h-full flex flex-col gap-2 p-2 justify-start overflow-y-scroll scrollbar-hide ">
+      <div className="h-full min-h-20 flex flex-col gap-2 p-2 justify-start overflow-y-scroll scrollbar-hide ">
         <AnimatePresence mode="sync">
           {cart.map((item, idx) => {
             const colorConfig = CATEGORY_COLOR_CONFIG[item.category_type];
@@ -99,7 +98,7 @@ const CheckoutPanel = () => {
                     duration: 0.4,
                   },
                 }}
-                className="h-20 max-h-20 w-full  bg-background-secondary/50 hover flex items-center gap-2 border border-border-hover rounded-xl p-2 outline-none"
+                className="h-20 max-h-20 w-full bg-background-secondary/50 hover flex items-center gap-2 border border-border-hover rounded-xl p-2 outline-none"
               >
                 {/* -------------------------------------- */}
                 {/* Item Image */}
@@ -119,7 +118,10 @@ const CheckoutPanel = () => {
                   {/* Item profile */}
                   {/* ------------------------------------ */}
                   <div className="w-full ">
-                    <h2 className="font-bold text-sm">{item.name}</h2>
+                    {/* name */}
+                    <h2 className="font-bold text-xs md:text-sm ">
+                      {item.name}
+                    </h2>
                     {/* Category Type */}
                     <span
                       className={`font-bold text-[8px] px-2 py-1 rounded-sm ${colorConfig.bgColor}`}
@@ -131,40 +133,44 @@ const CheckoutPanel = () => {
                       {item.category_name}
                     </span>
                   </div>
-                  {/* ------------------------------------- */}
-                  {/* Item amount management */}
-                  {/* ------------------------------------- */}
-                  <div className="w-full flex gap-1 items-center justify-end ">
-                    {/* button decrease */}
-                    <button
-                      onClick={() => decrease(item.id)}
-                      className="p-1 rounded-full bg-background-secondary hover:bg-background-secondary-hover hover:scale-110 active:scale-80 outline-none transition-all duration-100 "
-                    >
-                      <Minus size={16} />
-                    </button>
-                    {/* item amount */}
-                    <span className="px-4 font-bold text-sm rounded-md bg-background-secondary-hover">
-                      {item.quantity}
-                    </span>
-                    {/* button increase */}
-                    <button
-                      onClick={() => increase(item.id)}
-                      className="p-1 rounded-full bg-background-secondary hover:bg-background-secondary-hover hover:scale-110 active:scale-80  outline-none transition-all duration-100 "
-                    >
-                      <Plus size={16} />
-                    </button>
+
+                  <div className="flex flex-col items-start gap-2 ">
+                    {/* ---------------------------- */}
+                    {/* item price */}
+                    {/* ---------------------------- */}
+                    <div className="h-full flex gap-2 items-end justify-center ">
+                      <span className=" font-bold text-sm text-white bg-gray-500 px-2 rounded-sm">
+                        ${item.price}
+                      </span>
+                      <span className="font-bold text-sm text-white bg-green-600 px-2 rounded-sm">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
+                    </div>
+                    {/* ------------------------------------- */}
+                    {/* Item amount management */}
+                    {/* ------------------------------------- */}
+                    <div className="w-full flex gap-1 items-center justify-start ">
+                      {/* button decrease */}
+                      <button
+                        onClick={() => decrease(item.id)}
+                        className="p-1 rounded-full bg-background-secondary hover:bg-background-secondary-hover hover:scale-110 active:scale-80 outline-none transition-all duration-100 "
+                      >
+                        <Minus size={16} />
+                      </button>
+                      {/* item amount */}
+                      <span className="px-4 font-bold text-sm rounded-md bg-background-secondary-hover">
+                        {item.quantity}
+                      </span>
+                      {/* button increase */}
+                      <button
+                        onClick={() => increase(item.id)}
+                        className="p-1 rounded-full bg-background-secondary hover:bg-background-secondary-hover hover:scale-110 active:scale-80  outline-none transition-all duration-100 "
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
                   </div>
-                  {/* ---------------------------- */}
-                  {/* item price */}
-                  {/* ---------------------------- */}
-                  <div className="h-full flex flex-col gap-2 items-end justify-center ">
-                    <span className=" font-bold text-xs text-white bg-red-500 px-2 rounded-sm">
-                      ${item.price}
-                    </span>
-                    <span className="font-bold text-sm text-white bg-green-600 px-2 rounded-sm">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </span>
-                  </div>
+
                   {/* Button remove from card */}
                   <button
                     onClick={() => removeFromCart(item.id)}

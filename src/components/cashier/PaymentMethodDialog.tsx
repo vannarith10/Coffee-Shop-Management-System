@@ -69,7 +69,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
             id: "Order-Created",
           });
 
-          navigate(`confirm-order/${res.order_id}`);
+          navigate(`confirm-order/${res.order_id}`, { replace: true });
           onClose();
         },
       });

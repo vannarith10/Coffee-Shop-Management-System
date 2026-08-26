@@ -91,7 +91,10 @@ const ConfirmSummary = ({ id }: { id: string }) => {
         </div>
 
         <div className="w-full flex justify-center py-10 items-center">
-          <button onClick={() => navigate("/cashier")} className="flex font-semibold text:sm lg:text-lg gap-2 items-center justify-center px-10 py-5 bg-background-secondary-hover cursor-pointer rounded-lg active:scale-80 outline-none transition-all duration-300 ease-out">
+          <button
+            onClick={() => navigate("/cashier", { replace: true })}
+            className="flex font-semibold text:sm lg:text-lg gap-2 items-center justify-center px-10 py-5 bg-background-secondary-hover cursor-pointer rounded-lg active:scale-80 outline-none transition-all duration-300 ease-out"
+          >
             Back <ChevronsDown />
           </button>
         </div>

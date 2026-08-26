@@ -1,7 +1,7 @@
 //
 // App.tsx
 //
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PageNotFound from "./pages/PageNotFound";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
@@ -29,6 +29,10 @@ import { useEffect } from "react";
 import { authStorage } from "./utils/auth-storage";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to={"/login"} replace/>
+  },
   {
     path: "/login",
     element: (

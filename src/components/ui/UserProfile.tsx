@@ -16,8 +16,8 @@ interface Props {
 
 const UserProfile = ({ data, isLoading, isError, refetch }: Props) => {
   return (
-    <div className="flex items-center gap-2">
-      <div>
+    <div className="flex flex-col-reverse md:flex-row items-center gap-2">
+      <div className="flex flex-col-reverse md:flex-col items-center md:items-end">
         <h4 className="text-xs text-end">{data?.role || "Role"}</h4>
         <h3 className="text-sm font-bold whitespace-nowrap">
           {data?.name || "Username"}
@@ -31,7 +31,7 @@ const UserProfile = ({ data, isLoading, isError, refetch }: Props) => {
         <img
           src={data?.image_url || DefaultProfile}
           alt="profile"
-          className="w-12 h-12 object-cover rounded-full border-2 border-white"
+          className="w-16 h-16 md:w-12 md:h-12 object-cover rounded-full border-2 border-white"
         />
       )}
 
