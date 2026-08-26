@@ -136,7 +136,7 @@ export default function DisplayStaff() {
                   <img
                     src={staff.image_url || DefaultProfile}
                     alt="profile"
-                    className="w-10 h-10 lg:w-14 lg:h-14 rounded-full border-2 border-border object-cover"
+                    className="w-14 h-14 lg:w-14 lg:h-14 rounded-full border-2 border-border object-cover"
                   />
                   {/* ------------------------
                             user info
