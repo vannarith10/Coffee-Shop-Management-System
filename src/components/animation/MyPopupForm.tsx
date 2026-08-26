@@ -65,8 +65,8 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
         transition={{
           ease: "easeOut",
           type: "spring",
-          stiffness: 80,
-          damping: 10,
+          stiffness: 100,
+          damping: 20,
         }}
         style={{
           transformOrigin: "left center",

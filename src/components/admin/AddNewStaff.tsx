@@ -1,7 +1,7 @@
 //
 // components/AddNewStaff.tsx
 //
-import { SquarePlus, X } from "lucide-react";
+import { SquarePlus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import { ROLES, type Role } from "../../types/role";
@@ -22,7 +22,7 @@ import type { CreateStaffRequest } from "../../types/staff";
 import { Image } from "lucide-react";
 import { useCreateStaff } from "../../hooks/useCreateStaff";
 import MyPopupForm from "../animation/MyPopupForm";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import FormHeader from "../animation/FormHeader";
 import PasswordInput from "../ui/PasswordInput";
 
@@ -222,7 +222,7 @@ export default function AddNewStaff() {
           {/* ===================== */}
           <button
             onClick={() => setIsOpen(true)}
-            className="col-start-2 lg:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className="col-start-2 lg:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             Add Staff <SquarePlus />
           </button>
@@ -238,7 +238,7 @@ export default function AddNewStaff() {
               <form
                 onSubmit={(e) => handleSubmit(e)}
                 onClick={(e) => e.stopPropagation()}
-                className="flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-primary border-4 border-border rounded-4xl shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+                className="flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
               >
                 {/* ------------------ */}
                 {/* Form Title */}

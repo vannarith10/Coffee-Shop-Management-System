@@ -75,15 +75,15 @@ export default function DisplayStaff() {
         {/* ======================== */}
         <header>
           {/* Icon & Pagination Info */}
-          <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
-            <div className="flex gap-4">
+          <div className="w-full p-6 flex justify-between items-start bg-background-secondary-hover">
+            <div className="flex gap-4 ">
               <ContactRound />
               <h3 className="font-semibold">Employee Profiles</h3>
             </div>
             {/*  */}
             {/* Pages and Items */}
             {!isLoading && !isError && (
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row items-end gap-4">
                 <div>
                   <h4 className="font-semibold text-xs text-text-secondary">
                     Page {currentPage} of {totalPages}

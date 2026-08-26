@@ -180,7 +180,7 @@ export default function EditStaffProfile({
           <form
             onSubmit={handleSubmit}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[90vh] w-[80vw] overflow-y-auto scrollbar-hide flex flex-col gap-10 items-center bg-background-primary rounded-4xl border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+            className="max-h-[90vh] w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] overflow-y-auto scrollbar-hide flex flex-col gap-10 items-center bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
           >
             {/* ------------------ */}
             {/* Form Title */}
