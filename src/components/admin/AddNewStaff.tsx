@@ -238,7 +238,7 @@ export default function AddNewStaff() {
               <form
                 onSubmit={(e) => handleSubmit(e)}
                 onClick={(e) => e.stopPropagation()}
-                className="flex flex-col gap-6 max-h-[90vh] overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+                className="flex flex-col gap-6 overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] max-w-[90vw] max-h-[90vh] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
               >
                 {/* ------------------ */}
                 {/* Form Title */}

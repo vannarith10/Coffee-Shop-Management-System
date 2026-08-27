@@ -63,82 +63,59 @@ export default function DisplayProduct() {
       ref={targetRef}
       className="w-full rounded-lg overflow-hidden border-border border-2"
     >
-      {/* ======================== */}
-      {/* HEADER */}
-      {/* ======================== */}
+      {/* -----------------------------------
+                      Header
+        ------------------------------------ */}
       <header>
         {/* Icon & Pagination Info */}
-        <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
-          <div className="flex gap-4">
+        <div className="w-full p-6 flex flex-col gap-4 justify-between items-start bg-background-secondary-hover">
+          <div className="flex gap-4 items-center ">
             <SquareChartGantt />
-            <h3 className="font-semibold">Products</h3>
+            <h3 className="font-semibold text-lg text-nowrap">
+              Employee Profiles
+            </h3>
           </div>
           {/*  */}
           {/* Pages and Items */}
           {!isLoading && !isError && (
-            <div className="flex gap-4">
+            <div className="w-full flex justify-between items-center gap-4">
               <div>
                 <h4 className="font-semibold text-xs text-text-secondary">
                   Page {currentPage} of {totalPages}
                 </h4>
                 <h4 className="font-semibold text-sm">
-                  Products: {totalItems}
+                  Profiles: {totalItems}
                 </h4>
               </div>
               <button
                 onClick={() => refetch()}
-                className="px-4 py-2 flex gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
+                className="px-4 py-2 text-sm flex items-center gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
               >
                 {isRefetching ? (
                   "Syncing..."
                 ) : (
                   <>
-                    Refresh <RotateCcw />
+                    Refresh <RotateCcw size={20} />
                   </>
                 )}
               </button>
             </div>
           )}
         </div>
-        {/* ========================= */}
-        {/* Colum Titles */}
-        {/* ========================= */}
-        <div className="grid grid-cols-5 items-center-safe bg-sidebar py-4 px-4 font-bold uppercase text-sm">
-          <h2 className="text-start font-bold text-xs lg:text-sm xl:text-lg">
-            Image
-          </h2>
-          <h2 className="text-center font-bold text-xs lg:text-sm xl:text-lg">
-            Name
-          </h2>
-          <h2 className="text-center font-bold text-xs lg:text-sm xl:text-lg">
-            Category
-          </h2>
-          <div className="flex flex-col">
-            <h2 className="text-center font-bold text-xs lg:text-sm xl:text-lg">
-              Price
-            </h2>
-            <h2 className="text-center text-amber-500 font-bold text-xs lg:text-sm xl:text-lg">
-              Cost
-            </h2>
-          </div>
-          <h2 className="text-end font-bold text-xs md:text-sm lg:text-lg">
-            Status
-          </h2>
-        </div>
       </header>
 
-      {/* ================================== */}
-      {/* Handle Loading */}
-      {/* ================================== */}
+      {/* --------------------------------------------
+                    Handle Loading 
+      --------------------------------------------- */}
       {isLoading && !isError && (
         <div className="w-full py-20 flex justify-center items-center text-xl font-bold ">
           <TextLoader text="Loading..." />
         </div>
       )}
 
-      {/* ================================== */}
-      {/* Error handling */}
-      {/* ================================== */}
+      {/* --------------------------------------------
+                    Handle Error
+      --------------------------------------------- */}
       {isError && (
         <div className="w-full py-20 flex flex-col justify-center items-center gap-4">
           <p className="text-lg font-semibold text-text-error">
@@ -153,85 +130,95 @@ export default function DisplayProduct() {
         </div>
       )}
 
-      {/* ================================================================ */}
-      {/* List Items */}
-      {/* ================================================================ */}
-      {!isLoading && !isError && (
-        <>
-          {products!.product_items?.length > 0 ? (
-            products?.product_items?.map((product) => {
-              const config = STOCK_STATUS_CONFIG[product.stock_status];
-              return (
-                <button
-                  key={product.id}
-                  onClick={() => {
-                    navigate(`${product.id}`);
-                  }}
-                  className={`relative grid grid-cols-5 w-full items-center-safe bg-cover bg-center  p-4 cursor-pointer active:px-20 overflow-hidden hover:pl-10 transition-all duration-300 ease-out`}
-                  style={{ backgroundImage: `url(${product.image_url})` }}
-                >
-                  {/* Overlay with blur */}
-                  <div className="absolute inset-0 bg-black/30 backdrop-blur-lg"></div>
-                  {/* -------------------------- */}
-                  {/* Product Image */}
-                  {/* -------------------------- */}
-                  <img
-                    src={product.image_url || NoImage}
-                    alt="Product image"
-                    loading="lazy"
-                    className="w-20 h-20 z-10 lg:w-24 lg:h-24 rounded-md border-2 border-border object-cover"
-                  />
-                  {/* -------------------------- */}
-                  {/* Product Name */}
-                  {/* -------------------------- */}
-                  <h3 className="font-bold z-10 text-xs md:text-sm lg:text-lg text-white">
-                    {product.name}
-                  </h3>
-                  {/* -------------------------- */}
-                  {/* Product category */}
-                  {/* -------------------------- */}
-                  <div className="flex flex-col z-10 transition-colors duration-300 ease-out">
-                    <h5 className="text-[8px] md:text-[10px] lg:text-xs text-text-secondary font-bold">
-                      {product.category_type}
-                    </h5>
-                    <h4 className="text-xs md:text-sm font-bold">
-                      {product.category_name}
-                    </h4>
-                  </div>
-                  {/* -------------------------- */}
-                  {/* Product price */}
-                  {/* -------------------------- */}
-                  <div className="flex flex-col z-10 transition-colors duration-300 ease-out">
-                    <span className="font-bold text-sm md:text-lg">
-                      ${product.price}
-                    </span>
-                    <span className="text-[10px] md:text-xs lg:text-sm text-amber-600 font-bold">
-                      ${product.cost_price}
-                    </span>
-                  </div>
-                  {/* -------------------------- */}
-                  {/* Product status */}
-                  {/* -------------------------- */}
-                  <span
-                    className={`text-sm z-10 font-bold inline-flex justify-self-end px-2 py-1 rounded-sm ${config.colorClass} transition-colors duration-300 ease-out`}
+      {/* ------------------------------------------------
+                        *
+                        Display Items
+                        *
+      ------------------------------------------------- */}
+      <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
+        {!isLoading && !isError && (
+          <>
+            {products!.product_items?.length > 0 ? (
+              products?.product_items?.map((product) => {
+                const config = STOCK_STATUS_CONFIG[product.stock_status];
+                return (
+                  <button
+                    key={product.id}
+                    onClick={() => {
+                      navigate(`${product.id}`, { replace: true });
+                    }}
+                    className={` relative cursor-pointer bg-cover bg-center overflow-hidden `}
+                    // style={{ backgroundImage: `url(${product.image_url})` }}
                   >
-                    {config.label}
-                  </span>
-                </button>
-              );
-            })
-          ) : keyword === null ? (
-            <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
-              No product data of category type {selectedCategoryType} and
-              category name {selectedCategoryName}
-            </div>
-          ) : (
-            <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
-              Product name "{keyword}" not found
-            </div>
-          )}
-        </>
-      )}
+                    {/* Background layer */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 gruop-hover:scale-110  "
+                      style={{ backgroundImage: `url(${product.image_url})` }}
+                    ></div>
+                    {/* Overlay with blur */}
+                    <div className="w-full h-full p-4 inset-0 bg-black/30 backdrop-blur-lg transition-all duration-300 ease-out">
+                      {/* ----------------------------------------------
+                                  image & price & cost
+                      ----------------------------------------------- */}
+                      <div className=" border-red-400 w-full grid grid-cols-2 gap-x-6">
+                        <div className=" aspect-square max-h-38">
+                          <img
+                            src={product.image_url || NoImage}
+                            alt="product image"
+                            loading="lazy"
+                            className="w-full h-full object-center"
+                          />
+                        </div>
+                        {/* Price & Stock */}
+                        <div className=" flex flex-col ">
+                          <h5 className="text-start text-2xl md:text-xl lg:text-2xl font-bold text-green-400 text-nowrap">
+                            Price ${product.price}
+                          </h5>
+                          <h5 className="text-start text-xl md:text-lg lg:text-xl font-bold ">
+                            Cost ${product.cost_price}
+                          </h5>
+                          <h6
+                            className={`mt-2 text-start font-bold w-fit inline-flex gap-2`}
+                          >
+                            <span className="font-semibold">Stock</span>
+                            <span className={`${config.colorClass} px-4`}>
+                              {config.label}
+                            </span>
+                          </h6>
+                        </div>
+                      </div>
+
+                      {/* Name */}
+                      <h3 className="font-bold text-2xl md:text-xl lg:text-2xl text-left py-2">
+                        {product.name}
+                      </h3>
+
+                      {/* Category */}
+                      <div className="w-full flex flex-col items-start gap-2">
+                        <h5 className="font-bold text-sm bg-background-secondary-hover px-4 py-1">
+                          {product.category_name}
+                        </h5>
+                        <h5 className="font-semibold text-sm">
+                          {product.category_type}
+                        </h5>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })
+            ) : keyword === null ? (
+              <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
+                No product data of category type {selectedCategoryType} and
+                category name {selectedCategoryName}
+              </div>
+            ) : (
+              <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
+                Product name "{keyword}" not found
+              </div>
+            )}
+          </>
+        )}
+      </main>
 
       {/* ================= */}
       {/* FOOTER */}

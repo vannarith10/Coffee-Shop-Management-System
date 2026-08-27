@@ -2,7 +2,7 @@
 //
 import AddNewCategory from "../../components/admin/AddNewCategory";
 import CategoryStatus from "../../components/admin/CategoryStatusSummary";
-import ListCategory from "../../components/admin/DisplayListCategory";
+import ListCategory from "../../components/admin/DisplayCategory";
 
 export default function CategoryTab() {
   return (

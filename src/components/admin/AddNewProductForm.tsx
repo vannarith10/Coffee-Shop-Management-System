@@ -188,7 +188,7 @@ export default function AddNewProductForm() {
       <section className="grid grid-cols-4 gap-4">
         <button
           onClick={() => setIsOpen(true)}
-          className=" col-start-3 col-span-2 w-full flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+          className="text-sm md:text-lg col-start-3 col-span-2 w-full flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
         >
           Add Product <SquarePlus />
         </button>
@@ -201,7 +201,7 @@ export default function AddNewProductForm() {
               <form
                 onSubmit={(e) => handleSubmit(e)}
                 onClick={(e) => e.stopPropagation()}
-                className={` w-[80vw] h-[90vh] overflow-y-scroll scrollbar-hide flex flex-col gap-4 bg-background-primary rounded-4xl border-4 border-border transition-all duration-200 ease-out shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000`}
+                className={` w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] max-w-[90vw] max-h-[90vh] overflow-y-scroll scrollbar-hide flex flex-col gap-4 bg-background-primary border-4 border-border transition-all duration-200 ease-out shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000`}
               >
                 {/* Form Title */}
                 <FormHeader
@@ -359,7 +359,7 @@ export default function AddNewProductForm() {
                 {/* ========================= */}
                 {/* Buttons | Cancel | Submit*/}
                 {/* ========================= */}
-                <div className="w-full grid grid-cols-3 gap-6 p-6">
+                <div className="w-full grid grid-cols-3 gap-2 p-6">
                   <button
                     type="button"
                     onClick={() => onClose()}
@@ -369,7 +369,7 @@ export default function AddNewProductForm() {
                   </button>
                   <button
                     type="submit"
-                    className={`col-span-2 text-sm lg:text-lg font-bold py-4 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
+                    className={`col-span-2 text-sm lg:text-lg font-bold py-4 bg-green-600 border-2 border-border rounded-md hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-100 ease-out`}
                   >
                     Submit
                   </button>

@@ -70,15 +70,15 @@ export default function DisplayStaff() {
   return (
     <>
       <section className="w-full rounded-lg overflow-hidden border-border border-2">
-        {/* ======================== */}
-        {/* HEADER */}
-        {/* ======================== */}
+        {/* -----------------------------------
+                      Header
+        ------------------------------------ */}
         <header>
           {/* Icon & Pagination Info */}
           <div className="w-full p-6 flex flex-col gap-4 justify-between items-start bg-background-secondary-hover">
-            <div className="flex gap-4 ">
+            <div className="flex gap-4 items-center ">
               <ContactRound />
-              <h3 className="font-semibold text-nowrap">Employee Profiles</h3>
+              <h3 className="font-semibold text-lg text-nowrap">Employee Profiles</h3>
             </div>
             {/*  */}
             {/* Pages and Items */}
