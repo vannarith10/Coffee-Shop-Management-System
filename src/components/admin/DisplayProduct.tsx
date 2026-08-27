@@ -64,7 +64,9 @@ export default function DisplayProduct() {
       className="w-full rounded-lg overflow-hidden border-border border-2"
     >
       {/* -----------------------------------
+                      *
                       Header
+                      *
         ------------------------------------ */}
       <header>
         {/* Icon & Pagination Info */}
@@ -147,28 +149,27 @@ export default function DisplayProduct() {
                     onClick={() => {
                       navigate(`${product.id}`, { replace: true });
                     }}
-                    className={` relative cursor-pointer bg-cover bg-center overflow-hidden `}
+                    className={` group relative cursor-pointer bg-cover bg-center overflow-hidden `}
                     // style={{ backgroundImage: `url(${product.image_url})` }}
                   >
                     {/* Background layer */}
                     <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 gruop-hover:scale-110  "
+                      className="absolute inset-0 bg-cover bg-center transition-all duration-300 ease-out group-hover:scale-120 "
                       style={{ backgroundImage: `url(${product.image_url})` }}
                     ></div>
                     {/* Overlay with blur */}
-                    <div className="w-full h-full p-4 inset-0 bg-black/30 backdrop-blur-lg transition-all duration-300 ease-out">
+                    <div className="w-full h-full p-4 inset-0 bg-black/30 backdrop-blur-xl transition-all duration-300 ease-out">
                       {/* ----------------------------------------------
                                   image & price & cost
                       ----------------------------------------------- */}
-                      <div className=" border-red-400 w-full grid grid-cols-2 gap-x-6">
-                        <div className=" aspect-square max-h-38">
-                          <img
-                            src={product.image_url || NoImage}
-                            alt="product image"
-                            loading="lazy"
-                            className="w-full h-full object-center"
-                          />
-                        </div>
+                      <div className=" w-full grid grid-cols-2 gap-x-6">
+                        <img
+                          src={product.image_url || NoImage}
+                          alt="product image"
+                          loading="lazy"
+                          className=" max-h-40 aspect-square object-center rounded-md"
+                        />
+
                         {/* Price & Stock */}
                         <div className=" flex flex-col ">
                           <h5 className="text-start text-2xl md:text-xl lg:text-2xl font-bold text-green-400 text-nowrap">
@@ -220,25 +221,27 @@ export default function DisplayProduct() {
         )}
       </main>
 
-      {/* ================= */}
-      {/* FOOTER */}
-      {/* ================= */}
+      {/* --------------------------------------------------------
+                            *
+                            Footer
+                            *
+      --------------------------------------------------------- */}
       <footer>
-        <div className="flex bg-background-secondary justify-between px-6 py-4 border-t-4 border-border">
-          {/* =================== */}
-          {/* PREV */}
-          {/* =================== */}
+        <div className="flex bg-background-secondary-hover justify-between px-6 py-6 ">
+          {/* ----------------------
+                    Prev
+          ----------------------- */}
           <button
             onClick={handlePrev}
             disabled={!hasPrev}
-            className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+            className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
           >
             Prev
           </button>
-          {/* ============================= */}
-          {/* 1 2 3 ... 4 */}
-          {/* Page Numbers */}
-          {/* ============================= */}
+          {/* --------------------------------------------------
+                            Number of pages
+                            1 2 3 4 .......
+          --------------------------------------------------- */}
           {!isLoading && !isError && (
             <div className="flex items-center justify-center gap-2">
               {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
@@ -261,13 +264,13 @@ export default function DisplayProduct() {
               )}
             </div>
           )}
-          {/* ================= */}
-          {/* NEXT */}
-          {/* ================= */}
+          {/* ---------------------------
+                      Next
+          ---------------------------- */}
           <button
             onClick={handleNext}
             disabled={!hasNext}
-            className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+            className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
           >
             Next
           </button>

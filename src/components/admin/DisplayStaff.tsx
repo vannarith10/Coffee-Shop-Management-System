@@ -255,7 +255,7 @@ export default function DisplayStaff() {
             <button
               onClick={handlePrev}
               disabled={!hasPrev}
-              className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+              className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
             >
               Prev
             </button>
@@ -287,7 +287,7 @@ export default function DisplayStaff() {
             <button
               onClick={handleNext}
               disabled={!hasNext}
-              className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+              className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
             >
               Next
             </button>

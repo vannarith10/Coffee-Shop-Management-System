@@ -90,7 +90,7 @@ export default function ProductFilter() {
                   delay: idx * 0.05,
                 }}
                 onClick={() => setSelectedCategoryType(filter.value)}
-                className={` py-4 ${isSelected ? filter.background_color : "bg-background-secondary hover:bg-background-secondary-hover"} rounded-md font-bold cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none`}
+                className={`md:px-8 py-4 ${isSelected ? filter.background_color : "bg-background-secondary hover:bg-background-secondary-hover"} rounded-md font-bold cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none`}
               >
                 {filter.value}
               </motion.button>

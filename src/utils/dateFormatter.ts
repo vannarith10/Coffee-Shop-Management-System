@@ -1,19 +1,23 @@
 //
 
-
 export const formatDateTime = (
-  isoDate: string | null,
+  isoDate: string | null | undefined,
   options = {
     showDate: true,
-    showTime: true,
-  }
+    showTime: false,
+    fullMonthName: true,
+  },
 ) => {
   if (!isoDate) return "";
 
   const date = new Date(isoDate);
 
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate());
+
+  const month = options.fullMonthName
+    ? date.toLocaleString("en-GB", { month: "long" }) // August
+    : String(date.getMonth() + 1).padStart(2, "0"); // 08
+
   const year = date.getFullYear();
 
   const hours = String(date.getHours()).padStart(2, "0");
@@ -24,7 +28,7 @@ export const formatDateTime = (
   }
 
   if (options.showDate) {
-    return `${day}/${month}/${year}`;
+    return `${day} ${month} ${year}`;
   }
 
   if (options.showTime) {

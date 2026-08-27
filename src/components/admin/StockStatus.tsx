@@ -179,11 +179,13 @@ export default function StockStatus() {
         {/* Pagination */}
         {/* =================================================== */}
         <footer className="flex justify-between px-6 py-6 bg-background-secondary-hover border-t border-border-hover">
-          {/* PREV */}
+          {/* ------------------------
+                      Prev
+          ------------------------ */}
           <button
             onClick={handlePrev}
             disabled={!hasPrev}
-            className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} text-xs md:text-sm font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+            className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} text-xs md:text-sm font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
           >
             Prev
           </button>
@@ -209,12 +211,13 @@ export default function StockStatus() {
               ),
             )}
           </div>
-          {/*  */}
-          {/* NEXT */}
+          {/* ------------------------
+                      Next
+          ------------------------ */}
           <button
             onClick={handleNext}
             disabled={!hasNext}
-            className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} text-xs md:text-sm font-semibold px-4 py-2 rounded-md  bg-background-secondary-hover  active:scale-90 transition-all duration-200 ease-out`}
+            className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} text-xs md:text-sm font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
           >
             Next
           </button>

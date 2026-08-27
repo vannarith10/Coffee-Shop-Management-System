@@ -16,6 +16,9 @@ export default function Navbar() {
     useGetShopNameAndLogo();
   const [open, setOpen] = useState(false);
 
+  //*
+  // Lock scrolling when open navbar
+  //*
   useEffect(() => {
     if (open) {
       const scrollY = window.scrollY;
