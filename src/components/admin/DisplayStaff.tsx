@@ -174,7 +174,7 @@ export default function DisplayStaff() {
                 ------------------------ */}
                 <button
                   onClick={() => setSelectedStaff(staff)}
-                  className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
+                  className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer"
                 >
                   <UserRoundPen />
                 </button>

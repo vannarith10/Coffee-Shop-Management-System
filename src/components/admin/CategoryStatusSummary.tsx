@@ -74,10 +74,10 @@ export default function CategoryStatus() {
           return (
             <SpotlightCard key={key} rounded="lg">
               <div
-               className="flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
+               className="h-full flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
                 <div className="flex justify-between">
                   {/* Title & Icon*/}
-                  <h3 className="text-text-secondary font-semibold text-sm">
+                  <h3 className="text-text-secondary font-semibold text-xs md:text-sm">
                     {config.label}
                   </h3>
                   {config.icon}
@@ -89,7 +89,7 @@ export default function CategoryStatus() {
                   {isLoading ? <TextLoader text="..." /> : value}
                 </h2>
                 {/* Description */}
-                <p className="text-xs text-text-secondary font-semibold">
+                <p className="text-xs text-text-secondary font-semibold ">
                   {config.description}
                 </p>
               </div>

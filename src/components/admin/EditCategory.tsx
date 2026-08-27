@@ -76,14 +76,10 @@ export default function EditCategory({
   if (!isOpen) return null;
   return (
     <MyPopupForm onClose={onClose}>
-      {/* =================== */}
-      {/* Form */}
-      {/* =================== */}
-
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
-        className="overflow-y-scroll scrollbar-hide w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[70vh] flex flex-col gap-6 bg-background-primary rounded-4xl border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+        className="overflow-y-scroll scrollbar-hide w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-h-[90vh] flex flex-col gap-6 bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
       >
         {/* ----------------- */}
         {/* Form Title */}
@@ -169,7 +165,7 @@ export default function EditCategory({
         {/* Buttons */}
         {/* Submit */}
         {/* ================================ */}
-        <div className="w-full grid grid-cols-3 gap-6 p-6">
+        <div className="w-full grid grid-cols-3 gap-2 p-6">
           <button
             type="button"
             onClick={() => onClose()}

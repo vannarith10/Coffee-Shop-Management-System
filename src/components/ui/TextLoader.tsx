@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
-export default function TextLoader({ text = "Loading..." }) {
+interface Props {
+  text?: string;
+  className?: string;
+}
+
+export default function TextLoader({ text = "Loading...", className }:Props) {
     
   return (
     <StyledWrapper>
@@ -8,7 +13,7 @@ export default function TextLoader({ text = "Loading..." }) {
         {text.split("").map((char, index) => (
           <div
             key={index}
-            className="letter font-bold"
+            className={`letter font-bold ${className}`}
             style={{ "--i": index + 1 } as React.CSSProperties}
           >
             {char}

@@ -1,7 +1,7 @@
+// ------------------------------
 // components/AddNewCategory.tsx
-//
-
-import { RotateCcw, SquarePlus, X } from "lucide-react";
+// ------------------------------
+import { RotateCcw, SquarePlus } from "lucide-react";
 import { useState } from "react";
 import TextLoader from "../ui/TextLoader";
 import {
@@ -18,6 +18,9 @@ import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
 import FormHeader from "../animation/FormHeader";
+
+
+
 
 export default function AddNewCategory() {
   const { refetch, isRefetching } = useCategoryStatusSummary();
@@ -103,39 +106,42 @@ export default function AddNewCategory() {
           {/* ===================== */}
           <button
             onClick={() => setIsOpen(true)}
-            className="col-start-1 xl:col-start-3 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className=" col-start-1 xl:col-start-3 text-xs md:text-sm flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
-            Add Category <SquarePlus />
+            Add Category <SquarePlus className="size-6 md:size-8 lg:size-10"/>
           </button>
           {/* ------------------- */}
           {/* Refresh */}
           {/* ------------------- */}
           <button
             onClick={() => refetch()}
-            className="col-start-2 xl:col-start-4 flex justify-center gap-2 items-center bg-background-secondary py-4 px-8 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className="col-start-2 xl:col-start-4 text-xs md:text-sm flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             {isRefetching ? (
               "Syncing..."
             ) : (
               <>
-                Refresh <RotateCcw />
+                Refresh <RotateCcw className="size-6 md:size-8 lg:size-10"/>
               </>
             )}
           </button>
         </div>
       </section>
-      {/* ======================= */}
-      {/* ======================= */}
-      {/* Open Form */}
-      {/* ======================= */}
-      {/* ======================= */}
+      
+      
+
+      {/* -----------------------------------
+
+                Open The Form 
+
+      -------------------------------------*/}
       <AnimatePresence>
         {isOpen && (
           <MyPopupForm onClose={onClose}>
             <form
               onSubmit={(e) => handleSubmit(e)}
               onClick={(e) => e.stopPropagation()}
-              className="overflow-y-scroll scrollbar-hide w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] bg-background-primary rounded-4xl border-4 border-border flex flex-col gap-6 shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+              className="overflow-y-scroll scrollbar-hide w-[90vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] bg-background-primary border-4 border-border flex flex-col gap-6 shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
             >
               {/* ----------------- */}
               {/* Form Title */}
@@ -146,9 +152,20 @@ export default function AddNewCategory() {
                 className="w-full sticky top-0 z-100"
               />
 
-              {/* ========================= */}
-              {/* Category Types */}
-              {/* ========================= */}
+              
+              {/* Name input */}
+              <div className="flex flex-col w-full gap-2 px-6">
+                <label htmlFor="name" className="text-xs font-bold">
+                  NAME
+                </label>
+                <input
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  type="text"
+                  className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
+                />
+              </div>
+
+              {/* Type input */}
               <div className="flex flex-col gap-2 px-6">
                 <label htmlFor="name" className="text-xs font-bold">
                   TYPE
@@ -169,23 +186,8 @@ export default function AddNewCategory() {
                   })}
                 </div>
               </div>
-              {/* ================================= */}
-              {/* Name input*/}
-              {/* ================================= */}
-              <div className="flex flex-col w-full gap-2 px-6">
-                <label htmlFor="name" className="text-xs font-bold">
-                  NAME
-                </label>
-                <input
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  type="text"
-                  className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
-                />
-              </div>
 
-              {/* ============================ */}
-              {/* Category Status */}
-              {/* ============================ */}
+              {/* Status input */}
               <div className="w-full flex flex-col gap-2 px-6">
                 <label htmlFor="name" className="text-xs font-bold">
                   STATUS
@@ -207,10 +209,10 @@ export default function AddNewCategory() {
                 </div>
               </div>
 
-              {/* ========================= */}
-              {/* Buttons | Cancel | Submit*/}
-              {/* ========================= */}
-              <div className="w-full grid grid-cols-3 gap-6 p-6">
+              {/* --------------------------------
+                        Cancel | Submit 
+              ----------------------------------*/}
+              <div className="w-full grid grid-cols-3 gap-2 p-6">
                 <button
                   type="button"
                   onClick={() => onClose()}

@@ -1,9 +1,9 @@
+//
 // components/ListCategory.tsx
 //
-
 import { useEffect, useRef, useState } from "react";
 import type { Category } from "../../types/category.ts";
-import { Ellipsis, SquarePen } from "lucide-react";
+import { Ellipsis, RotateCcw, SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
@@ -20,6 +20,8 @@ export default function ListCategory() {
     isError,
     justUpdatedFieldId,
     justCreatedCategoryId,
+    refetch,
+    isRefetching,
   } = useCategory(page, size);
 
   const targetRef = useRef<HTMLDivElement | null>(null);
@@ -71,23 +73,31 @@ export default function ListCategory() {
             {/*  */}
             {/* Pages and Items */}
             {!isLoading && !isError && (
-              <div>
-                <h4 className="font-semibold text-xs text-text-secondary">
-                  Page {currentPage} of {totalPages}
-                </h4>
-                <h4 className="font-semibold text-sm">
-                  Categories: {totalItems}
-                </h4>
+              <div className="flex items-center gap-4">
+                <div hidden={isRefetching}>
+                  <h4 className="font-semibold text-xs text-text-secondary">
+                    Page {currentPage} of {totalPages}
+                  </h4>
+                  <h4 className="font-semibold text-sm">
+                    Categories: {totalItems}
+                  </h4>
+                </div>
+                {/* refetch button */}
+                <button
+                  onClick={() => refetch()}
+                  className="cursor-pointer rounded-full active:scale-80 outline-none transition-all duration-300 ease-out"
+                >
+                  {isRefetching ? (
+                    <TextLoader
+                      text="Syncing..."
+                      className="text-xs md:text-sm"
+                    />
+                  ) : (
+                    <RotateCcw />
+                  )}
+                </button>
               </div>
             )}
-          </div>
-          {/*  */}
-          {/* Colum Titles */}
-          <div className="grid grid-cols-5 text-sm text-white font-bold bg-sidebar p-6">
-            <h2 className="col-span-2">CATEGORY NAME</h2>
-            <h2>TYPE</h2>
-            <h2>STATUS</h2>
-            <h2 className="text-end">ACTION</h2>
           </div>
         </header>
 
@@ -103,48 +113,61 @@ export default function ListCategory() {
         {/* ============================ */}
         {/* Items List */}
         {/* ============================ */}
-        {!isLoading &&
-          category?.categories?.map((category) => {
-            const isActive = category.is_active;
-            const justUpdated = category.category_id === justUpdatedFieldId;
-            const justCreated = category.category_id === justCreatedCategoryId;
-            return (
-              <main
-                key={category.category_id}
-                ref={justCreated ? targetRef : null}
-                className={`grid grid-cols-5 items-center-safe text-sm ${justUpdated || justCreated ? "bg-green-700" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold border-t border-border`}
-              >
-                {/* Name */}
-                <h2 className="col-span-2 text-lg">{category.category_name}</h2>
-                {/* Type */}
-                <h3
-                  className={`${category.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} text-white inline-block justify-self-start px-2 md:px-4 rounded-sm py-1`}
+        <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
+          {!isLoading &&
+            category?.categories?.map((category) => {
+              const isActive = category.is_active;
+              const justUpdated = category.category_id === justUpdatedFieldId;
+              const justCreated =
+                category.category_id === justCreatedCategoryId;
+
+              return (
+                <div
+                  key={category.category_id}
+                  ref={justCreated ? targetRef : null}
+                  className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
-                  {category.category_type}
-                </h3>
-                {/* Status */}
-                <h4
-                  className={`${isActive ? "text-green-600" : "text-amber-600"} bg-background-primary/30 inline-block justify-self-start px-4 py-2 rounded-full font-bold text-xs lg:text-sm`}
-                >
-                  {isActive ? "ENABLED" : "DISABLED"}
-                </h4>
-                {/* ========================= */}
-                {/* Action | Button */}
-                {/* ========================= */}
-                <button
-                  onClick={() => setSelectedCategory(category)}
-                  className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border-2 border-border hover:border-border-hover cursor-pointer"
-                >
-                  <SquarePen />
-                </button>
-              </main>
-            );
-          })}
-        {/* ================= */}
-        {/* FOOTER */}
-        {/* ================= */}
+                  <div className="w-full flex justify-between items-center">
+                    {/* Name */}
+                    <h2 className="col-span-2 text-xl">
+                      {category.category_name}
+                    </h2>
+                    {/* button edit */}
+                    <button
+                      onClick={() => setSelectedCategory(category)}
+                      className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer"
+                    >
+                      <SquarePen />
+                    </button>
+                  </div>
+                  {/* Type */}
+                  <h4
+                    className={`text-xs md:text-sm w-fit inline-flex gap-4 items-center`}
+                  >
+                    <span className="text-white font-semibold ">Type</span>
+                    <span className={`${category.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} px-4 py-2 rounded-md`}>{category.category_type}</span>
+                  </h4>
+                  {/* Status */}
+                  <h4
+                    className={` w-fit text-xs md:text-sm inline-flex gap-4 items-center`}
+                  >
+                    <span className="text-white font-semibold ">Status</span>
+                    <span className={`bg-background-primary/30 px-4 py-2 rounded-md ${isActive ? "text-green-600" : "text-amber-600"}`}>{isActive ? "ENABLED" : "DISABLED"}</span>
+                  </h4>
+                </div>
+              );
+            })}
+        </main>
+        
+
+
+        {/* ----------------------------------------
+
+                           Footer 
+
+        ------------------------------------------*/}
         <footer>
-          <div className="flex bg-background-secondary justify-between px-6 py-4 border-t-4 border-border">
+          <div className="flex bg-background-secondary justify-between px-6 py-6 ">
             {/* =================== */}
             {/* PREV */}
             {/* =================== */}
