@@ -88,7 +88,7 @@ export default function TopSellingProductsChart() {
       {/* ================================= */}
       {/* Filter range*/}
       {/* ================================= */}
-      <div className="w-full mb-4 flex flex-wrap gap-4">
+      <div className="w-full mb-4 flex flex-wrap gap-2">
         {RANGES.map((range) => {
           return (
             <button

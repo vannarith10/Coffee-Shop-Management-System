@@ -67,10 +67,9 @@ export default function UpdateStockStatus({
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between bg-background-primary/50 backdrop-blur-md border-border border-4 h-[60vh] md:h-[70vh] min-h-150 w-[80vw] md:w-[50vw] xl:w-[40vw] rounded-4xl p-8"
+        className="flex flex-col justify-between bg-background-primary backdrop-blur-md border-border border-4 h-[60vh] md:h-[70vh] min-h-150 w-[80vw] md:w-[50vw] xl:w-[40vw] p-4"
       >
-        {/*  */}
-        {/*  */}
+        
         <div className="flex flex-col gap-6">
           {/*  */}
           {/* Form Header | Name & Icon */}
@@ -84,10 +83,11 @@ export default function UpdateStockStatus({
             <h4 className="text-lg font-semibold text-yellow-500">
               {product.name}
             </h4>
+            {/* Current stock */}
             <div className="flex gap-2 items-center justify-center mt-4">
               <h5 className="font-semibold text-xs">Current stock:</h5>
               <span
-                className={`text-sm font-bold ${config.colorClass} px-1 rounded-xs`}
+                className={`text-sm text-white font-bold ${config.colorClass} px-4 py-2 rounded-xs`}
               >
                 {config.label}
               </span>
@@ -128,7 +128,7 @@ export default function UpdateStockStatus({
         {/* ============================================= */}
         {/* Bottom Buttons | Cance & Update*/}
         {/* ============================================= */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => onClose()}

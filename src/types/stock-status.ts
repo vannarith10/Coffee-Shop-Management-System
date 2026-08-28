@@ -35,7 +35,7 @@ export const STATUS_OPTIONS: {
     description: "Stock level is healthy",
     accent: "accent-green-600",
     border: "border-green-500",
-    bg: "bg-background-secondary",
+    bg: "bg-green-500/50",
     color:  "green-600",
   },
   {
@@ -44,7 +44,7 @@ export const STATUS_OPTIONS: {
     description: "Stock is running low",
     accent: "accent-yellow-600",
     border: "border-yellow-500",
-    bg: "bg-background-secondary",
+    bg: "bg-yellow-500/50",
     color:  "amber-600",
   },
   {
@@ -53,7 +53,7 @@ export const STATUS_OPTIONS: {
     description: "Out of stock",
     accent: "accent-red-600",
     border: "border-red-500",
-    bg: "bg-background-secondary",
+    bg: "bg-red-500/50",
     color:  "red-600",
   },
 ];
