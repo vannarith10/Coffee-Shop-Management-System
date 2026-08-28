@@ -10,6 +10,7 @@ import { ListSortAscending } from "lucide-react";
 import { useCategory } from "../../hooks/useCategory.ts";
 import { getPageNumbers } from "../../utils/page-numbers.ts";
 import { AnimatePresence } from "framer-motion";
+import PageHeader from "../ui/PageHeader.tsx";
 
 export default function ListCategory() {
   const [page, setPage] = useState(1);
@@ -63,43 +64,19 @@ export default function ListCategory() {
         {/* ======================== */}
         {/* HEADER */}
         {/* ======================== */}
-        <header>
-          {/* Icon & Pagination Info */}
-          <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
-            <div className="flex gap-4">
-              <ListSortAscending />
-              <h3 className="font-semibold">Category</h3>
-            </div>
-            {/*  */}
-            {/* Pages and Items */}
-            {!isLoading && !isError && (
-              <div className="flex items-center gap-4">
-                <div hidden={isRefetching}>
-                  <h4 className="font-semibold text-xs text-text-secondary">
-                    Page {currentPage} of {totalPages}
-                  </h4>
-                  <h4 className="font-semibold text-sm">
-                    Categories: {totalItems}
-                  </h4>
-                </div>
-                {/* refetch button */}
-                <button
-                  onClick={() => refetch()}
-                  className="cursor-pointer rounded-full active:scale-80 outline-none transition-all duration-300 ease-out"
-                >
-                  {isRefetching ? (
-                    <TextLoader
-                      text="Syncing..."
-                      className="text-xs md:text-sm"
-                    />
-                  ) : (
-                    <RotateCcw />
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-        </header>
+        <PageHeader
+          headerIcon={<ListSortAscending />}
+          headerTitle="Category"
+          isLoading={isLoading}
+          isError={isError}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          refetch={refetch}
+          isRefetching={isRefetching}
+        />
+        
+        
 
         {/* ====================== */}
         {/* Loading */}

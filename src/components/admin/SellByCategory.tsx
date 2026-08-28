@@ -73,27 +73,30 @@ const SellByCategory = () => {
   }));
 
   return (
-    <section className="min-h-100 bg-background-secondary p-6 gap-4 flex flex-col rounded-lg border-2 border-border">
+    <section className="min-h-100 bg-background-secondary p-4 gap-4 flex flex-col rounded-lg border-2 border-border">
       {/* ================================ */}
       {/* Title */}
       {/* ================================ */}
-      <div className="flex justify-between">
+      <div className="flex justify-between ">
         <div>
-          <h3 className="text-xl font-bold">Sales by Category</h3>
-          <p className="text-text-secondary text-sm">
+          <h3 className="text-sm sm:text-lg md:text-sm lg:text-lg xl:text-xl font-bold">
+            Sales by Category
+          </h3>
+          <p className="text-text-secondary text-xs sm:text-sm md:text-xs lg:text-sm xl:text-lg">
             Revenue distribution across product lines
           </p>
         </div>
         <div>
           <button
             onClick={() => refetch()}
-            className="col-start-2 xl:col-start-4 flex justify-center gap-2 items-center bg-background-secondary py-2 px-4 rounded-md border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
+            className="col-start-2 xl:col-start-4 text-xs sm:text-sm md:text-xs lg:text-sm xl:text-lg flex justify-center items-center gap-2 bg-background-secondary py-2 px-4 rounded-md border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
             {isRefetching ? (
               "Syncing..."
             ) : (
               <>
-                Refresh <RotateCcw />
+                Refresh{" "}
+                <RotateCcw className="size-4 sm:size-6 md:size-4 lg:size-6 xl:size-8" />
               </>
             )}
           </button>
@@ -103,7 +106,7 @@ const SellByCategory = () => {
       {/* ================================= */}
       {/* Filter range*/}
       {/* ================================= */}
-      <div className="w-full mb-4 flex flex-wrap gap-4">
+      <div className="w-full flex flex-wrap gap-2 ">
         {RANGES.map((range) => {
           return (
             <button
@@ -144,45 +147,117 @@ const SellByCategory = () => {
         </div>
       )}
 
-      {/* ==================================================== */}
-      {/* ================| Donuts container |==================*/}
-      {/* ==================================================== */}
+      {/* --------------------------------------------------
+                        *
+                        Donuts container
+                        *
+      --------------------------------------------------- */}
       {!isLoading && !isError && (
-        <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-6">
-          {/* ================================================= */}
-          {/* Donut | Category Name*/}
-          {/* ================================================= */}
-          <div>
-            <div className="h-100">
-              <ResponsivePie
-                data={chartData}
-                colors={(d) => d.data.color}
-                margin={{ top: 40, right: 100, bottom: 40, left: 100 }}
-                innerRadius={0.5}
-                padAngle={1}
-                cornerRadius={2}
-                activeOuterRadiusOffset={8}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor={(d) => d.data.color}
-                arcLinkLabelsThickness={2}
-                arcLinkLabelsColor={{ from: "color" }}
-                arcLinkLabel={(d) => d.data.label}
-                arcLabelsSkipAngle={10}
-                arcLabelsTextColor={{
-                  from: "color",
-                  modifiers: [["darker", 4]],
-                }}
-                // ---------------------------------------
-                //   Tooltip
-                // ---------------------------------------
-                tooltip={({ datum }) => (
-                  <div className="bg-background-secondary/10 backdrop-blur-sm px-4 py-2 border border-border rounded-md">
-                    <strong className="whitespace-nowrap" style={{ color: datum.color }}>
-                      {datum.label}
-                    </strong>
-                    <br />
+        <div className="flex flex-col gap-4">
+          {/* -----------------------------
+                Donut of Category Name
+          ------------------------------ */}
+          <div className=" bg-background-secondary-hover rounded-md p-4">
+            <h2 className="font-bold text-sm sm:text-lg md:text-sm lg:text-lg xl:text-sl">
+              Sale By Category Name
+            </h2>
+            <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2  ">
+              <div className="h-80 max-h-80 ">
+                <ResponsivePie
+                  data={chartData}
+                  colors={(d) => d.data.color}
+                  margin={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                  innerRadius={0.5}
+                  padAngle={2}
+                  activeOuterRadiusOffset={10} // hover
+                  enableArcLinkLabels={false}
+                  arcLabelsTextColor={{
+                    from: "color",
+                    modifiers: [["darker", 4]],
+                  }}
+                  // ---------------------------------------
+                  //   Tooltip
+                  // ---------------------------------------
+                  tooltip={({ datum }) => (
+                    <div className="bg-background-secondary/10 backdrop-blur-sm px-4 py-2 border border-border rounded-md">
+                      <strong
+                        className="whitespace-nowrap"
+                        style={{ color: datum.color }}
+                      >
+                        {datum.label}
+                      </strong>
+                      <br />
+                      {hasData && (
+                        <>
+                          <span className="whitespace-nowrap">
+                            Revenue: ${datum.value}
+                          </span>
+                          <br />
+                          <span className="whitespace-nowrap">
+                            Share:{" "}
+                            {((datum.value / totalRevenue) * 100).toFixed(1)}%
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
+              {/* ========================================================= */}
+              {/* Custom Legends */}
+              {/* ========================================================= */}
+              <div className="flex flex-wrap gap-2 items-centers justify-center content-center ">
+                {chartData.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{ backgroundColor: item.color }}
+                    className={`h-fit w-fit text-xs sm:text-sm md:text-xs lg:text-sm flex items-center gap-2 bg-background-secondary-hovers px-2 sm:px-4 py-2 rounded-md `}
+                  >
+                    <span className="text-white font-bold text-xs sm:text-sm">
+                      {item.label}
+                    </span>
                     {hasData && (
-                      <>
+                      <span className="font-bold text-xs sm:text-sm">
+                        {((item.value / totalRevenue) * 100).toFixed(1)}%
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* -----------------------------
+                Donut of Category Type
+          ------------------------------ */}
+          {hasData && (
+            <div className=" bg-background-secondary-hover p-4 rounded-md">
+              <h2 className="font-bold text-sm sm:text-lg md:text-sm lg:text-lg xl:text-sl">
+                Sale By Category Name
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+                <div className="h-80 max-h-80">
+                  <ResponsivePie
+                    data={categoryTypeData}
+                    colors={(d) => d.data.color}
+                    margin={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                    innerRadius={0.5}
+                    padAngle={2}
+                    activeOuterRadiusOffset={10} // hover
+                    enableArcLinkLabels={false}
+                    arcLabelsTextColor={{
+                      from: "color",
+                      modifiers: [["darker", 4]],
+                    }}
+                    // ---------------------------------------
+                    //   Tooltip
+                    // ---------------------------------------
+                    tooltip={({ datum }) => (
+                      <div className="bg-background-secondary/10 backdrop-blur-sm px-4 py-2 border border-border rounded-md">
+                        <strong style={{ color: datum.color }}>
+                          {datum.label}
+                        </strong>
+                        <br />
                         <span className="whitespace-nowrap">
                           Revenue: ${datum.value}
                         </span>
@@ -191,93 +266,32 @@ const SellByCategory = () => {
                           Share:{" "}
                           {((datum.value / totalRevenue) * 100).toFixed(1)}%
                         </span>
-                      </>
+                      </div>
                     )}
-                  </div>
-                )}
-              />
-            </div>
-            {/* ========================================================= */}
-            {/* Custom Legends */}
-            {/* ========================================================= */}
-            <div className="flex flex-wrap gap-2 items-center justify-center">
-              {chartData.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-4 bg-background-secondary-hover px-2 py-1 rounded-md"
-                >
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-white text-sm">{item.label}</span>
-                  {hasData && <span>{((item.value / totalRevenue) * 100).toFixed(1)}%</span>}
                 </div>
-              ))}
-            </div>
-          </div>
-          {/* =============================================================================================== */}
-          {/* Donut | Category Type*/}
-          {/* =============================================================================================== */}
-          {hasData && (<div className="flex flex-col border-t border-border mt-6 xl:mt-0 xl:border-none">
-            <div className="h-100 col-span-2">
-              <ResponsivePie
-                data={categoryTypeData}
-                colors={(d) => d.data.color}
-                margin={{ top: 40, right: 100, bottom: 40, left: 100 }}
-                innerRadius={0.5}
-                padAngle={1}
-                cornerRadius={2}
-                activeOuterRadiusOffset={8}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor={(d) => d.data.color}
-                arcLinkLabelsThickness={2}
-                arcLinkLabelsColor={{ from: "color" }}
-                arcLinkLabel={(d) => d.data.label}
-                arcLabelsSkipAngle={10}
-                arcLabelsTextColor={{
-                  from: "color",
-                  modifiers: [["darker", 4]],
-                }}
-                // ---------------------------------------
-                //   Tooltip
-                // ---------------------------------------
-                tooltip={({ datum }) => (
-                  <div className="bg-background-secondary/10 backdrop-blur-sm px-4 py-2 border border-border rounded-md">
-                    <strong style={{ color: datum.color }}>
-                      {datum.label}
-                    </strong>
-                    <br />
-                    <span className="whitespace-nowrap">
-                      Revenue: ${datum.value}
-                    </span>
-                    <br />
-                    <span className="whitespace-nowrap">
-                      Share: {((datum.value / totalRevenue) * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                )}
-              />
-            </div>
-            {/* ========================================================= */}
-            {/* Custom Legends | Category Type*/}
-            {/* ========================================================= */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {categoryTypeData.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-4 bg-background-secondary-hover px-2 py-1 rounded-md"
-                >
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: item.color }}
-                  />
-                  <span className="text-white text-sm">{item.label}</span>
-                  <span>{((item.value / totalRevenue) * 100).toFixed(1)}%</span>
+                {/* ========================================================= */}
+                {/* Custom Legends | Category Type*/}
+                {/* ========================================================= */}
+                <div className="flex flex-wrap items-center justify-center content-center gap-2 ">
+                  {categoryTypeData.map((item) => (
+                    <div
+                      key={item.id}
+                      style={{ backgroundColor: item.color }}
+                      className="h-fit w-fit text-xs sm:text-sm md:text-xs lg:text-sm flex items-center gap-2 bg-background-secondary-hover px-2 sm:px-4 py-2 rounded-md"
+                    >
+                      <span className="text-white font-bold text-xs sm:text-sm">
+                        {item.label}
+                      </span>
+                      <span className="font-bold text-xs sm:text-sm">
+                        {((item.value / totalRevenue) * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-          </div>)}
+          )}
         </div>
       )}
     </section>

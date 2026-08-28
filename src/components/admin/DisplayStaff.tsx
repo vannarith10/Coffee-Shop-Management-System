@@ -17,6 +17,7 @@ import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
 import { AnimatePresence } from "framer-motion";
 import { COLORS } from "../../utils/colors";
 import { ROLES } from "../../types/role";
+import PageHeader from "../ui/PageHeader";
 
 export default function DisplayStaff() {
   const [page, setPage] = useState(1);
@@ -73,41 +74,20 @@ export default function DisplayStaff() {
         {/* -----------------------------------
                       Header
         ------------------------------------ */}
-        <header>
-          {/* Icon & Pagination Info */}
-          <div className="w-full p-6 flex flex-col gap-4 justify-between items-start bg-background-secondary-hover">
-            <div className="flex gap-4 items-center ">
-              <ContactRound />
-              <h3 className="font-semibold text-lg text-nowrap">Employee Profiles</h3>
-            </div>
-            {/*  */}
-            {/* Pages and Items */}
-            {!isLoading && !isError && (
-              <div className="w-full flex justify-between items-center gap-4">
-                <div>
-                  <h4 className="font-semibold text-xs text-text-secondary">
-                    Page {currentPage} of {totalPages}
-                  </h4>
-                  <h4 className="font-semibold text-sm">
-                    Profiles: {totalItems}
-                  </h4>
-                </div>
-                <button
-                  onClick={() => refetch()}
-                  className="px-4 py-2 text-sm flex items-center gap-2 font-semibold bg-background-secondary rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
-                >
-                  {isRefetching ? (
-                    "Syncing..."
-                  ) : (
-                    <>
-                      Refresh <RotateCcw size={20} />
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-        </header>
+        <PageHeader
+          headerIcon={<ContactRound />}
+          headerTitle="Employee Profiles"
+          isLoading={isLoading}
+          isError={isError}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          refetch={refetch}
+          isRefetching={isRefetching}
+        />
+
+
+
         {/* ================================ */}
         {/* List down each RECORD of profile */}
         {/* MAIN */}

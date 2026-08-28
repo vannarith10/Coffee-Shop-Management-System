@@ -1,7 +1,11 @@
 // hooks/useProduct.ts
 // TanStack
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import type { AdminProductResponse } from "../types/product";
 import { getAllProducts } from "../services/admin/product";
 import { useEffect } from "react";
@@ -20,16 +24,8 @@ export function useAdminProduct({
   categoryName: string | null;
   keyword: string | null;
 }) {
-
   const queryClient = useQueryClient();
-  const queryKey = [
-    "product",
-    page,
-    size,
-    categoryType,
-    categoryName,
-    keyword,
-  ];
+  const queryKey = ["product", page, size, categoryType, categoryName, keyword];
 
   // ==========================
   // Fetch data
@@ -45,12 +41,13 @@ export function useAdminProduct({
           categoryName,
           keyword,
         }).then((res) => res.data),
+      placeholderData: keepPreviousData, // keep the current data while querying for new resource rather than set data to undefined.
       staleTime: 1000 * 60 * 10,
       gcTime: 1000 * 60 * 30,
     });
 
   // =============================
-  // Fetch next page
+  //       Fetch next page
   // =============================
   const totalPages = data?.pagination.total_pages ?? 1;
   useEffect(() => {
@@ -67,13 +64,14 @@ export function useAdminProduct({
         categoryName,
         keyword,
       ],
+
       queryFn: () =>
         getAllProducts({
           page: nextPage,
           size,
           categoryType,
           categoryName,
-          keyword
+          keyword,
         }).then((res) => res.data),
       staleTime: 1000 * 60 * 10,
       gcTime: 1000 * 60 * 30,

@@ -15,6 +15,7 @@ import {
   Box,
   Calendar,
   CalendarDays,
+  Camera,
   ChartBarStacked,
   CircleDollarSign,
   DollarSign,
@@ -42,7 +43,7 @@ export default function ProductDetailPage() {
   const [isOpen, setIsOpen] = useState(true);
   const { id } = useParams<{ id: string }>();
   const safeId = id ?? "";
-  const { product, isLoading, isError } = useGetASingleProduct({ id: safeId });
+  const { data:product, isLoading, isError } = useGetASingleProduct({ id: safeId });
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   // NEW
@@ -223,7 +224,7 @@ export default function ProductDetailPage() {
           <>
             <main
               onClick={(e) => e.stopPropagation()}
-              className="flex flex-col gap-6 overflow-y-scroll scrollbar-hide w-[90vw] max-h-[90vh] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
+              className="flex flex-col gap-6 overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] max-h-[90vh] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
             >
               {/* ---------------------------------
                            Form header
@@ -239,14 +240,14 @@ export default function ProductDetailPage() {
                             Product Image
                             *
               -------------------------------------------- */}
-              <div className=" flex justify-center items-center ">
+              <div className={` flex justify-center items-center bg-background-secondary mx-6 p-6 rounded-lg border-2 ${isEditing? "border-green-500" : "border-border"}`}>
                 {isLoading && <TextLoader text="Loading image..." />}
                 {!isLoading && !isError && (
                   <>
                     {/* CLICKABLE IMAGE */}
                     <label
                       htmlFor="imageUpload"
-                      className={`w-40 h-40 sm:w-50 sm:h-50 md:w-60 md:h-60 lg:w-70 lg:h-70 xl:w-80 xl:h-80 relative block cursor-pointer border-2 ${isEditing ? "border-green-500" : "border-border"} `}
+                      className={`group w-40 h-40 sm:w-50 sm:h-50 md:w-60 md:h-60 lg:w-70 lg:h-70 xl:w-80 xl:h-80 relative block cursor-pointer border-2 ${isEditing ? "border-green-500" : "border-border"} `}
                     >
                       <img
                         src={preview || DefaultPicture}
@@ -257,7 +258,8 @@ export default function ProductDetailPage() {
                         hidden={!isEditing}
                         className={` absolute bg-black/30 backdrop-blur-xs w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400 active:text-gray-200`}
                       >
-                        <Image size={56} className="text-white" />
+
+                        <Camera className="size-10 group-hover:size-12 text-white transition-all duration-300 ease-out"/>
                       </span>
                     </label>
 

@@ -1,7 +1,7 @@
 // hooks/useCategoryStatusSummary.ts
 // Tanstack
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCategoryStatusSummary } from "../services/admin/category";
 import type { CategoryStatusSummaryResponse } from "../types/category";
 import { useCategoryStatusUpdate } from "./websockets/useCategoryStatusSummaryUpdate";
@@ -14,6 +14,7 @@ export function useCategoryStatusSummary() {
     useQuery<CategoryStatusSummaryResponse>({
       queryKey,
       queryFn: () => getCategoryStatusSummary().then((res) => res.data),
+      placeholderData: keepPreviousData,
       staleTime: 1000 * 60 * 10,
       gcTime: 1000 * 60 * 30,
     });

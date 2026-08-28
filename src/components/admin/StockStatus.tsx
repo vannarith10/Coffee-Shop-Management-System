@@ -11,10 +11,11 @@ import TextLoader from "../ui/TextLoader";
 import { useStockStatus } from "../../hooks/useStockStatus";
 import { getPageNumbers } from "../../utils/page-numbers";
 import { AnimatePresence } from "framer-motion";
+import PageHeader from "../ui/PageHeader";
 
 export default function StockStatus() {
   const [page, setPage] = useState(1);
-  const size = 10;
+  const size = 20;
 
   // Select a product and pass to Update Form
   const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(
@@ -22,7 +23,7 @@ export default function StockStatus() {
   );
 
   // Retreive data from hook
-  const { product, isLoading, isError, refetch } = useStockStatus({
+  const { data:product, isLoading, isError, refetch, isRefetching } = useStockStatus({
     page,
     size,
   });
@@ -40,6 +41,7 @@ export default function StockStatus() {
   const totalPages = product?.pagination.total_pages ?? 1;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
+  const totalItems = product?.pagination.total_items ?? 0;
   //
   function handlePrev() {
     if (hasPrev) {
@@ -64,23 +66,18 @@ export default function StockStatus() {
         {/* Header of Stock Status Board */}
         {/* Stock Status Title */}
         {/* ========================================= */}
-        <div className="w-full p-6 flex justify-between items-center bg-background-secondary-hover">
-          <div className="flex gap-4">
-            <Layers2 />
-            <h3 className="font-semibold">Stoct Status</h3>
-          </div>
-          {/* Pages and Items */}
-          {!isLoading && !isError && (
-            <div>
-              <h4 className="font-semibold text-xs text-text-secondary">
-                Page {currentPage} of {totalPages}
-              </h4>
-              <h4 className="font-semibold text-sm">
-                Total Items: {product?.pagination.total_items ?? 0}
-              </h4>
-            </div>
-          )}
-        </div>
+        <PageHeader
+          headerIcon={<Layers2 />}
+          headerTitle="Stock Status"
+          isLoading={isLoading}
+          isError={isError}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          refetch={refetch}
+          isRefetching={isRefetching}
+        />
+
 
         {/* =============================================== */}
         {/* Header of item columns | column name */}
@@ -128,8 +125,6 @@ export default function StockStatus() {
                 key={p.id}
                 className=" grid grid-cols-4 items-center px-6 py-4 text-xs xl:text-base border-t border-border-hover hover:bg-background-secondary-hover"
               >
-
-
                 {/* ---------------------------------
                         Name & Category
                 ---------------------------------- */}
@@ -145,19 +140,17 @@ export default function StockStatus() {
                   </div>
                 </div>
 
-
                 {/* Current Stock Label */}
                 <h4 className="font-bold">Comming soon</h4>
-
 
                 {/* ---------------------------------
                         Status & Button
                 ---------------------------------- */}
-                <div
-                  className={` w-full flex flex-col gap-2 `}
-                >
+                <div className={` w-full flex flex-col gap-2 `}>
                   {/* status label */}
-                  <span className={`${config.colorClass} w-fit px-4 py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}>
+                  <span
+                    className={`${config.colorClass} w-fit px-4 py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}
+                  >
                     {config.label}
                   </span>
                   {/* Update Stock Status Button */}
@@ -168,7 +161,6 @@ export default function StockStatus() {
                     Restock
                   </button>
                 </div>
-
               </div>
             );
           })}

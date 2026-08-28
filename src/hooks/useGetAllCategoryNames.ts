@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getAllCategoryNames } from "../services/admin/category";
 
 interface NameTypeResponse {
@@ -13,6 +13,7 @@ export function useGetAllCategoryNames() {
   const { data, isLoading, isError, isRefetching, refetch } = useQuery<NameTypeResponse[]>({
     queryKey,
     queryFn: () => getAllCategoryNames().then((res) => res.data),
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10,
     gcTime: 1000 * 60 * 10,
   });

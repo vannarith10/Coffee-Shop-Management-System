@@ -59,13 +59,16 @@ const RevenueTrends = () => {
       {/* ================================ */}
       {/* Title */}
       {/* ================================ */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col gap-4 sm:flex-row justify-between items-start">
         <div>
-          <h3 className="text-xl font-bold">Revenue Trends</h3>
-          <p className="text-text-secondary text-sm">
+          <h3 className="text-sm sm:text-lg md:text-sm lg:text-lg xl:text-xl font-bold">
+            Revenue Trends
+          </h3>
+          <p className="text-text-secondary text-xs sm:text-sm md:text-xs lg:text-sm xl:text-lg">
             Daily revenue distribution for the current period
           </p>
         </div>
+
 
         {/* --------------------------- */}
         {/* Date picker */}
@@ -73,19 +76,19 @@ const RevenueTrends = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setMonthOpen(true)}
-            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+            className="px-4 py-2 text-xs sm:text-sm border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
           >
             {value.format("MMMM")}
           </button>
           <button
             onClick={() => setYearOpen(true)}
-            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+            className="px-4 py-2 text-xs sm:text-sm border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
           >
             {value.format("YYYY")}
           </button>
           <button
             onClick={() => setValue(dayjs())}
-            className="px-4 py-2 border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
+            className="px-4 py-2 text-xs sm:text-sm border border-border rounded-md cursor-pointer hover:bg-background-secondary-hover"
           >
             Now
           </button>

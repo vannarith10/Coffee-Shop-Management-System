@@ -3,7 +3,7 @@
 //
 import { useEffect, useState } from "react";
 import { getAllCategories } from "../services/admin/category";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Category, GetAllCategoriesResponse } from "../types/category";
 import { useCategoryCreate } from "./websockets/useCategoryCreate";
 
@@ -22,6 +22,7 @@ export function useCategory(page: number = 1, size: number = 10) {
     useQuery<GetAllCategoriesResponse>({
       queryKey,
       queryFn: () => getAllCategories({ page, size }).then((res) => res.data),
+      placeholderData: keepPreviousData,
       staleTime: 1000 * 60 * 10,
       gcTime: 1000 * 60 * 30,
     });

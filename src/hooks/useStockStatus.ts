@@ -15,23 +15,23 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
   const queryKey = ["productStatus", page, size];
 
-  // Fetch Product Stock
-  async function fetchStockStatus() {
-    const response = await getAllProductsStatus({ page, size });
-    return response.data;
-  }
 
-  // 1. Manage API query
-  const { data, isLoading, isError, refetch } = useQuery({
+  // ---------------------------------------
+  // 1. Fetch Data
+  // ---------------------------------------
+  const {data, isLoading, isError, error, refetch, isRefetching, isRefetchError} = useQuery<StockStatusResponse>({
     queryKey,
-    queryFn: fetchStockStatus,
+    queryFn: () => getAllProductsStatus({page, size}).then(res => res.data as StockStatusResponse),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10, // 10 minutes (Fresh)
     gcTime: 1000 * 60 * 30, // 30 minutes (Garbage Collection)
   });
 
+
+
+  // ---------------------------------------
   // 2. Fetch next page automatically
-  // =======================================
+  // ---------------------------------------
   const product = data as StockStatusResponse | undefined;
   const totalPages = product?.pagination?.total_pages ?? 1;
   useEffect(() => {
@@ -48,7 +48,11 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     });
   }, [data, page, totalPages, queryClient, size]);
 
+
+
+  // ---------------------------------------
   // 3. WebSocket
+  // ---------------------------------------
   useProductStockStatusUpdate({
     onStockStatusUpdate: (updatedProduct: ProductStock) => {
       queryClient.setQueryData(queryKey, (oldData: StockStatusResponse) => {
@@ -64,5 +68,6 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     },
   });
 
-  return { product: data ?? null, isLoading, isError, refetch };
+
+  return {data, isLoading, isError, error, refetch, isRefetching, isRefetchError}
 }

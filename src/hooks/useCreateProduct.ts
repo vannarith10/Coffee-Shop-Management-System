@@ -20,7 +20,7 @@ export function useCreateProduct(onAction?: () => void) {
         toast.success("Product created", { duration: 3000 });
       }
 
-      onAction?.(); // Optional chaining, it is like this statement: if(onAction){onAction();}
+      onAction?.(); // Optional chaining, it's like this statement: if(onAction){onAction();} runs the function we pass to it.
     },
 
     onError: (error) => {
