@@ -1,6 +1,6 @@
+//
 // components/EditCategory.tsx
 //
-
 import { useState } from "react";
 import {
   CATEGORY_TYPES_ARRAY,
@@ -10,41 +10,31 @@ import {
   type PatchCategoryRequest,
 } from "../../types/category";
 import TextLoader from "../ui/TextLoader";
-import { patchCategory } from "../../services/admin/category";
 import { toast } from "sonner";
-import { X } from "lucide-react";
 import MyPopupForm from "../animation/MyPopupForm";
-import { AnimatePresence } from "framer-motion";
-import MyDialogClose from "../animation/MyDialogClose";
 import FormHeader from "../animation/FormHeader";
+import { useUpdateCategory } from "../../hooks/category/useUpdateCategory";
 
-interface EditCategory {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   category: Category;
-}
+};
 
-export default function EditCategory({
-  isOpen,
-  onClose,
-  category,
-}: EditCategory) {
+export default function EditCategory({ isOpen, onClose, category }: Props) {
   const [categoryName, setCategoryName] = useState<string | null>(null);
   const [categoryType, setCategoryType] = useState<CATEGORY_TYPE>(
     category.category_type,
   );
   const [isActive, setIsActive] = useState<boolean>(category.is_active);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
+  const { mutate: updateCategory, isPending, isError } = useUpdateCategory();
 
   //=======================
   // Submit
   //=======================
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsLoading(true);
-    setIsError(false);
+
     const data: PatchCategoryRequest = {
       new_name: categoryName === category.category_name ? null : categoryName,
       new_type: categoryType === category.category_type ? null : categoryType,
@@ -52,25 +42,25 @@ export default function EditCategory({
     };
     const allNull = Object.values(data).every((value) => value === null);
 
-    try {
-      if (allNull) {
-        toast.warning("Need at least one edited field to update", {
-          duration: 3000,
-        });
-        return;
-      }
-      const res = await patchCategory({
-        categoryId: category.category_id,
-        data: data,
+    if (allNull) {
+      toast.warning("Need at least one edited field to update", {
+        duration: 3000,
       });
-      if (res.status == 200) onClose();
-    } catch (error) {
-      console.error(error);
-      setIsError(true);
-      toast.error("Error updating category", { duration: 3000 });
-    } finally {
-      setIsLoading(false);
     }
+
+    updateCategory(
+      { id: category.category_id, new_data: data },
+      {
+        onError: (error) => {
+          toast.error(error.response?.data.detail);
+        },
+
+        onSuccess: () => {
+          toast.success("Category updated successfully", { duration: 5000 });
+          onClose();
+        },
+      },
+    );
   }
 
   if (!isOpen) return null;
@@ -89,7 +79,6 @@ export default function EditCategory({
           onClose={onClose}
           className="w-full sticky top-0 z-100"
         />
-
 
         {/* ================================= */}
         {/* Name input*/}
@@ -179,7 +168,7 @@ export default function EditCategory({
           >
             {isError ? (
               "Try again"
-            ) : isLoading && !isError ? (
+            ) : isPending && !isError ? (
               <TextLoader text="Submitting..." />
             ) : (
               "Submit"

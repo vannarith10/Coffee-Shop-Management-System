@@ -21,7 +21,7 @@ export default function TopSellingProductsChart() {
   // const [page, setPage] = useState(1);
   const page = 1;
   const size = 20;
-  const [selectedRange, setSelectedRange] = useState<Range>("ALL");
+  const [selectedRange, setSelectedRange] = useState<Range>("TODAY");
 
   const {topSelling, isLoading, isError, refetch, isRefetching} = useTopSellingProduct({range:selectedRange, page, size});
 

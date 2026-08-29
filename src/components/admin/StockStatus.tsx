@@ -1,3 +1,4 @@
+//
 // components/StockStatus.tsx
 //
 import { Layers2 } from "lucide-react";
@@ -42,30 +43,17 @@ export default function StockStatus() {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
   const totalItems = product?.pagination.total_items ?? 0;
-  //
-  function handlePrev() {
-    if (hasPrev) {
-      setPage((p) => p - 1);
-    }
-  }
-  //
-  function handleNext() {
-    if (hasNext) {
-      setPage((p) => p + 1);
-    }
-  }
-  //
-  function handlePageClick(pageNum: number) {
-    setPage(pageNum);
-  }
+  const handlePrev = () => hasPrev && setPage(p => p - 1);
+  const handleNext = () => hasNext && setPage(p => p + 1);
+  const handlePageClick = (pageNum: number) => setPage(pageNum); 
+
 
   return (
     <>
       <section className="w-full bg-background-secondary text-text-primary rounded-lg mt-4 overflow-hidden border-border border-2">
-        {/* ========================================= */}
-        {/* Header of Stock Status Board */}
-        {/* Stock Status Title */}
-        {/* ========================================= */}
+        {/* ------------------------------------
+                        Header
+        ------------------------------------- */}
         <PageHeader
           headerIcon={<Layers2 />}
           headerTitle="Stock Status"
@@ -78,15 +66,6 @@ export default function StockStatus() {
           isRefetching={isRefetching}
         />
 
-
-        {/* =============================================== */}
-        {/* Header of item columns | column name */}
-        {/* =============================================== */}
-        <div className="grid grid-cols-4 bg-sidebar text-text-secondary p-4 px-6 text-[10px] md:text-sm xl:text-sm font-bold uppercase">
-          <h4 className="col-span-2">Item Name / Category</h4>
-          <h4>Current Stock</h4>
-          <h4 className="text-right w-full">Status / Action</h4>
-        </div>
 
         {/* ===================================== */}
         {/* Handle Loading */}
@@ -140,8 +119,6 @@ export default function StockStatus() {
                   </div>
                 </div>
 
-                {/* Current Stock Label */}
-                <h4 className="font-bold">Comming soon</h4>
 
                 {/* ---------------------------------
                         Status & Button

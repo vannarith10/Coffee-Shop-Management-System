@@ -3,7 +3,7 @@
 //
 import { useEffect, useRef, useState } from "react";
 import type { Category } from "../../types/category.ts";
-import { Ellipsis, RotateCcw, SquarePen } from "lucide-react";
+import { Ellipsis, SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
@@ -33,15 +33,9 @@ export default function ListCategory() {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
 
-  const handlePrev = () => {
-    if (hasPrev) setPage((p) => p - 1);
-  };
-  const handleNext = () => {
-    if (hasNext) setPage((p) => p + 1);
-  };
-  function handlePageClick(pageNum: number) {
-    setPage(pageNum);
-  }
+  const handlePrev = () => hasPrev && setPage((p) => p - 1);
+  const handleNext = () => hasNext && setPage((p) => p + 1);
+  const handlePageClick = (pageNum: number) => setPage(pageNum);
 
   // Select a category to open Form edit
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -75,8 +69,6 @@ export default function ListCategory() {
           refetch={refetch}
           isRefetching={isRefetching}
         />
-        
-        
 
         {/* ====================== */}
         {/* Loading */}
@@ -87,9 +79,11 @@ export default function ListCategory() {
           </div>
         )}
 
-        {/* ============================ */}
-        {/* Items List */}
-        {/* ============================ */}
+        {/* ------------------------------------------------------
+                          *
+                          Category items list
+                          *
+        ------------------------------------------------------- */}
         <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
           {!isLoading &&
             category?.categories?.map((category) => {
@@ -97,12 +91,13 @@ export default function ListCategory() {
               const justUpdated = category.category_id === justUpdatedFieldId;
               const justCreated =
                 category.category_id === justCreatedCategoryId;
+              const disabled = !category.is_active;
 
               return (
                 <div
                   key={category.category_id}
                   ref={justCreated ? targetRef : null}
-                  className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
+                  className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">
                     {/* Name */}
@@ -122,21 +117,27 @@ export default function ListCategory() {
                     className={`text-xs md:text-sm w-fit inline-flex gap-4 items-center`}
                   >
                     <span className="text-white font-semibold ">Type</span>
-                    <span className={`${category.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} px-4 py-2 rounded-md`}>{category.category_type}</span>
+                    <span
+                      className={`${category.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} px-4 py-2 rounded-md`}
+                    >
+                      {category.category_type}
+                    </span>
                   </h4>
                   {/* Status */}
                   <h4
                     className={` w-fit text-xs md:text-sm inline-flex gap-4 items-center`}
                   >
                     <span className="text-white font-semibold ">Status</span>
-                    <span className={`bg-background-primary/30 px-4 py-2 rounded-md ${isActive ? "text-green-600" : "text-amber-600"}`}>{isActive ? "ENABLED" : "DISABLED"}</span>
+                    <span
+                      className={`bg-background-primary/30 px-4 py-2 rounded-md ${isActive ? "text-green-600" : "text-amber-600"}`}
+                    >
+                      {isActive ? "ENABLED" : "DISABLED"}
+                    </span>
                   </h4>
                 </div>
               );
             })}
         </main>
-        
-
 
         {/* ----------------------------------------
 

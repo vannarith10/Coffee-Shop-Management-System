@@ -1,13 +1,12 @@
-
-
 import api from "../../lib/axios";
 import type { Range } from "../../types/business-analytics";
-import type { CreateCategoryRequest, PatchCategoryRequest } from "../../types/category";
-
-
+import type {
+  CreateCategoryRequest,
+  PatchCategoryRequest,
+} from "../../types/category";
 
 //
-// GET ALL CATEGORIES
+// GET ALL
 //
 export async function getAllCategories({
   page,
@@ -20,10 +19,8 @@ export async function getAllCategories({
   return response;
 }
 
-
-
 //
-// PATCH CATEGORY
+// PATCH
 //
 export async function patchCategory({
   categoryId,
@@ -31,14 +28,12 @@ export async function patchCategory({
 }: {
   categoryId: string;
   data: PatchCategoryRequest;
-}) {
-  const response = await api.patch(`/api/v2/category/${categoryId}`, data);
-  return response;
+}) : Promise<void> {
+  return await api.patch(`/api/v2/category/${categoryId}`, data);
 }
 
-
 //
-// CREATE CATEGORY
+// CREATE
 //
 export async function createCategory({
   data,
@@ -49,7 +44,6 @@ export async function createCategory({
   return response;
 }
 
-
 //
 // GET CATEGORY STATUS
 //
@@ -58,14 +52,12 @@ export async function getCategoryStatusSummary() {
   return res;
 }
 
-
 //
-// Get All Category Names
+// Get All Names
 //
 export async function getAllCategoryNames() {
   return await api.get("/api/v2/category/names");
 }
-
 
 //
 // Get Sales By Category

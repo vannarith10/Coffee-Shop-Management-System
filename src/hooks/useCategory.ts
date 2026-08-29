@@ -18,6 +18,9 @@ export function useCategory(page: number = 1, size: number = 10) {
     string | null
   >(null);
   const queryKey = ["category", page, size];
+
+
+  // Fetch
   const { data, isLoading, isError, isRefetching, refetch } =
     useQuery<GetAllCategoriesResponse>({
       queryKey,
