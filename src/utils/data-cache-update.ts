@@ -1,7 +1,10 @@
 // utils/staff-cache.ts
 //
 
-import type { Category, GetAllCategoriesResponse } from "../types/category";
+import type {
+  Category,
+  GetAllCategoriesResponse,
+} from "../types/category/category";
 import type { ProductStock, StockStatusResponse } from "../types/product";
 import type { Staff, StaffProfileResponse } from "../types/staff";
 

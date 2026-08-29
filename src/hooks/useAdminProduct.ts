@@ -9,7 +9,7 @@ import {
 import type { AdminProductResponse } from "../types/product";
 import { getAllProducts } from "../services/admin/product";
 import { useEffect } from "react";
-import type { CATEGORY_TYPE } from "../types/category";
+import type { CATEGORY_TYPE } from "../types/category/category";
 
 export function useAdminProduct({
   page,

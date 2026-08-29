@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import type { Staff } from "../../types/staff";
 import { toast } from "sonner";
-import { websocketManager } from "../../websocket/websocket-manager";
+import { websocketManager } from "../websocket-manager";
 
 interface Props {
   //   Receives parameter of type Staff, returns nothing

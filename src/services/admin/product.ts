@@ -1,13 +1,10 @@
-
-
-
 import api from "../../lib/axios";
 import type { TopSellingProductRequest } from "../../types/business-analytics";
-import type { CATEGORY_TYPE } from "../../types/category";
-import type { AddNewProductRequest, UpdateProductRequest } from "../../types/product";
-
-
-
+import type { CATEGORY_TYPE } from "../../types/category/category";
+import type {
+  AddNewProductRequest,
+  UpdateProductRequest,
+} from "../../types/product";
 
 // Get all product
 // Filter
@@ -39,7 +36,6 @@ export async function getAllProducts({
   return await api.get("api/v2/product/get-all-products", { params });
 }
 
-
 //
 // Get a single product
 //
@@ -47,7 +43,6 @@ export async function getASingleProduct({ id }: { id: string }) {
   const res = await api.get(`/api/v2/product/get-a-single/${id}`);
   return res;
 }
-
 
 //
 // Add new Product
@@ -67,7 +62,6 @@ export async function addNewProduct({
   formData.append("image", image);
   return await api.post("/api/v2/product/add-new", formData);
 }
-
 
 //
 // Update product | PATCH
@@ -93,7 +87,6 @@ export async function patchProduct({
   return res;
 }
 
-
 //
 // Get All Products Status
 //
@@ -108,8 +101,7 @@ export const getAllProductsStatus = async ({
     `/api/v2/product/get-statuses?page=${page}&size=${size}`,
   );
   return response;
-}
-
+};
 
 //
 // Get top selling product to display at Admin Dashboard

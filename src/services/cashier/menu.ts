@@ -1,9 +1,5 @@
-
-
 import api from "../../lib/axios";
-import type { CATEGORY_TYPE } from "../../types/category";
-
-
+import type { CATEGORY_TYPE } from "../../types/category/category";
 
 //
 // Get Menu

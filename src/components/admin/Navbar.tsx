@@ -2,14 +2,14 @@
 // components/Navbar.tsx
 //
 import { useEffect, useState } from "react";
-import MenuSwitch from "./ui/MenuSwitch";
-import { links } from "../constants/navLinks";
+import MenuSwitch from "../ui/MenuSwitch";
+import { links } from "../../constants/navLinks";
 import { NavLink } from "react-router-dom";
-import ThemeSwitch from "./ui/ThemeSwitch";
-import LogoutButton from "./ui/LogoutButton";
-import { useGetShopNameAndLogo } from "../hooks/useGetShopNameAndLogo";
+import ThemeSwitch from "../ui/ThemeSwitch";
+import LogoutButton from "../ui/LogoutButton";
+import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
 import { motion } from "framer-motion";
-import ShopProfile from "./ui/ShopProfile";
+import ShopProfile from "../ui/ShopProfile";
 
 export default function Navbar() {
   const { data, isLoading, isError, isRefetching, refetch } =

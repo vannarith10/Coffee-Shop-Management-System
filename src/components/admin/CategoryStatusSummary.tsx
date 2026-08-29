@@ -1,3 +1,4 @@
+//
 // components/CategoryStatus.tsx
 //
 import {
@@ -14,7 +15,7 @@ import type { JSX } from "react/jsx-runtime";
 // Showing the numbers on the top of Category Tab
 //
 export default function CategoryStatus() {
-  const { statusSummary, isLoading, isError, isRefetching, refetch } =
+  const { statusSummary, isLoading, isError } =
     useCategoryStatusSummary();
 
   return (

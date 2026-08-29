@@ -16,7 +16,11 @@ export function useTopSellingProduct ({page, size, range}:{page:number, size:num
 
     const queryKey = ["top-selling-products", range, page, size];
 
+    // -----------------------------------------
+    //
     // 1. Fetch Data | Query
+    //
+    // -----------------------------------------
     const {data, isLoading, isError, error, refetch, isRefetching} = useQuery<TopSellingResponse, AxiosError<BackendErrorDetail>>({
         queryKey,
         queryFn: () =>  getTopSellingProduct({range, page, size}).then((res) => res.data as TopSellingResponse),

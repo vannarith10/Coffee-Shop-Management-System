@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import type { ProductStock } from "../../types/product";
 import { toast } from "sonner";
-import { websocketManager } from "../../websocket/websocket-manager";
+import { websocketManager } from "../websocket-manager";
 
 interface Props {
   onStockStatusUpdate: (product: ProductStock) => void;

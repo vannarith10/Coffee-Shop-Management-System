@@ -1,3 +1,13 @@
+// ----------------------------------------------------------------
+//
+// Name only
+//
+// Get all names for user when they update or create a new product,
+// so that they can see their category names
+// how many categories they have
+//
+// ----------------------------------------------------------------
+
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getAllCategoryNames } from "../services/admin/category";
 

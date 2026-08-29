@@ -1,15 +1,15 @@
 //
 // components/Sidebar.tsx
 //
-import NoImage from "../assets/no-image.webp"
-import ErrorImage from "../assets/error-image.jpg";
-import Loader from "./ui/Loader";
-import LogoutButton from "./ui/LogoutButton.tsx";
-import ThemeSwitch from "./ui/ThemeSwitch.tsx";
+import NoImage from "../../assets/no-image.webp";
+import ErrorImage from "../../assets/error-image.jpg";
+import Loader from "../ui/Loader.tsx";
+import LogoutButton from "../ui/LogoutButton.tsx";
+import ThemeSwitch from "../ui/ThemeSwitch.tsx";
 import { NavLink } from "react-router-dom";
-import { links } from "../constants/navLinks.ts";
-import { useGetShopNameAndLogo } from "../hooks/useGetShopNameAndLogo.ts";
-import TextLoader from "./ui/TextLoader.tsx";
+import { links } from "../../constants/navLinks.ts";
+import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo.ts";
+import TextLoader from "../ui/TextLoader.tsx";
 
 export default function Sidebar() {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -41,7 +41,11 @@ export default function Sidebar() {
           {/* Shop Name */}
           {/* ======================== */}
           <h1 className="font-bold shimmer shimmer-color-orange-500 text-foreground/40 uppercase  transition-all duration-300">
-            {(isLoading || isRefetching) && !isError ? <TextLoader text="Loading" /> : data?.name}
+            {(isLoading || isRefetching) && !isError ? (
+              <TextLoader text="Loading" />
+            ) : (
+              data?.name
+            )}
 
             {/* handle error */}
             {isError && (

@@ -6,7 +6,7 @@
 import { ClockFading, Minus, Plus, Trash2 } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import DefaultImage from "../../assets/image-default.jpg";
-import { CATEGORY_COLOR_CONFIG } from "../../types/category";
+import { CATEGORY_COLOR_CONFIG } from "../../types/category/category";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Checkout from "./Checkout";

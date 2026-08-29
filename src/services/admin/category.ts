@@ -3,7 +3,7 @@ import type { Range } from "../../types/business-analytics";
 import type {
   CreateCategoryRequest,
   PatchCategoryRequest,
-} from "../../types/category";
+} from "../../types/category/category";
 
 //
 // GET ALL
@@ -28,7 +28,7 @@ export async function patchCategory({
 }: {
   categoryId: string;
   data: PatchCategoryRequest;
-}) : Promise<void> {
+}): Promise<void> {
   return await api.patch(`/api/v2/category/${categoryId}`, data);
 }
 

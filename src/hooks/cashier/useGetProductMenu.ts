@@ -2,13 +2,11 @@
 // hooks/cashier/useGetProducts.ts
 //
 import { useInfiniteQuery } from "@tanstack/react-query";
-import type { CATEGORY_TYPE } from "../../types/category";
+import type { CATEGORY_TYPE } from "../../types/category/category";
 import { getMenu } from "../../services/cashier/menu";
 import type { ProductMenuResponse } from "../../types/product";
 
-
-
-export function useGetProductMenu ({
+export function useGetProductMenu({
   size,
   categoryType,
   categoryName,

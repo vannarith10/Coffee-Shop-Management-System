@@ -1,6 +1,6 @@
 // hooks/useGetShopNameAndLogo.ts
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getShopImageAndName } from "../services/admin/shop";
 import type { ShopNameAndLogo } from "../types/shop-setting";
 
@@ -13,6 +13,7 @@ export function useGetShopNameAndLogo () {
     const {data, isLoading, isError, isRefetching, refetch} = useQuery<ShopNameAndLogo>({
         queryKey,
         queryFn: () => getShopImageAndName().then((res) => res.data),
+        placeholderData: keepPreviousData,
         staleTime: 1000 * 60 * 3,
         gcTime: 1000 * 60 * 30,
     });

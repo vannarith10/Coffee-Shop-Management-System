@@ -1,12 +1,16 @@
 // hooks/useStaff.ts
 // Tanstack
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { getAllStaffProfiles } from "../services/admin/staff";
 import { useCallback, useEffect, useState } from "react";
-import { useStaffUpdate } from "./websockets/useStaffUpdate";
+import { useStaffUpdate } from "../websocket/staff/useUpdateStaffWebsocket";
 import type { Staff, StaffProfileResponse } from "../types/staff";
-import { useCreateStaffWebSocket } from "./websockets/useCreateStaffWebSocket";
+import { useCreateStaffWebSocket } from "../websocket/staff/useCreateStaffWebsocket";
 
 export function useStaff({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
@@ -17,6 +21,7 @@ export function useStaff({ page, size }: { page: number; size: number }) {
       queryKey,
       queryFn: () =>
         getAllStaffProfiles({ page, size }).then((res) => res.data),
+      placeholderData: keepPreviousData,
       staleTime: 1000 * 60 * 10,
       gcTime: 1000 * 60 * 30,
     });

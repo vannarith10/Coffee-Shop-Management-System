@@ -13,7 +13,7 @@ import type {
   BaristaOrderItem,
   BaristaOrderQueue,
 } from "../../types/barista/order";
-import { useGetQueuedOrder } from "../../hooks/websockets/order/useGetQueuedOrder";
+import { useGetQueuedOrder } from "../../websocket/order/useGetQueuedOrder";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -100,9 +100,7 @@ const QueueOrder = () => {
   }
 
   // WebSocket - update
-  useGetQueuedOrder({onQueuedUpdate: handleAddOrderToQueue});
-
-
+  useGetQueuedOrder({ onQueuedUpdate: handleAddOrderToQueue });
 
   // Update Status QUEUE -> PREPARING
   function handleUpdateStatus(id: string) {

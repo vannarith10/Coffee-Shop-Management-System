@@ -10,7 +10,7 @@ import {
   type CATEGORY_STATUS,
   type CATEGORY_TYPE,
   type CreateCategoryRequest,
-} from "../../types/category";
+} from "../../types/category/category";
 import { toast } from "sonner";
 import { createCategory } from "../../services/admin/category";
 import axios from "axios";
@@ -18,9 +18,6 @@ import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
 import FormHeader from "../animation/FormHeader";
-
-
-
 
 export default function AddNewCategory() {
   const { refetch, isRefetching } = useCategoryStatusSummary();
@@ -108,7 +105,7 @@ export default function AddNewCategory() {
             onClick={() => setIsOpen(true)}
             className=" col-start-1 xl:col-start-3 text-xs md:text-sm flex justify-center gap-2 items-center bg-background-secondary py-4 rounded-lg border-2 border-border font-bold hover:bg-background-secondary-hover hover:border-border-hover cursor-pointer active:scale-90 transition-all duration-200 ease-out outline-none"
           >
-            Add Category <SquarePlus className="size-6 md:size-8 lg:size-10"/>
+            Add Category <SquarePlus className="size-6 md:size-8 lg:size-10" />
           </button>
           {/* ------------------- */}
           {/* Refresh */}
@@ -121,14 +118,12 @@ export default function AddNewCategory() {
               "Syncing..."
             ) : (
               <>
-                Refresh <RotateCcw className="size-6 md:size-8 lg:size-10"/>
+                Refresh <RotateCcw className="size-6 md:size-8 lg:size-10" />
               </>
             )}
           </button>
         </div>
       </section>
-      
-      
 
       {/* -----------------------------------
 
@@ -152,7 +147,6 @@ export default function AddNewCategory() {
                 className="w-full sticky top-0 z-100"
               />
 
-              
               {/* Name input */}
               <div className="flex flex-col w-full gap-2 px-6">
                 <label htmlFor="name" className="text-xs font-bold">

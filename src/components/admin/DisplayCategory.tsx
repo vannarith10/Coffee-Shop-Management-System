@@ -2,19 +2,19 @@
 // components/ListCategory.tsx
 //
 import { useEffect, useRef, useState } from "react";
-import type { Category } from "../../types/category.ts";
+import type { Category } from "../../types/category/category.ts";
 import { Ellipsis, SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
-import { useCategory } from "../../hooks/useCategory.ts";
+import { useCategory } from "../../hooks/useGetAllCategories.ts";
 import { getPageNumbers } from "../../utils/page-numbers.ts";
 import { AnimatePresence } from "framer-motion";
 import PageHeader from "../ui/PageHeader.tsx";
 
 export default function ListCategory() {
   const [page, setPage] = useState(1);
-  const size = 10;
+  const size = 20;
   const {
     category,
     isLoading,
@@ -44,13 +44,13 @@ export default function ListCategory() {
 
   // Scroll to the new Category that just created
   useEffect(() => {
-    if (justCreatedCategoryId) {
+    if (justCreatedCategoryId || justUpdatedFieldId) {
       targetRef.current?.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
-  }, [justCreatedCategoryId]);
+  }, [justCreatedCategoryId, justUpdatedFieldId]);
 
   return (
     <>
@@ -96,7 +96,7 @@ export default function ListCategory() {
               return (
                 <div
                   key={category.category_id}
-                  ref={justCreated ? targetRef : null}
+                  ref={(justCreated || justUpdated) ? targetRef : null}
                   className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">

@@ -2,9 +2,9 @@
 // WebSocket Manager
 //
 import { useEffect } from "react";
-import type { Category } from "../../types/category";
+import type { Category } from "../../types/category/category";
 import { toast } from "sonner";
-import { websocketManager } from "../../websocket/websocket-manager";
+import { websocketManager } from "../websocket-manager";
 
 interface Props {
   onCategoryCreate: (newCategory: Category) => void;

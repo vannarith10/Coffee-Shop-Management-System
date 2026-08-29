@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { getAllProductsStatus } from "../services/admin/product";
-import { useProductStockStatusUpdate } from "./websockets/useStockStatusWebSocket";
+import { useProductStockStatusUpdate } from "../websocket/stock/useUpdateStockWebSocket";
 import type { ProductStock, StockStatusResponse } from "../types/product";
 import { useEffect } from "react";
 
@@ -15,22 +15,34 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
   const queryKey = ["productStatus", page, size];
 
-
   // ---------------------------------------
+  //
   // 1. Fetch Data
+  //
   // ---------------------------------------
-  const {data, isLoading, isError, error, refetch, isRefetching, isRefetchError} = useQuery<StockStatusResponse>({
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+    isRefetchError,
+  } = useQuery<StockStatusResponse>({
     queryKey,
-    queryFn: () => getAllProductsStatus({page, size}).then(res => res.data as StockStatusResponse),
+    queryFn: () =>
+      getAllProductsStatus({ page, size }).then(
+        (res) => res.data as StockStatusResponse,
+      ),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10, // 10 minutes (Fresh)
     gcTime: 1000 * 60 * 30, // 30 minutes (Garbage Collection)
   });
 
-
-
   // ---------------------------------------
+  //
   // 2. Fetch next page automatically
+  //
   // ---------------------------------------
   const product = data as StockStatusResponse | undefined;
   const totalPages = product?.pagination?.total_pages ?? 1;
@@ -48,10 +60,10 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     });
   }, [data, page, totalPages, queryClient, size]);
 
-
-
   // ---------------------------------------
-  // 3. WebSocket
+  //
+  // 3. Update stock - WebSocket
+  //
   // ---------------------------------------
   useProductStockStatusUpdate({
     onStockStatusUpdate: (updatedProduct: ProductStock) => {
@@ -68,6 +80,13 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     },
   });
 
-
-  return {data, isLoading, isError, error, refetch, isRefetching, isRefetchError}
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+    isRefetchError,
+  };
 }

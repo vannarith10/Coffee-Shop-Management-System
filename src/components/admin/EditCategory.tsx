@@ -8,7 +8,7 @@ import {
   type Category,
   type CATEGORY_TYPE,
   type PatchCategoryRequest,
-} from "../../types/category";
+} from "../../types/category/category";
 import TextLoader from "../ui/TextLoader";
 import { toast } from "sonner";
 import MyPopupForm from "../animation/MyPopupForm";
@@ -56,7 +56,6 @@ export default function EditCategory({ isOpen, onClose, category }: Props) {
         },
 
         onSuccess: () => {
-          toast.success("Category updated successfully", { duration: 5000 });
           onClose();
         },
       },

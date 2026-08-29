@@ -1,11 +1,23 @@
+// ---------------------------------------------------------------------------
 //
-// hooks/useCategory
+// All categories that are being displayed on Category tab of Admin Dashboard
 //
+// ---------------------------------------------------------------------------
 import { useEffect, useState } from "react";
 import { getAllCategories } from "../services/admin/category";
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Category, GetAllCategoriesResponse } from "../types/category";
-import { useCategoryCreate } from "./websockets/useCategoryCreate";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import type {
+  Category,
+  GetAllCategoriesResponse,
+} from "../types/category/category";
+import { useCategoryCreate } from "../websocket/category/useCreateCategoryWebsocket";
+import { useUpdateCategoryWebsocket } from "../websocket/category/useUpdateCategoryWebsocket";
+
+
 
 
 
@@ -19,8 +31,11 @@ export function useCategory(page: number = 1, size: number = 10) {
   >(null);
   const queryKey = ["category", page, size];
 
-
-  // Fetch
+  // ----------------------------------------
+  //
+  // Fetching data
+  //
+  // ----------------------------------------
   const { data, isLoading, isError, isRefetching, refetch } =
     useQuery<GetAllCategoriesResponse>({
       queryKey,
@@ -30,9 +45,11 @@ export function useCategory(page: number = 1, size: number = 10) {
       gcTime: 1000 * 60 * 30,
     });
 
-  // ===========================
-  // Fetch next page
-  // ===========================
+  // ----------------------------------------
+  //
+  // Fetching next page
+  //
+  // ----------------------------------------
   const totalPages = data?.pagination.total_pages ?? 1;
   useEffect(() => {
     if (!data) return;
@@ -48,11 +65,14 @@ export function useCategory(page: number = 1, size: number = 10) {
     });
   }, [data, page, totalPages, size, queryClient]);
 
-  // =================================================
-  // WebSocket - Add a new Category that just created
-  // =================================================
+  // -------------------------------------------------
+  //
+  // Add new Category - Websocket
+  //
+  // -------------------------------------------------
   function handleAddNewCategory(newCategory: Category) {
     setJustCreatedCategoryId(newCategory.category_id);
+
     queryClient.setQueriesData<GetAllCategoriesResponse>(
       { queryKey: ["category"] },
       (oldData) => {
@@ -76,11 +96,41 @@ export function useCategory(page: number = 1, size: number = 10) {
     );
   }
   useCategoryCreate({ onCategoryCreate: handleAddNewCategory });
-
   // Clear category id after 5 sec
   useEffect(() => {
     setTimeout(() => setJustCreatedCategoryId(null), 5000);
   }, [justCreatedCategoryId]);
+
+  // ---------------------------------------
+  //
+  // Update Category - Websocket
+  //
+  // ---------------------------------------
+  function updateCategory(updated: Category) {
+    setJustUpdateFieldId(updated.category_id);
+
+    queryClient.setQueriesData<GetAllCategoriesResponse>(
+      { queryKey: ["category"] },
+      (oldData) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          categories: oldData.categories.map((cat) =>
+            cat.category_id === updated.category_id ? updated : cat,
+          ),
+        };
+      },
+    );
+  }
+  useUpdateCategoryWebsocket({ onCategoryUpdate: updateCategory });
+  useEffect(() => {
+    setTimeout(() => setJustUpdateFieldId(null), 5000);
+  }, [justUpdatedFieldId]);
+
+
+
+  
 
   return {
     category: data ?? null,

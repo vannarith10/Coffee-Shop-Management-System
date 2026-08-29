@@ -1,6 +1,6 @@
 // types/product.ts
 //
-import type { CATEGORY_TYPE } from "./category";
+import type { CATEGORY_TYPE } from "./category/category";
 import type { Pagination } from "./pagination";
 
 export type PRODUCT_STOCK_STATUS = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
@@ -25,8 +25,6 @@ export interface StockStatusResponse {
   products: ProductStock[];
 }
 
-
-
 export interface Product {
   id: string;
   name: string;
@@ -41,12 +39,10 @@ export interface Product {
   updated_at: string | null;
 }
 
-
 export interface AdminProductResponse {
   pagination: Pagination;
   product_items: Product[];
 }
-
 
 export interface UpdateProductRequest {
   name: string | null | undefined;
@@ -54,10 +50,8 @@ export interface UpdateProductRequest {
   selling_price: number | null | undefined;
   cost_price: number | null | undefined;
   description: string | null | undefined;
-  stock_status: PRODUCT_STOCK_STATUS | null | undefined ;
+  stock_status: PRODUCT_STOCK_STATUS | null | undefined;
 }
-
-
 
 interface TopProduct {
   product_id: string;
@@ -72,7 +66,6 @@ export interface TopSellingResponse {
   top_products: TopProduct[];
 }
 
-
 export interface AddNewProductRequest {
   name: string;
   selling_price: number;
@@ -81,8 +74,6 @@ export interface AddNewProductRequest {
   stock_status: PRODUCT_STOCK_STATUS;
   description: string | null;
 }
-
-
 
 // --------------------------------
 // Cashier | Product Menu Response

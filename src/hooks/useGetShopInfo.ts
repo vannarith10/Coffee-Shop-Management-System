@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getShopInfo } from "../services/admin/shop";
 import type { ShopInfo } from "../types/shop-setting";
 
@@ -11,6 +11,7 @@ export function useGetShopInfo () {
     const {data, isLoading, isError, isRefetching, refetch} = useQuery<ShopInfo>({
         queryKey,
         queryFn: () => getShopInfo().then((res) => res.data),
+        placeholderData: keepPreviousData,
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 30,
     });

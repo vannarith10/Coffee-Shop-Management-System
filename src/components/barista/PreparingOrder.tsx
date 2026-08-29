@@ -13,7 +13,7 @@ import type {
   BaristaOrderItem,
   BaristaOrderQueue,
 } from "../../types/barista/order";
-import { useGetPreparingOrder } from "../../hooks/websockets/order/useGetPreparingOrder";
+import { useGetPreparingOrder } from "../../websocket/order/useGetPreparingOrder";
 
 const breakpointColumnsObj = {
   default: 4,
