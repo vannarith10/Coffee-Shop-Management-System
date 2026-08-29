@@ -4,10 +4,10 @@
 //
 // ----------------------------------------------------------
 //
-// Category Summary of Category Tab on Admin Dashboard
+// Category Summary of the Category Tab on Admin Dashboard
 //
 // ----------------------------------------------------------
-
+//
 import { useEffect } from "react";
 import type { CategoryStatusSummaryResponse } from "../../types/category/category";
 import { websocketManager } from "../websocket-manager";

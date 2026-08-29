@@ -9,11 +9,24 @@ import {
 import { getAllProductsStatus } from "../services/admin/product";
 import { useProductStockStatusUpdate } from "../websocket/stock/useUpdateStockWebSocket";
 import type { ProductStock, StockStatusResponse } from "../types/product";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useStockStatus({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
   const queryKey = ["productStatus", page, size];
+  const [justUpdatedIds, setJustUpdatedIds] = useState<Set<string>>(new Set());
+
+  const markUpdated = (id: string) => {
+    setJustUpdatedIds(prev => new Set(prev).add(id));
+
+    setTimeout(() => {
+      setJustUpdatedIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      })
+    }, 5000);
+  };
 
   // ---------------------------------------
   //
@@ -67,6 +80,8 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
   // ---------------------------------------
   useProductStockStatusUpdate({
     onStockStatusUpdate: (updatedProduct: ProductStock) => {
+      markUpdated(updatedProduct.id);
+
       queryClient.setQueryData(queryKey, (oldData: StockStatusResponse) => {
         if (!oldData) return oldData;
 
@@ -80,6 +95,8 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     },
   });
 
+
+
   return {
     data,
     isLoading,
@@ -88,5 +105,6 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
     refetch,
     isRefetching,
     isRefetchError,
+    justUpdatedIds,
   };
 }

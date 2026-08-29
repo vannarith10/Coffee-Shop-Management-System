@@ -158,7 +158,7 @@ export default function DisplayProduct() {
                             className={`mt-2 text-start font-bold w-fit inline-flex gap-2`}
                           >
                             <span className="font-semibold">Stock</span>
-                            <span className={`${config.colorClass} px-4`}>
+                            <span className={`${config.bg} px-4`}>
                               {config.label}
                             </span>
                           </h6>

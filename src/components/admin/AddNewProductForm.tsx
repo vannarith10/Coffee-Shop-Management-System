@@ -347,7 +347,7 @@ export default function AddNewProductForm() {
                         <button
                           onClick={() => setStockStatus(stock.value)}
                           type="button"
-                          className={`${isSelected ? config.colorClass : "hover:bg-background-secondary-hover"} px-8 py-4 font-bold font-mono border border-border rounded-md cursor-pointer active:scale-80 transition-all duration-200 ease-out`}
+                          className={`${isSelected ? config.bg : "hover:bg-background-secondary-hover"} px-8 py-4 font-bold font-mono border border-border rounded-md cursor-pointer active:scale-80 transition-all duration-200 ease-out`}
                         >
                           {stock.value.replaceAll("_", " ")}
                         </button>

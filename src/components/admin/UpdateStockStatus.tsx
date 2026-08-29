@@ -87,7 +87,7 @@ export default function UpdateStockStatus({
             <div className="flex gap-2 items-center justify-center mt-4">
               <h5 className="font-semibold text-xs">Current stock:</h5>
               <span
-                className={`text-sm text-white font-bold ${config.colorClass} px-4 py-2 rounded-xs`}
+                className={`text-sm text-white font-bold ${config.bg} px-4 py-2 rounded-xs`}
               >
                 {config.label}
               </span>

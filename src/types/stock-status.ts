@@ -4,15 +4,36 @@ import type { PRODUCT_STOCK_STATUS } from "./product";
 export const STOCK_STATUS_CONFIG = {
   IN_STOCK: {
     label: "IN",
-    colorClass: "bg-green-600",
+
+    bg: "bg-green-600",
+    bg50: "bg-green-600/50",
+    bg20: "bg-green-600/20",
+    
+    bg_hover: "hover:bg-green-600",
+    bg50_hover: "hover:bg-green-600/50",
+    bg20_hover: "hover:bg-green-600/20",
   },
   LOW_STOCK: {
     label: "LOW",
-    colorClass: "bg-amber-600",
+
+    bg: "bg-amber-600",
+    bg50: "bg-amber-600/50",
+    bg20: "bg-amber-600/20",
+
+    bg_hover: "hover:bg-amber-600",
+    bg50_hover: "hover:bg-amber-600/50",
+    bg20_hover: "hover:bg-amber-600/20",
   },
   OUT_OF_STOCK: {
     label: "OUT",
-    colorClass: "bg-red-600",
+
+    bg: "bg-red-600",
+    bg50: "bg-red-600/50",
+    bg20: "bg-red-600/20",
+
+    bg_hover: "hover:bg-red-600",
+    bg50_hover: "hover:bg-red-600/50",
+    bg20_hover: "hover:bg-red-600/20",
   },
 } as const;
 

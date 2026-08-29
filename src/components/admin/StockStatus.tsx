@@ -1,7 +1,7 @@
 //
 // components/StockStatus.tsx
 //
-import { Layers2 } from "lucide-react";
+import { Layers2, SquarePen } from "lucide-react";
 import type { ProductStock } from "../../types/product";
 import { useState } from "react";
 import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
@@ -24,7 +24,14 @@ export default function StockStatus() {
   );
 
   // Retreive data from hook
-  const { data:product, isLoading, isError, refetch, isRefetching } = useStockStatus({
+  const {
+    data: product,
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+    justUpdatedIds,
+  } = useStockStatus({
     page,
     size,
   });
@@ -43,10 +50,9 @@ export default function StockStatus() {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
   const totalItems = product?.pagination.total_items ?? 0;
-  const handlePrev = () => hasPrev && setPage(p => p - 1);
-  const handleNext = () => hasNext && setPage(p => p + 1);
-  const handlePageClick = (pageNum: number) => setPage(pageNum); 
-
+  const handlePrev = () => hasPrev && setPage((p) => p - 1);
+  const handleNext = () => hasNext && setPage((p) => p + 1);
+  const handlePageClick = (pageNum: number) => setPage(pageNum);
 
   return (
     <>
@@ -65,7 +71,6 @@ export default function StockStatus() {
           refetch={refetch}
           isRefetching={isRefetching}
         />
-
 
         {/* ===================================== */}
         {/* Handle Loading */}
@@ -99,15 +104,16 @@ export default function StockStatus() {
           !isError &&
           product?.products.map((p: ProductStock) => {
             const config = STOCK_STATUS_CONFIG[p.status];
+            const justUpdated = justUpdatedIds.has(p.id);
             return (
               <div
                 key={p.id}
-                className=" grid grid-cols-4 items-center px-6 py-4 text-xs xl:text-base border-t border-border-hover hover:bg-background-secondary-hover"
+                className={`${config.bg20} ${config.bg50_hover} grid grid-cols-2 items-center px-6 py-4 text-xs xl:text-base border-t border-border-hover ${justUpdated && "shimmer shimmer-bg shimmer-color-blue-500 shimmer-duration-2500"} `}
               >
                 {/* ---------------------------------
                         Name & Category
                 ---------------------------------- */}
-                <div className="col-span-2 flex flex-col gap-2">
+                <div className=" flex flex-col gap-2 ">
                   {/* Product Name */}
                   <h4 className=" font-bold text-sm">{p.name}</h4>
                   {/* Catogory */}
@@ -119,23 +125,23 @@ export default function StockStatus() {
                   </div>
                 </div>
 
-
                 {/* ---------------------------------
                         Status & Button
                 ---------------------------------- */}
-                <div className={` w-full flex flex-col gap-2 `}>
+                <div className={` w-full flex justify-between gap-2 `}>
                   {/* status label */}
                   <span
-                    className={`${config.colorClass} w-fit px-4 py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}
+                    className={`${config.bg}  content-center w-fit px-4 py-1 font-bold text-white text-xs font-mono tracking-widest text-center uppercase`}
                   >
                     {config.label}
                   </span>
+
                   {/* Update Stock Status Button */}
                   <button
                     onClick={() => setSelectedProduct(p)}
-                    className="py-1 lg:px-6 bg-green-600 text-white text-sm font-bold justify-self-end cursor-pointer hover:bg-green-700 active:scale-80 focus:outline-none transition-all duration-300 ease-out"
+                    className="py-1 px-2 rounded-md lg:px-6 bg-green-600 text-white text-sm font-bold justify-self-end cursor-pointer hover:bg-green-700 active:scale-80 focus:outline-none transition-all duration-300 ease-out"
                   >
-                    Restock
+                    <SquarePen />
                   </button>
                 </div>
               </div>
