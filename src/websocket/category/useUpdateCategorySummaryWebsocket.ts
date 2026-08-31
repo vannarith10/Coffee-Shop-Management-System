@@ -1,5 +1,5 @@
 //
-// hooks/useCategoryStatusUpdate.ts
+// websocket/category/useCategoryStatusUpdate.ts
 // Websocket Manager
 //
 // ----------------------------------------------------------

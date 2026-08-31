@@ -1,4 +1,5 @@
-// hooks/websockets/useCategoryCreate.ts
+//
+// websocket/category/useCategoryCreate.ts
 // WebSocket Manager
 //
 import { useEffect } from "react";

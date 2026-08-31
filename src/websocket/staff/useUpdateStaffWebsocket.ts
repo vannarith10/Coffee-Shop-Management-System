@@ -1,4 +1,5 @@
-// hooks/useStaffUpdate.ts
+//
+// websocket/staff/useStaffUpdate.ts
 // WebSocket Manager
 //
 import { useEffect } from "react";

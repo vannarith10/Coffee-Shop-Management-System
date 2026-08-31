@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { LiquidGlass } from "../components/ui/LiguidGlass";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { gsap } from "gsap";
-import { useTheme } from "../contexts/useTheme";
+// import { useTheme } from "../contexts/useTheme";
 import DarkTemple from "../assets/dark-temple.png";
 import LightTemple from "../assets/light-temple.jpg";
+import { useThemeStore } from "../stores/useThemeStore";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -17,7 +18,8 @@ export default function LoginPage() {
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
   const targetRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

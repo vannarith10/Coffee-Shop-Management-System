@@ -120,16 +120,17 @@ export default function StockStatus() {
             </button>
           </div>
         )}
-        
-
 
         {/* -----------------------------------------------------------
                               *
                                 Display Items
                               *  
         ------------------------------------------------------------ */}
-        {!isLoading &&
-          !isError &&
+        {!isLoading && !isError && product?.products.length == 0 ? (
+          <div className="w-full flex justify-center items-center py-20 font-bold">
+            No data
+          </div>
+        ) : (
           product?.products.map((p: ProductStock) => {
             const config = STOCK_STATUS_CONFIG[p.status];
             const justUpdated = justUpdatedIds.has(p.id);
@@ -176,7 +177,8 @@ export default function StockStatus() {
                 </div>
               </div>
             );
-          })}
+          })
+        )}
 
         {/* =================================================== */}
         {/* Footer of the Stock Status Board */}

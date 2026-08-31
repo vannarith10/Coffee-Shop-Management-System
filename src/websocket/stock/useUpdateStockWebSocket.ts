@@ -1,4 +1,5 @@
-// hooks/useProductStockStatusUpdate.ts
+//
+// websocket/stock/useProductStockStatusUpdate.ts
 // WebSocket Manager
 //
 import { useEffect } from "react";
@@ -19,7 +20,7 @@ export function useProductStockStatusUpdate({ onStockStatusUpdate }: Props) {
           const product: ProductStock = JSON.parse(message.body);
 
           onStockStatusUpdate(product);
-          toast.success("Product Stock Status Updated Successfully!", {
+          toast.success("Product Stock Status has been updated!", {
             duration: 3000,
           });
         } catch (error) {

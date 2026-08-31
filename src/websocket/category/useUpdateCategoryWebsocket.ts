@@ -1,3 +1,6 @@
+//
+//  websocket/category/useUpdateCategoryWebsocket.ts
+//  
 import { useEffect } from "react";
 import type { Category } from "../../types/category/category";
 import { websocketManager } from "../websocket-manager";

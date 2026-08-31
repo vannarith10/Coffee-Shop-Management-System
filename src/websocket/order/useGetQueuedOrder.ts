@@ -1,5 +1,5 @@
 //
-// hooks/websocket/order/useGetQueuedOrder.ts | BARISTA
+// websocket/order/useGetQueuedOrder.ts | BARISTA
 //
 import { useEffect } from "react";
 import type { BaristaOrderItem } from "../../types/barista/order";

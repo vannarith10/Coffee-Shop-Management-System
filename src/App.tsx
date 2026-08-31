@@ -1,7 +1,11 @@
 //
 // App.tsx
 //
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PageNotFound from "./pages/PageNotFound";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
@@ -31,7 +35,7 @@ import { authStorage } from "./utils/auth-storage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to={"/login"} replace/>
+    element: <Navigate to={"/login"} replace />,
   },
   {
     path: "/login",
@@ -60,7 +64,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Navigate to={"dashboard"} replace/>
+                element: <Navigate to={"dashboard"} replace />,
               },
               {
                 path: "dashboard",
@@ -145,6 +149,7 @@ const router = createBrowserRouter([
 
 function App() {
   const isAuthenticated = !!authStorage.getUser();
+
   useEffect(() => {
     if (!isAuthenticated) {
       websocketManager.disconnect();

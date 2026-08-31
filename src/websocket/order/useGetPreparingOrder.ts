@@ -1,5 +1,5 @@
 //
-// hooks/websocket/useGetPreparingOrder.ts | BARISTA
+// websocket/order/useGetPreparingOrder.ts | BARISTA
 //
 import { useEffect } from "react";
 import type { BaristaOrderItem } from "../../types/barista/order";

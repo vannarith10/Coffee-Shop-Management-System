@@ -1,5 +1,6 @@
+//
 // websocket/websocket-manager.ts
-
+//
 import { Client, type IMessage, type StompSubscription } from "@stomp/stompjs";
 import { authStorage } from "../utils/auth-storage";
 

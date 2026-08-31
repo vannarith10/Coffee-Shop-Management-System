@@ -47,7 +47,7 @@ const PageHeader = ({
                   Page {currentPage} of {totalPages}
                 </h4>
                 <h4 className="font-semibold text-sm text-nowrap">
-                  Profiles: {totalItems}
+                  Total items: {totalItems}
                 </h4>
               </div>
             )}

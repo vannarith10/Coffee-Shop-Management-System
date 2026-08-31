@@ -1,4 +1,5 @@
-// hooks/useAProductUpdate.ts
+//
+// websocket/product/useAProductUpdate.ts
 // WebSocket Manager
 //
 import { useEffect } from "react";

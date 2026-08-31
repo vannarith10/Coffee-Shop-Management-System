@@ -1,3 +1,4 @@
+//
 // contexts/AuthProvider.tsx
 //
 import { useEffect, useState, type ReactNode } from "react";
