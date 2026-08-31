@@ -6,22 +6,24 @@ import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
 import type { Staff } from "../../types/staff";
 import { DAY_ORDER, SCHEDULE_CONFIG } from "../../types/schedule";
-import { Ellipsis } from "lucide-react";
 import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
 import TextLoader from "../ui/TextLoader";
-import { getPageNumbers } from "../../utils/page-numbers";
 import { useStaff } from "../../hooks/useGetStaffProfiles";
 import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
 import { AnimatePresence } from "framer-motion";
 import { COLORS } from "../../utils/colors";
 import { ROLES } from "../../types/role";
 import PageHeader from "../ui/PageHeader";
+import { useSearchParams } from "react-router-dom";
+import PageFooter from "../ui/PageFooter";
 
 export default function DisplayStaff() {
-  const [page, setPage] = useState(1);
-  const size = 20;
+  const size = 10;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("staffPage") || 1);
+
   const {
     staff,
     isLoading,
@@ -41,18 +43,27 @@ export default function DisplayStaff() {
 
   function handlePrev() {
     if (hasPrev) {
-      setPage((p) => p - 1);
+      setSearchParams((prev) => {
+        prev.set("staffPage", String(page - 1));
+        return prev;
+      });
     }
   }
   //
   function handleNext() {
     if (hasNext) {
-      setPage((p) => p + 1);
+      setSearchParams((prev) => {
+        prev.set("staffPage", String(page + 1));
+        return prev;
+      });
     }
   }
   //
   function handlePageClick(pageNum: number) {
-    setPage(pageNum);
+    setSearchParams((prev) => {
+      prev.set("staffPage", String(pageNum));
+      return prev;
+    });
   }
 
   function handleRetry() {
@@ -86,14 +97,16 @@ export default function DisplayStaff() {
           isRefetching={isRefetching}
         />
 
-
-
         {/* ================================ */}
         {/* List down each RECORD of profile */}
         {/* MAIN */}
         {/* Render unless isLoading = false */}
         {/* ================================ */}
-        {!isLoading &&
+        {!isLoading && !isError && staff?.staffs.length == 0 ? (
+          <div className="w-full flex justify-center items-center py-20 font-bold">
+            No data
+          </div>
+        ) : (
           staff?.staffs.map((staff) => {
             const isUpdated = staff.id === justUpdatedId;
             const justAdded = staff.id === justAddedId;
@@ -199,7 +212,8 @@ export default function DisplayStaff() {
                 </div>
               </main>
             );
-          })}
+          })
+        )}
         {/* ------------------------- */}
         {/* Handle Loading */}
         {/* ------------------------- */}
@@ -229,51 +243,15 @@ export default function DisplayStaff() {
                       Footer
                     Prev & Next
         ------------------------------------- */}
-        <footer>
-          <div className="flex bg-background-secondary-hover justify-between px-6 py-6 border-t border-border-hover">
-            {/* Prev */}
-            <button
-              onClick={handlePrev}
-              disabled={!hasPrev}
-              className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-            >
-              Prev
-            </button>
-            {/* ============================= */}
-            {/* 1 2 3 ... 4 */}
-            {/* Page Numbers */}
-            {/* ============================= */}
-            <div className="flex items-center justify-center gap-2">
-              {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
-                pageNum === "..." ? (
-                  <span
-                    key={`ellipsis-${idx}`}
-                    className="px-3 py-2 text-text-secondary"
-                  >
-                    <Ellipsis />
-                  </span>
-                ) : (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageClick(pageNum as number)}
-                    className={`px-4 py-2 rounded-md font-bold text-sm transition-all duration-200 cursor-pointer ${pageNum === currentPage ? "bg-green-600 text-white hover:bg-green-500" : "bg-sidebar text-white hover:bg-background-secondary-hover"}`}
-                  >
-                    {pageNum}
-                  </button>
-                ),
-              )}
-            </div>
-            {/* Next */}
-            <button
-              onClick={handleNext}
-              disabled={!hasNext}
-              className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-            >
-              Next
-            </button>
-          </div>
-        </footer>
-        {/*  */}
+        <PageFooter
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+          hasPrev={hasPrev}
+          hasNext={hasNext}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          handlePageClick={handlePageClick}
+        />
       </section>
 
       {/* =============================== */}

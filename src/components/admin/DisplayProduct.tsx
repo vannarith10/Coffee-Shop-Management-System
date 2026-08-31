@@ -1,20 +1,23 @@
+//
 // components/DisplayProduct.tsx
 //
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import NoImage from "../../assets/no-image.webp";
 import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import { Ellipsis, RotateCcw, SquareChartGantt } from "lucide-react";
-import { getPageNumbers } from "../../utils/page-numbers";
-import { useNavigate } from "react-router-dom";
+import { RotateCcw, SquareChartGantt } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TextLoader from "../ui/TextLoader";
 import { useAdminProduct } from "../../hooks/useAdminProduct";
 import { useProductFilter } from "../../hooks/useProductFilter";
 import PageHeader from "../ui/PageHeader";
+import PageFooter from "../ui/PageFooter";
 
 export default function DisplayProduct() {
-  const [page, setPage] = useState(1);
   const size = 20;
+  // const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("productPage") || 1);
 
   const { selectedCategoryName, selectedCategoryType, keyword } =
     useProductFilter();
@@ -33,31 +36,34 @@ export default function DisplayProduct() {
   const totalItems = products?.pagination.total_items || 0;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
-  const handlePrev = () => setPage((p) => p - 1);
-  const handleNext = () => setPage((p) => p + 1);
-  const handlePageClick = (pageNum: number) => setPage(pageNum);
+
+  const handlePrev = () => {
+    if (!hasPrev) return;
+
+    setSearchParams((prev) => {
+      prev.set("productPage", String(page - 1));
+      return prev;
+    });
+  };
+
+  const handleNext = () => {
+    if (!hasNext) return;
+
+    setSearchParams((prev) => {
+      prev.set("productPage", String(page + 1));
+      return prev;
+    });
+  };
+
+  const handlePageClick = (pageNum: number) => {
+    setSearchParams((prev) => {
+      prev.set("productPage", String(pageNum));
+      return prev;
+    });
+  };
+
   const navigate = useNavigate();
   const targetRef = useRef<HTMLDivElement | null>(null);
-
-  // ==============
-  // Scroll up
-  // ==============
-  // const scrollToComponent = () => {
-  //   targetRef.current?.scrollIntoView({
-  //     behavior: "smooth",
-  //     block: "start",
-  //   });
-  // };
-
-  useEffect(() => {
-    // scrollToComponent();
-  }, [page]);
-
-  useEffect(() => {
-    (function reset() {
-      setPage(1);
-    })();
-  }, [selectedCategoryName, selectedCategoryType, keyword]);
 
   return (
     <section
@@ -69,18 +75,17 @@ export default function DisplayProduct() {
                       Header
                       *
         ------------------------------------ */}
-        <PageHeader
-          headerIcon={<SquareChartGantt />}
-          headerTitle="Employee Profiles"
-          isLoading={isLoading}
-          isError={isError}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          refetch={refetch}
-          isRefetching={isRefetching}
-        />
-
+      <PageHeader
+        headerIcon={<SquareChartGantt />}
+        headerTitle="Employee Profiles"
+        isLoading={isLoading}
+        isError={isError}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        refetch={refetch}
+        isRefetching={isRefetching}
+      />
 
       {/* --------------------------------------------
                     Handle Loading 
@@ -113,11 +118,11 @@ export default function DisplayProduct() {
                         Display Items
                         *
       ------------------------------------------------- */}
-      <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
-        {!isLoading && !isError && (
-          <>
-            {products!.product_items?.length > 0 ? (
-              products?.product_items?.map((product) => {
+      {!isLoading && !isError && (
+        <>
+          {products!.product_items?.length > 0 ? (
+            <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
+              {products?.product_items?.map((product) => {
                 const config = STOCK_STATUS_CONFIG[product.stock_status];
                 return (
                   <button
@@ -182,76 +187,30 @@ export default function DisplayProduct() {
                     </div>
                   </button>
                 );
-              })
-            ) : keyword === null ? (
-              <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
-                No product data of category type {selectedCategoryType} and
-                category name {selectedCategoryName}
-              </div>
-            ) : (
-              <div className="w-full text-center py-20 px-10 text-gray-400 font-bold">
-                Product name "{keyword}" not found
-              </div>
-            )}
-          </>
-        )}
-      </main>
+              })}
+            </main>
+          ) : (
+            <div className="w-full flex justify-center items-center py-20 font-bold">
+              No data
+            </div>
+          )}
+        </>
+      )}
 
       {/* --------------------------------------------------------
                             *
                             Footer
                             *
       --------------------------------------------------------- */}
-      <footer>
-        <div className="flex bg-background-secondary-hover justify-between px-6 py-6 ">
-          {/* ----------------------
-                    Prev
-          ----------------------- */}
-          <button
-            onClick={handlePrev}
-            disabled={!hasPrev}
-            className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-          >
-            Prev
-          </button>
-          {/* --------------------------------------------------
-                            Number of pages
-                            1 2 3 4 .......
-          --------------------------------------------------- */}
-          {!isLoading && !isError && (
-            <div className="flex items-center justify-center gap-2">
-              {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
-                pageNum === "..." ? (
-                  <span
-                    key={`ellipsis-${idx}`}
-                    className="px-3 py-2 text-text-secondary"
-                  >
-                    <Ellipsis />
-                  </span>
-                ) : (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageClick(pageNum as number)}
-                    className={`px-4 py-2 rounded-md font-bold text-sm transition-all duration-200 cursor-pointer ${pageNum === currentPage ? "bg-green-600 text-white hover:bg-green-500" : "bg-sidebar text-white hover:bg-background-secondary-hover"}`}
-                  >
-                    {pageNum}
-                  </button>
-                ),
-              )}
-            </div>
-          )}
-          {/* ---------------------------
-                      Next
-          ---------------------------- */}
-          <button
-            onClick={handleNext}
-            disabled={!hasNext}
-            className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-          >
-            Next
-          </button>
-        </div>
-      </footer>
+      <PageFooter
+        handlePrev={handlePrev}
+        handleNext={handleNext}
+        hasPrev={hasPrev}
+        hasNext={hasNext}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        handlePageClick={handlePageClick}
+      />
     </section>
   );
 }

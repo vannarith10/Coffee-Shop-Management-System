@@ -3,18 +3,21 @@
 //
 import { useEffect, useRef, useState } from "react";
 import type { Category } from "../../types/category/category.ts";
-import { Ellipsis, SquarePen } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
 import { useCategory } from "../../hooks/useGetAllCategories.ts";
-import { getPageNumbers } from "../../utils/page-numbers.ts";
 import { AnimatePresence } from "framer-motion";
 import PageHeader from "../ui/PageHeader.tsx";
+import PageFooter from "../ui/PageFooter.tsx";
+import { useSearchParams } from "react-router-dom";
 
 export default function ListCategory() {
-  const [page, setPage] = useState(1);
   const size = 20;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("categoryPage") || 1);
+
   const {
     category,
     isLoading,
@@ -33,9 +36,30 @@ export default function ListCategory() {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
 
-  const handlePrev = () => hasPrev && setPage((p) => p - 1);
-  const handleNext = () => hasNext && setPage((p) => p + 1);
-  const handlePageClick = (pageNum: number) => setPage(pageNum);
+  const handlePrev = () => {
+    if (!hasPrev) return;
+
+    setSearchParams((prev) => {
+      prev.set("categoryPage", String(page - 1));
+      return prev;
+    });
+  };
+
+  const handleNext = () => {
+    if (!hasNext) return;
+
+    setSearchParams((prev) => {
+      prev.set("categoryPage", String(page + 1));
+      return prev;
+    });
+  };
+
+  const handlePageClick = (pageNum: number) => {
+    setSearchParams((prev) => {
+      prev.set("categoryPage", String(pageNum));
+      return prev;
+    });
+  };
 
   // Select a category to open Form edit
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -84,9 +108,13 @@ export default function ListCategory() {
                           Category items list
                           *
         ------------------------------------------------------- */}
-        <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
-          {!isLoading &&
-            category?.categories?.map((category) => {
+        {!isLoading && !isError && category?.categories.length == 0 ? (
+          <div className=" w-full flex justify-center items-center py-20 font-bold">
+            No data
+          </div>
+        ) : (
+          <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
+            {category?.categories?.map((category) => {
               const isActive = category.is_active;
               const justUpdated = category.category_id === justUpdatedFieldId;
               const justCreated =
@@ -96,7 +124,7 @@ export default function ListCategory() {
               return (
                 <div
                   key={category.category_id}
-                  ref={(justCreated || justUpdated) ? targetRef : null}
+                  ref={justCreated || justUpdated ? targetRef : null}
                   className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">
@@ -136,62 +164,24 @@ export default function ListCategory() {
                   </h4>
                 </div>
               );
-            })}
-        </main>
+            })}{" "}
+          </main>
+        )}
 
         {/* ----------------------------------------
 
                            Footer 
 
         ------------------------------------------*/}
-        <footer>
-          <div className="flex bg-background-secondary justify-between px-6 py-6 ">
-            {/* =================== */}
-            {/* PREV */}
-            {/* =================== */}
-            <button
-              onClick={handlePrev}
-              disabled={!hasPrev}
-              className={`${hasPrev ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"}  font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-            >
-              Prev
-            </button>
-            {/* ============================= */}
-            {/* 1 2 3 ... 4 */}
-            {/* Page Numbers */}
-            {/* ============================= */}
-            <div className="flex items-center justify-center gap-2">
-              {getPageNumbers(totalPages, currentPage).map((pageNum, idx) =>
-                pageNum === "..." ? (
-                  <span
-                    key={`ellipsis-${idx}`}
-                    className="px-3 py-2 text-text-secondary"
-                  >
-                    <Ellipsis />
-                  </span>
-                ) : (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageClick(pageNum as number)}
-                    className={`px-4 py-2 rounded-md font-bold text-sm transition-all duration-200 cursor-pointer ${pageNum === currentPage ? "bg-green-600 text-white hover:bg-green-500" : "bg-sidebar text-white hover:bg-background-secondary-hover"}`}
-                  >
-                    {pageNum}
-                  </button>
-                ),
-              )}
-            </div>
-            {/* ================= */}
-            {/* NEXT */}
-            {/* ================= */}
-            <button
-              onClick={handleNext}
-              disabled={!hasNext}
-              className={`${hasNext ? "cursor-pointer hover:bg-sidebar text-white " : "bg-gray-600 cursor-not-allowed text-gray-900"} font-semibold px-4 py-2 rounded-md  bg-background-secondary  active:scale-90 transition-all duration-200 ease-out`}
-            >
-              Next
-            </button>
-          </div>
-        </footer>
+        <PageFooter
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+          hasPrev={hasPrev}
+          hasNext={hasNext}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          handlePageClick={handlePageClick}
+        />
       </section>
 
       {/* =============================== */}
