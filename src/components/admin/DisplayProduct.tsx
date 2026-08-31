@@ -15,7 +15,6 @@ import PageFooter from "../ui/PageFooter";
 
 export default function DisplayProduct() {
   const size = 20;
-  // const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("productPage") || 1);
 

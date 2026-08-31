@@ -4,6 +4,7 @@
 import AddNewCategory from "../../components/admin/AddNewCategory";
 import CategoryStatus from "../../components/admin/CategoryStatusSummary";
 import ListCategory from "../../components/admin/DisplayCategory";
+import ScrollToTheTop from "../../components/ScrollToTheTop";
 
 export default function CategoryTab() {
   return (
@@ -16,6 +17,7 @@ export default function CategoryTab() {
           Oversee and manage your categories.
         </p>
       </div>
+      <ScrollToTheTop/>
       <AddNewCategory />
       <CategoryStatus />
       <ListCategory />

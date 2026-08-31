@@ -3,6 +3,7 @@
 //
 import GeneralInformation from '../../components/admin/GeneralInformation'
 import ShopBranding from '../../components/admin/ShopBranding'
+import ScrollToTheTop from '../../components/ScrollToTheTop'
 
 const SettingTab = () => {
   return (
@@ -17,6 +18,7 @@ const SettingTab = () => {
       </div>
 
       <div className='grid grid-cols-1 xl:grid-cols-3 gap-4'>
+        <ScrollToTheTop/>
         <GeneralInformation/>
         <ShopBranding/>
       </div>

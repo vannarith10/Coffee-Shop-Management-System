@@ -4,6 +4,7 @@
 import SellByCategory from '../../components/admin/SellByCategory'
 import BusiestHours from '../../components/admin/BusiestHours'
 import RevenueTrends from '../../components/admin/RevenueTrends'
+import ScrollToTheTop from '../../components/ScrollToTheTop'
 
 const ReportTab = () => {
   return (
@@ -17,6 +18,7 @@ const ReportTab = () => {
         </p>
       </div>
 
+      <ScrollToTheTop/>
       <SellByCategory/>
       <BusiestHours/>
       <RevenueTrends/>

@@ -4,6 +4,7 @@
 
 import AddNewStaff from "../../components/admin/AddNewStaff";
 import DisplayStaff from "../../components/admin/DisplayStaff";
+import ScrollToTheTop from "../../components/ScrollToTheTop";
 
 export default function StaffTab() {
   return (
@@ -16,6 +17,7 @@ export default function StaffTab() {
           Oversee your team and manage shift schedules.
         </p>
       </div>
+      <ScrollToTheTop/>
       <AddNewStaff />
       <DisplayStaff />
     </div>
