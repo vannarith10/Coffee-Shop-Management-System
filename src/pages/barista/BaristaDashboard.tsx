@@ -1,3 +1,4 @@
+//
 // pages/barista/BaristaDashboard.tsx
 //
 
@@ -10,7 +11,7 @@ export default function BaristaDashboard() {
     <div className="h-screen max-h-screen w-screen ">
       <Navbar />
       <div className="h-full w-full flex flex-col gap-4 overflow-y-scroll scrollbar-hide p-4">
-        <PreparingOrder/>
+        <PreparingOrder />
         <QueueOrder />
       </div>
     </div>

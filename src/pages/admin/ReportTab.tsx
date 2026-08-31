@@ -1,4 +1,6 @@
-import React from 'react'
+//
+//  ReportTab.tsx
+//
 import SellByCategory from '../../components/admin/SellByCategory'
 import BusiestHours from '../../components/admin/BusiestHours'
 import RevenueTrends from '../../components/admin/RevenueTrends'

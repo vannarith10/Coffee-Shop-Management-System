@@ -27,11 +27,11 @@ export const links = [
     path: "/admin/category",
     icon: ChartColumnStacked,
   },
-  {
-    label: "Inventory",
-    path: "/admin/inventory",
-    icon: CirclePile,
-  },
+  // {
+  //   label: "Inventory",
+  //   path: "/admin/inventory",
+  //   icon: CirclePile,
+  // },
   {
     label: "Products",
     path: "/admin/products",

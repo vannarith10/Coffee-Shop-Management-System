@@ -1,4 +1,6 @@
-import React from "react";
+//
+//  ProductTab.tsx
+//
 import DisplayProduct from "../../components/admin/DisplayProduct";
 import { Outlet } from "react-router-dom";
 import AddNewProductForm from "../../components/admin/AddNewProductForm";

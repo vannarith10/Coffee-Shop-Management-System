@@ -1,3 +1,4 @@
+//
 // pages/admin/CategoryTab.tsx
 //
 import AddNewCategory from "../../components/admin/AddNewCategory";

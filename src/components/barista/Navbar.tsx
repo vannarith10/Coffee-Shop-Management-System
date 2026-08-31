@@ -1,6 +1,6 @@
 //
 import { LogOut } from "lucide-react";
-import { useAuth } from "../../contexts/useAuth";
+// import { useAuth } from "../../contexts/useAuth";
 import { useGetShopNameAndLogo } from "../../hooks/barista/useGetShopNameAndLogo";
 import { useGetUserProfile } from "../../hooks/useGetUserProfile";
 import ShopProfile from "../ui/ShopProfile";
@@ -8,6 +8,7 @@ import ThemeSwitch from "../ui/ThemeSwitch";
 import UserProfile from "../ui/UserProfile";
 import { useEffect, useState } from "react";
 import MenuSwitch from "../ui/MenuSwitch";
+import { useAuthStore } from "../../stores/useAuthStore";
 
 const Navbar = () => {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -20,7 +21,8 @@ const Navbar = () => {
     refetch: refetchProfile,
   } = useGetUserProfile();
 
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const logout = useAuthStore().logout;
   const [isOpen, setIsOpen] = useState(false);
 
   //   click once, refetch all

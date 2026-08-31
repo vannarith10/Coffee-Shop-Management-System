@@ -1,10 +1,13 @@
+//
 // components/ui/LogoutButton.tsx
 //
-import { useAuth } from "../../contexts/useAuth";
+// import { useAuth } from "../../contexts/useAuth";
 import { LogOut } from 'lucide-react';
+import { useAuthStore } from '../../stores/useAuthStore';
 
 export default function LogoutButton() {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const logout = useAuthStore().logout;
 
   function handleLogout() {
     logout();

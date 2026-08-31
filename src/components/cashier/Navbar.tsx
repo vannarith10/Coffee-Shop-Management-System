@@ -4,13 +4,14 @@
 import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
 import { useGetUserProfile } from "../../hooks/useGetUserProfile";
 import { LogOut } from "lucide-react";
-import { useAuth } from "../../contexts/useAuth";
+// import { useAuth } from "../../contexts/useAuth";
 import ThemeSwitch from "../ui/ThemeSwitch";
 import ShopProfile from "../ui/ShopProfile";
 import UserProfile from "../ui/UserProfile";
 import { useEffect, useState } from "react";
 import MenuSwitch from "../ui/MenuSwitch";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useAuthStore } from "../../stores/useAuthStore";
 
 const Navbar = () => {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -23,7 +24,8 @@ const Navbar = () => {
     refetch: refetchProfile,
   } = useGetUserProfile();
 
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const logout = useAuthStore().logout;
   const [isOpen, setIsOpen] = useState(false);
 
 

@@ -20,7 +20,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
 import StaffTab from "./pages/admin/StaffTab";
 import CategoryTab from "./pages/admin/CategoryTab";
-import InventoryTab from "./pages/admin/InventoryTab";
+// import InventoryTab from "./pages/admin/InventoryTab";
 import ProductTab from "./pages/admin/ProductTab";
 import ReportTab from "./pages/admin/ReportTab";
 import SettingTab from "./pages/admin/SettingTab";
@@ -28,9 +28,8 @@ import ProductDetailPage from "./pages/admin/ProductDetailPage";
 import CashierLayout from "./layouts/CashierLayout";
 import ConfirmOrder from "./pages/cashier/ConfirmOrder";
 import { GlassFilter } from "./components/ui/GlassFilter";
-import { websocketManager } from "./websocket/websocket-manager";
 import { useEffect } from "react";
-import { authStorage } from "./utils/auth-storage";
+import { useAuthStore } from "./stores/useAuthStore";
 
 const router = createBrowserRouter([
   {
@@ -78,10 +77,10 @@ const router = createBrowserRouter([
                 path: "category",
                 element: <CategoryTab />,
               },
-              {
-                path: "inventory",
-                element: <InventoryTab />,
-              },
+              // {
+              //   path: "inventory",
+              //   element: <InventoryTab />,
+              // },
               {
                 path: "products",
                 element: <ProductTab />,
@@ -148,16 +147,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const isAuthenticated = !!authStorage.getUser();
+  const initialize = useAuthStore((state) => state.initialize);
+  const initialized = useAuthStore((state) => state.initialized);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      websocketManager.disconnect();
-      return;
-    }
+    initialize();
+  }, [initialize]);
 
-    websocketManager.connect();
-  }, [isAuthenticated]);
+  if (!initialized) return null;
 
   return (
     <div className="w-screen min-w-80 min-h-screen bg-background-primary transition-colors duration-500 ease-out">

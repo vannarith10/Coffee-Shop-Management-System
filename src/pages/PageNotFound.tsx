@@ -1,5 +1,6 @@
+//
 // pages/PageNotFound.tsx
-
+//
 import { MoveRight } from "lucide-react";
 import { Link } from "react-router-dom";
 

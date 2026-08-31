@@ -43,7 +43,7 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
     >
       <motion.div
         initial={{
-          opacity: 0.5,
+          opacity: 0.4,
           scale: 0,
 
           // x: 500,
@@ -81,7 +81,7 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
           scaleY: 0.01,
           borderRadius: 500,
           transition: {
-            duration: 1,
+            duration: 0.5,
           },
         }}
         transition={{

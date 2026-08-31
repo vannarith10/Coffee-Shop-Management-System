@@ -2,7 +2,8 @@
 // websocket/websocket-manager.ts
 //
 import { Client, type IMessage, type StompSubscription } from "@stomp/stompjs";
-import { authStorage } from "../utils/auth-storage";
+import { useAuthStore } from "../stores/useAuthStore";
+import { isTokenExpired } from "../utils/jwt";
 
 type MessageHandler = (message: IMessage) => void;
 
@@ -16,17 +17,24 @@ class WebSocketManager {
 
   private subscriptions = new Map<string, SubscriptionEntry>();
 
-  connect() {
+
+
+
+  async connect() {
     if (this.client) {
       console.log("WebSocket already initialized.");
       return;
     }
 
-    const token = authStorage.getAccessToken();
+    let token = useAuthStore.getState().accessToken;
 
     if (!token) {
-      console.warn("Cannot connect WebSocket: access token is missing.");
+      console.warn("WS: access token is missing.");
       return;
+    }
+
+    if (isTokenExpired(token, 30)){
+      token = await useAuthStore.getState().refresh();
     }
 
     const client = new Client({
@@ -48,13 +56,13 @@ class WebSocketManager {
           return;
         }
 
-        console.log("+++ WebSocket Connected +++");
+        console.log("+++ WS Connected +++");
 
         this.restoreSubscriptions();
       },
 
       onDisconnect: () => {
-        console.log("--- WebSocket Disconnected ---");
+        console.log("--- WS Disconnected ---");
       },
 
       onStompError: (frame) => {
@@ -65,15 +73,20 @@ class WebSocketManager {
         console.error("WebSocket Error:", event);
       },
 
-      debug: (message) => {
-        console.debug("[STOMP]", message);
-      },
+      // debug: (message) => {
+      //   console.debug("[STOMP]", message);
+      // },
     });
 
     this.client = client;
 
     client.activate();
   }
+
+
+
+
+
 
   subscribe(destination: string, handler: MessageHandler): () => void {
     let entry = this.subscriptions.get(destination);

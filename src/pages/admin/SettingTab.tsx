@@ -1,4 +1,6 @@
-
+//
+//  SettingTab.tsx
+//
 import GeneralInformation from '../../components/admin/GeneralInformation'
 import ShopBranding from '../../components/admin/ShopBranding'
 

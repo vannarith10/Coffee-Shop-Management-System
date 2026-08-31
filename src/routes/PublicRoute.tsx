@@ -1,11 +1,12 @@
+//
 // secutiry/PublicRoute.tsx
 //
 
-import { useAuth } from "../contexts/useAuth";
 import { Role } from "../types/auth";
 import { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import Loader from "../components/ui/Loader";
+import { useAuthStore } from "../stores/useAuthStore";
 
 function getRoute(role: Role) {
   switch (role) {
@@ -21,9 +22,10 @@ function getRoute(role: Role) {
 }
 
 export default function PublicRoute({ children }: { children: ReactNode }) {
-  const { user, checkingUser } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const initialized = useAuthStore((state) => state.initialized);
 
-  if (checkingUser) {
+  if (!initialized) {
     return (
       <div className="relative">
         {children}

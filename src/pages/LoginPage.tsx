@@ -1,18 +1,21 @@
+//  
+//  LoginPage.tsx
+//
 import { useRef, useState, useEffect } from "react";
 import { login as loginApi } from "../services/auth.service";
-import { useAuth } from "../contexts/useAuth";
 import { Role } from "../types/auth";
 import { useNavigate } from "react-router-dom";
 import { LiquidGlass } from "../components/ui/LiguidGlass";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { gsap } from "gsap";
-// import { useTheme } from "../contexts/useTheme";
 import DarkTemple from "../assets/dark-temple.png";
 import LightTemple from "../assets/light-temple.jpg";
 import { useThemeStore } from "../stores/useThemeStore";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  // const { login } = useAuth();
+  const login = useAuthStore().login;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
@@ -77,7 +80,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className={` relative w-screen h-screen overflow-hidden flex flex-col gap-4 justify-center items-center transition-colors duration-300 ease-out`}
+      className={` w-screen h-screen fixed inset-0 overflow-hidden flex flex-col gap-4 justify-center items-center transition-colors duration-300 ease-out`}
     >
       {/* Dark background */}
       <div

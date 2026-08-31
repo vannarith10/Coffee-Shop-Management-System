@@ -1,3 +1,4 @@
+//
 // pages/cashier/CashierDashboard.tsx
 //
 import CheckoutPanel from "../../components/cashier/CheckoutPanel";
