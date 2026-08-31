@@ -52,7 +52,7 @@ export const STATUS_OPTIONS: {
 }[] = [
   {
     value: "IN_STOCK",
-    label: "Normal",
+    label: "In",
     description: "Stock level is healthy",
     accent: "accent-green-600",
     border: "border-green-500",

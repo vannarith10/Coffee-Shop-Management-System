@@ -1,3 +1,4 @@
+//
 // components/UpdateStockStatus.tsx
 //
 
@@ -7,9 +8,9 @@ import type { PRODUCT_STOCK_STATUS } from "../../types/product";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
 import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import { updateStockStatus } from "../../services/admin/stock";
 import TextLoader from "../ui/TextLoader";
 import MyPopupForm from "../animation/MyPopupForm";
+import { useUpdateStockStatus } from "../../hooks/stock/useUpdateStockStatus";
 
 interface UpdateStockStatusProps {
   product: ProductStock;
@@ -26,15 +27,14 @@ export default function UpdateStockStatus({
   const [selectedStatus, setSelectedStatus] = useState<PRODUCT_STOCK_STATUS>(
     product.status,
   );
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [isError, setIsError] = useState(false);
+
+  const {
+    mutate: updateStockStatus,
+    isError,
+    isPending,
+  } = useUpdateStockStatus();
 
   const config = STOCK_STATUS_CONFIG[product.status];
-
-  // Disable scrolling
-  if (isOpen) {
-    document.body.classList.add("overflow-hidden");
-  }
 
   //=====================
   // Handle Update
@@ -42,21 +42,18 @@ export default function UpdateStockStatus({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    setIsUpdating(true);
-    setIsError(false);
-    try {
-      const res = await updateStockStatus({
-        productId: product.id,
-        newStatus: selectedStatus,
-      });
-      if (res.status == 200) onClose();
-    } catch (error) {
-      console.error(error);
-      setIsError(true);
-      toast.error("Error updating stock", { duration: 3000 });
-    } finally {
-      setIsUpdating(false);
-    }
+    updateStockStatus(
+      { productId: product.id, newStatus: selectedStatus },
+      {
+        onError: (error) => {
+          toast.error(error.response?.data.detail);
+        },
+
+        onSuccess: () => {
+          onClose();
+        },
+      },
+    );
   }
 
   if (!isOpen) return null;
@@ -69,7 +66,6 @@ export default function UpdateStockStatus({
         onClick={(e) => e.stopPropagation()}
         className="flex flex-col justify-between bg-background-primary backdrop-blur-md border-border border-4 h-[60vh] md:h-[70vh] min-h-150 w-[80vw] md:w-[50vw] xl:w-[40vw] p-4"
       >
-        
         <div className="flex flex-col gap-6">
           {/*  */}
           {/* Form Header | Name & Icon */}
@@ -93,9 +89,11 @@ export default function UpdateStockStatus({
               </span>
             </div>
           </div>
-          {/* =========================================== */}
-          {/* Stock Status Input Options */}
-          {/* =========================================== */}
+          {/* --------------------------------------------------------
+                    *
+                    Status Input: IN / LOW / OUT
+                    *
+          -------------------------------------------------------- */}
           {STATUS_OPTIONS.map((option) => {
             const isSelected = selectedStatus === option.value;
             return (
@@ -116,7 +114,7 @@ export default function UpdateStockStatus({
                   className={`w-4 h-4 ${option.accent}`}
                 />
                 <div>
-                  <span className="font-semibold">{option.label}</span>
+                  <span className="font-semibold uppercase">{option.label}</span>
                   <p className="text-xs text-text-secondary">
                     {option.description}
                   </p>
@@ -125,24 +123,26 @@ export default function UpdateStockStatus({
             );
           })}
         </div>
-        {/* ============================================= */}
-        {/* Bottom Buttons | Cance & Update*/}
-        {/* ============================================= */}
+        {/* --------------------------------------------------------
+                    *
+                    Buttons: Cancel / Update
+                    *
+        -------------------------------------------------------- */}
         <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => onClose()}
-            className="py-4 font-semibold bg-background-secondary/50 rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out"
+            className="py-4 font-semibold bg-background-secondary hover:bg-background-secondary/50 rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out"
           >
             Cancel
           </button>
 
           <button
-            className={`w-full font-semibold col-span-2 ${isError ? "bg-amber-600" : "bg-sidebar/70 hover:bg-sidebar"}  rounded-lg cursor-pointer hover:scale-105 active:scale-90 transition-all duration-200 ease-out`}
+            className={`w-full font-semibold col-span-2 ${isError ? "bg-amber-600" : "bg-sidebar/70 hover:bg-sidebar"}  rounded-lg cursor-pointer active:scale-80 transition-all duration-200 ease-out`}
           >
             {isError ? (
               "Try again"
-            ) : isUpdating && !isError ? (
+            ) : isPending && !isError ? (
               <TextLoader text="Updating..." />
             ) : (
               "Update"

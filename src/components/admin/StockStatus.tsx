@@ -1,5 +1,5 @@
 //
-// components/StockStatus.tsx
+// components/admin/StockStatus.tsx
 //
 import { Layers2, SquarePen } from "lucide-react";
 import type { ProductStock } from "../../types/product";
@@ -13,12 +13,15 @@ import { useStockStatus } from "../../hooks/useStockStatus";
 import { getPageNumbers } from "../../utils/page-numbers";
 import { AnimatePresence } from "framer-motion";
 import PageHeader from "../ui/PageHeader";
+import { useSearchParams } from "react-router-dom";
 
 export default function StockStatus() {
-  const [page, setPage] = useState(1);
   const size = 20;
 
-  // Select a product and pass to Update Form
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("stockPage") || 1);
+
+  // Select a product and pass it to Update Form
   const [selectedProduct, setSelectedProduct] = useState<ProductStock | null>(
     null,
   );
@@ -38,7 +41,6 @@ export default function StockStatus() {
 
   // Hanle Error fetching data
   function handleRetry() {
-    setPage(1);
     refetch();
   }
 
@@ -50,9 +52,31 @@ export default function StockStatus() {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
   const totalItems = product?.pagination.total_items ?? 0;
-  const handlePrev = () => hasPrev && setPage((p) => p - 1);
-  const handleNext = () => hasNext && setPage((p) => p + 1);
-  const handlePageClick = (pageNum: number) => setPage(pageNum);
+
+  const handlePrev = () => {
+    if (!hasPrev) return;
+
+    setSearchParams((prev) => {
+      prev.set("stockPage", String(page - 1));
+      return prev;
+    });
+  };
+
+  const handleNext = () => {
+    if (!hasNext) return;
+
+    setSearchParams((prev) => {
+      prev.set("stockPage", String(page + 1));
+      return prev;
+    });
+  };
+
+  const handlePageClick = (pageNum: number) => {
+    setSearchParams((prev) => {
+      prev.set("stockPage", String(pageNum));
+      return prev;
+    });
+  };
 
   return (
     <>
@@ -115,7 +139,9 @@ export default function StockStatus() {
                 ---------------------------------- */}
                 <div className=" flex flex-col gap-2 ">
                   {/* Product Name */}
-                  <h4 className=" font-bold text-sm">{p.name}</h4>
+                  <h4 className=" font-bold text-sm sm:text-lg lg:text-xl">
+                    {p.name}
+                  </h4>
                   {/* Catogory */}
                   <div className="h-full flex flex-col justify-center">
                     <h5 className="text-[10px] xl:text-xs uppercase">

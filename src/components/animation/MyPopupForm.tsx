@@ -8,29 +8,30 @@ interface Props {
 }
 
 const MyPopupForm = ({ children, onClose, className }: Props) => {
-
+  // ---------------------------------------------------------------------
   // Blocks scrolling when open the form
   // makes sure the position not go back to the top when closing the from
   // So, the form stays still at the position we open it
+  // ---------------------------------------------------------------------
   useEffect(() => {
-  const scrollY = window.scrollY;
+    const scrollY = window.scrollY;
 
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
 
-  return () => {
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.left = "";
-    document.body.style.right = "";
-    document.body.style.width = "";
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
 
-    window.scrollTo(0, scrollY);
-  };
-}, []);
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -42,29 +43,33 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
     >
       <motion.div
         initial={{
-          opacity: 1,
-          x: 500,
-          y: 480,
-          rotateY: 20,
-          rotateZ: 20,
-          skewY: 50,
-          scaleX: 0.5,
-          scaleY: 0.1,
-          borderRadius: 1000,
+          opacity: 0.5,
+          scale: 0,
+
+          // x: 500,
+          // y: 480,
+          // rotateY: 20,
+          // rotateZ: 20,
+          // skewY: 50,
+          // scaleX: 0.5,
+          // scaleY: 0.1,
+          // borderRadius: 1000,
         }}
         //
         animate={{
           opacity: 1,
-          x: 0,
-          y: 0,
-          rotateY: 0,
-          rotateX: 0,
-          rotateZ: 0,
-          skewY: 0,
-          skewX: 0,
-          scaleX: 1,
-          scaleY: 1,
-          borderRadius: 30,
+          scale: 1,
+
+          // x: 0,
+          // y: 0,
+          // rotateY: 0,
+          // rotateX: 0,
+          // rotateZ: 0,
+          // skewY: 0,
+          // skewX: 0,
+          // scaleX: 1,
+          // scaleY: 1,
+          // borderRadius: 30,
         }}
         //
         exit={{
@@ -76,17 +81,17 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
           scaleY: 0.01,
           borderRadius: 500,
           transition: {
-            duration: 0.5,
+            duration: 1,
           },
         }}
         transition={{
           ease: "easeOut",
           type: "spring",
-          stiffness: 100,
-          damping: 20,
+          stiffness: 250,
+          damping: 30,
         }}
         style={{
-          transformOrigin: "left center",
+          transformOrigin: "center",
           transformPerspective: 1500,
         }}
       >
