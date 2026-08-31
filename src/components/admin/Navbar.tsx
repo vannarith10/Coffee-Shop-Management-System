@@ -38,13 +38,28 @@ export default function Navbar() {
     }
   }, [open]);
 
+  // Close menu when entering desktop mode
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <nav
       className={` z-90 w-full md:hidden ${open ? " fixed inset-0 overflow-y-scroll scrollbar-hide flex flex-col justify-start gap-10 pt-10 " : "sticky top-0 "} px-4 py-4 bg-sidebar transition-all duration-500 ease-out shimmer shimmer-bg shimmer-color-blue-300 shimmer-duration-9000`}
     >
-      {/* -----------------------------
-                 Logo and Name
-        ------------------------------ */}
+      {/* -----------------------------------------
+                      *
+                      Shop Profile
+                      *
+        ------------------------------------------ */}
       <div className="w-full flex justify-between items-center ">
         <ShopProfile
           isLoading={isLoading}
@@ -56,9 +71,11 @@ export default function Navbar() {
         <MenuSwitch handleOpen={() => setOpen(!open)} open={open} />
       </div>
 
-      {/* --------------------------------------
-                    Nav menu items
-        --------------------------------------- */}
+      {/* -----------------------------------------
+                      *
+                      Display menus
+                      *
+        ------------------------------------------ */}
       {open && (
         <div className={"w-full flex flex-col gap-4 "}>
           {links.map((link, idx) => {
@@ -93,9 +110,11 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* ------------------------------------
-                Theme & Logout
-      ------------------------------------- */}
+      {/* -----------------------------------------
+                    *
+                    Theme & Logout
+                    *
+        ------------------------------------------ */}
       {open && (
         <motion.div
           initial={{ scale: 0.5, opacity: 0, y: 50 }}

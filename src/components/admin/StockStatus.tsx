@@ -120,10 +120,14 @@ export default function StockStatus() {
             </button>
           </div>
         )}
-        {/* ================================================= */}
-        {/* All items are being displayed here */}
-        {/* Display list of products */}
-        {/* ================================================= */}
+        
+
+
+        {/* -----------------------------------------------------------
+                              *
+                                Display Items
+                              *  
+        ------------------------------------------------------------ */}
         {!isLoading &&
           !isError &&
           product?.products.map((p: ProductStock) => {

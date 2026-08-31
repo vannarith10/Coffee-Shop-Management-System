@@ -12,7 +12,7 @@ import { ChartColumnStacked } from 'lucide-react';
 export const links = [
   {
     label: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
     icon: LayoutDashboard,
     end: true,
   },
