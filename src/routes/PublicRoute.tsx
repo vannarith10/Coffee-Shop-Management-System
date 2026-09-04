@@ -2,7 +2,7 @@
 // secutiry/PublicRoute.tsx
 //
 
-import { Role } from "../types/auth";
+import { Role } from "../types/role";
 import { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import Loader from "../components/ui/Loader";

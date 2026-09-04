@@ -3,7 +3,7 @@
 //
 import { useRef, useState, useEffect } from "react";
 import { login as loginApi } from "../services/auth.service";
-import { Role } from "../types/auth";
+import { Role } from "../types/role";
 import { useNavigate } from "react-router-dom";
 import { LiquidGlass } from "../components/ui/LiguidGlass";
 import ThemeSwitch from "../components/ui/ThemeSwitch";

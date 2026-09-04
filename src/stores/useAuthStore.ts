@@ -2,7 +2,7 @@
 //  stores/useAuthStore.ts
 //
 import { create } from "zustand";
-import type { UserInfo } from "../types/auth";
+import type { UserInfo } from "../types/user";
 import { persist } from "zustand/middleware";
 import { websocketManager } from "../websocket/websocket-manager";
 import { refreshWithLock } from "../lib/auth-refresh";
@@ -55,7 +55,7 @@ export const useAuthStore = create<AuthState>()(
 
           await refreshWithLock();
 
-          websocketManager.connect();
+          
 
           set({
             initialized: true,

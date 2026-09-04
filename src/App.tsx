@@ -12,7 +12,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RoleRoute from "./routes/RoleRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-import { Role } from "./types/auth";
+import { Role } from "./types/role";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CashierDashboard from "./pages/cashier/CashierDashboard";
 import BaristaDashboard from "./pages/barista/BaristaDashboard";
@@ -29,6 +29,7 @@ import ConfirmOrder from "./pages/cashier/ConfirmOrder";
 import { GlassFilter } from "./components/ui/GlassFilter";
 import { useAuthStore } from "./stores/useAuthStore";
 import Loader from "./components/ui/Loader";
+import { websocketManager } from "./websocket/websocket-manager";
 
 const router = createBrowserRouter([
   {
@@ -153,6 +154,7 @@ const router = createBrowserRouter([
 
 function App() {
 
+  websocketManager.connect();
 
   return (
     <div className="w-screen min-w-80 min-h-screen bg-background-primary transition-colors duration-500 ease-out">

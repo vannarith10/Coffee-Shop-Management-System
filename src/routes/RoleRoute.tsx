@@ -3,7 +3,7 @@
 //
 
 import { useAuthStore } from "../stores/useAuthStore";
-import { Role } from "../types/auth";
+import { Role } from "../types/role";
 import { Navigate, Outlet } from "react-router-dom";
 
 interface Props {

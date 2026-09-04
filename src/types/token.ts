@@ -1,10 +1,10 @@
 
 
-import type { UserInfo } from "./auth";
+import type { UserInfo } from "./user";
 import type { Role } from "./role";
 
 
-export interface RefreshResponse {
+export interface RefreshTokenResponse {
   access_token: string;
   token_type: string;
   expires_in: number;

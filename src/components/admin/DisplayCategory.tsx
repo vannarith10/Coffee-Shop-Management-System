@@ -1,8 +1,7 @@
 //
 // components/ListCategory.tsx
 //
-import { useEffect, useRef, useState } from "react";
-import type { Category } from "../../types/category/category.ts";
+import { useEffect, useRef } from "react";
 import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
@@ -61,10 +60,6 @@ export default function ListCategory() {
     });
   };
 
-  // Select a category to open Form edit
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null,
-  );
 
   // Scroll to the new Category that just created or updated
   useEffect(() => {
@@ -85,7 +80,6 @@ export default function ListCategory() {
   };
 
   const handleCloseFormEdit = () => {
-    setSelectedCategory(null);
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.delete("edit");
