@@ -27,8 +27,8 @@ import ProductDetailPage from "./pages/admin/ProductDetailPage";
 import CashierLayout from "./layouts/CashierLayout";
 import ConfirmOrder from "./pages/cashier/ConfirmOrder";
 import { GlassFilter } from "./components/ui/GlassFilter";
-import { useEffect } from "react";
 import { useAuthStore } from "./stores/useAuthStore";
+import Loader from "./components/ui/Loader";
 
 const router = createBrowserRouter([
   {
@@ -152,14 +152,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const initialize = useAuthStore((state) => state.initialize);
-  const initialized = useAuthStore((state) => state.initialized);
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
-
-  if (!initialized) return null;
 
   return (
     <div className="w-screen min-w-80 min-h-screen bg-background-primary transition-colors duration-500 ease-out">

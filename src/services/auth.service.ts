@@ -5,6 +5,7 @@ import type { AxiosError } from "axios";
 import { authApi } from "../lib/axios";
 import type { LoginRequest, LoginResponse } from "../types/auth";
 import type { BackendErrorDetail } from "../types/error";
+import type { RefreshResponse } from "../types/token";
 
 
 
@@ -30,7 +31,7 @@ export const login = async (payload: LoginRequest): Promise<LoginResponse> => {
 // Refresh Token
 //
 // ----------------------------------------------------------------
-export const refreshAccessToken = async (refreshToken: string) => {
+export const refreshAccessToken = async (refreshToken: string): Promise<RefreshResponse> => {
   try {
     const response = await authApi.post("/api/v2/token/refresh", {
       refresh_token: refreshToken,
@@ -38,7 +39,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError<BackendErrorDetail>;
-    console.error("Detail:", axiosError.response?.data.detail);
+    console.error(axiosError.response?.data.detail);
     throw error;
   }
 };
