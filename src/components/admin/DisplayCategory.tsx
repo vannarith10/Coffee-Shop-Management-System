@@ -141,7 +141,7 @@ export default function ListCategory() {
                 <div
                   key={category.category_id}
                   ref={justCreated || justUpdated ? targetRef : null}
-                  className={`flex flex-col gap-4 transition-all duration-300 ease-out ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
+                  className={`flex flex-col gap-4 transition-all duration-300 ease-out ${(justUpdated || justCreated) ? "shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1000" : ""} ${disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">
                     {/* Name */}

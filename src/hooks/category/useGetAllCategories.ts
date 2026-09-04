@@ -38,7 +38,7 @@ export function useGetAllCategories (page: number = 1) {
       queryKey,
       queryFn: () => getAllCategories({ page, size }).then((res) => res.data),
       placeholderData: keepPreviousData,
-      staleTime: 1000 * 60 * 10,
+      staleTime: 1000 * 60,
       gcTime: 1000 * 60 * 30,
     });
 
@@ -57,7 +57,7 @@ export function useGetAllCategories (page: number = 1) {
       queryKey: ["category", nextPage, size],
       queryFn: () =>
         getAllCategories({ page: nextPage, size }).then((res) => res.data),
-      staleTime: 1000 * 60 * 10,
+      staleTime: 1000 * 60,
       gcTime: 1000 * 60 * 30,
     });
   }, [data, page, totalPages, size, queryClient]);
@@ -103,23 +103,25 @@ export function useGetAllCategories (page: number = 1) {
   // Update Category - Websocket
   //
   // ---------------------------------------
-  function updateCategory(updated: Category) {
-    setJustUpdateFieldId(updated.category_id);
+function updateCategory(updated: Category) {
+  setJustUpdateFieldId(updated.category_id);
 
-    queryClient.setQueriesData<GetAllCategoriesResponse>(
-      { queryKey: ["category"] },
-      (oldData) => {
-        if (!oldData) return oldData;
+  queryClient.setQueriesData<GetAllCategoriesResponse>(
+    { queryKey: ["category"] },
+    (oldData) => {
+      if (!oldData || !Array.isArray(oldData.categories)) {
+        return oldData;
+      }
 
-        return {
-          ...oldData,
-          categories: oldData.categories.map((cat) =>
-            cat.category_id === updated.category_id ? updated : cat,
-          ),
-        };
-      },
-    );
-  }
+      return {
+        ...oldData,
+        categories: oldData.categories.map((cat) =>
+          cat.category_id === updated.category_id ? updated : cat,
+        ),
+      };
+    },
+  );
+}
   useUpdateCategoryWebsocket({ onCategoryUpdate: updateCategory });
   useEffect(() => {
     setTimeout(() => setJustUpdateFieldId(null), 5000);

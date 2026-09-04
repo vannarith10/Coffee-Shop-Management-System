@@ -23,6 +23,7 @@ export default function DisplayStaff() {
   const size = 10;
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("staffPage") || 1);
+  const isOpen = searchParams.get("edit") === "true";
 
   const {
     staff,
@@ -38,7 +39,6 @@ export default function DisplayStaff() {
   const totalItems = staff?.pagination.total_items ?? 0;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
-  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
   
 
@@ -79,6 +79,23 @@ export default function DisplayStaff() {
       });
     }
   }, [justAddedId, justUpdatedId]);
+
+  const handleOpenFormEdit = (id: string) => {
+    setSearchParams((prev) => {
+      prev.set("edit", String(true));
+      prev.set("id", id);
+      return prev;
+    })
+  }
+
+  const handleCloseFormEdit = () => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.delete("edit");
+      params.delete("id");
+      return params;
+    })
+  }
 
   return (
     <>
@@ -164,10 +181,10 @@ export default function DisplayStaff() {
                 </div>
 
                 {/* -----------------------
-                            Edit
+                        Button Edit
                 ------------------------ */}
                 <button
-                  onClick={() => setSelectedStaff(staff)}
+                  onClick={() => handleOpenFormEdit(staff.id)}
                   className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out"
                 >
                   <UserRoundPen />
@@ -262,14 +279,10 @@ export default function DisplayStaff() {
       *
       -------------------------------------------------- */}
       <AnimatePresence>
-        {selectedStaff && (
+        {isOpen && (
           <EditStaffProfile
             isOpen={true}
-            staff={selectedStaff}
-            onClose={() => {
-              setSelectedStaff(null);
-              document.body.classList.remove("overflow-hidden");
-            }}
+            onClose={handleCloseFormEdit}
           />
         )}
       </AnimatePresence>

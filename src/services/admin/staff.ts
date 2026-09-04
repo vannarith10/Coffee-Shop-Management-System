@@ -2,7 +2,7 @@
 // services/admin/staff.ts
 //
 import api from "../../lib/axios";
-import type { CreateStaffRequest, EditStaffDataRequest } from "../../types/staff";
+import type { CreateStaffRequest, EditStaffDataRequest, Staff } from "../../types/staff";
 
 
 
@@ -102,4 +102,11 @@ export async function createStaffAccount({
 //
 export async function deleteProfile(id: string): Promise<void> {
   await api.delete(`/api/v2/employee/${id}/delete`);
+}
+
+
+
+// Get a single profile
+export async function getASpecificProfile (id: string) {
+   return await api.get(`/api/v2/employee/profile/${id}`)
 }

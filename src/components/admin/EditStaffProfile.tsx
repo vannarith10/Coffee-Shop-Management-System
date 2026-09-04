@@ -26,17 +26,26 @@ import DefaultProfile from "../../assets/user-profile.png";
 import ImageCropForm from "../ui/ImageCropForm";
 import ButtonCancel from "../ui/ButtonCancel";
 import ButtonSubmit from "../ui/ButtonSubmit";
+import { useSearchParams } from "react-router-dom";
+import { useGetASingleProfile } from "../../hooks/staff/useGetASingleProfile";
 
 interface UpdateStaffProfile {
   isOpen: boolean;
   onClose: () => void;
-  staff: Staff;
 }
 
-export default function EditStaffProfile({
-  onClose,
-  staff,
-}: UpdateStaffProfile) {
+export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const staffId = searchParams.get("id") || "";
+
+  useEffect(() => {
+    if (!staffId.trim()) {
+      onClose();
+    }
+  }, [staffId, onClose]);
+
+  const { data: staff } = useGetASingleProfile(staffId);
+
   const { mutate: deleteStaff, isPending } = useDeleteStaff();
   const [isDeletingStaff, setIsDeletingStaff] = useState(false);
   const {
@@ -44,31 +53,46 @@ export default function EditStaffProfile({
     isError,
     isPending: isUpdatePending,
   } = useEditStaff();
-
+  const [currentRole, setCurrentRole] = useState<Role>();
+  const [currentStatus, setCurrentStatus] = useState<Status>();
+  const [currentShift, setCurrentShift] = useState<Shift>();
+  const [currentSchedules, setCurrentSchedules] = useState<Schedule[]>();
+  //
   const [name, setName] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+  //
+  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedStatus, setSelectedStatus] = useState<Status>();
+  const [selectedShift, setSelectedShift] = useState<Shift>();
+  const [schedules, setSchedules] = useState<Schedule[]>();
 
-  const currentRole = staff.role;
-  const [selectedRole, setSelectedRole] = useState<Role>(currentRole);
 
-  const currentStatus = staff.status;
-  const [selectedStatus, setSelectedStatus] = useState<Status>(currentStatus);
+  useEffect(() => {
+    if (staff) {
+      (() => {
+        setCurrentRole(staff.role);
+        setCurrentStatus(staff.status);
+        setCurrentShift(staff.shift);
+        setCurrentSchedules(staff.schedules);
+        // set selected to show their currect values
+        setSelectedRole(staff.role);
+        setSelectedStatus(staff.status);
+        setSelectedShift(staff.shift);
+        setSchedules(staff.schedules);
+      })();
+    }
+  }, [staff]);
 
-  const currentShift = staff.shift;
-  const [selectedShift, setSelectedShift] = useState<Shift>(currentShift);
-
-  const currentSchedules = staff.schedules; // EX: ['SATURDAY', 'THURSDAY', 'WEDNESDAY', 'TUESDAY', 'MONDAY']
-  const [schedules, setSchedules] = useState<Schedule[]>(currentSchedules);
 
   // Image preview
   const [preview, setPreview] = useState<string>(DefaultProfile);
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    (() => setPreview(staff.image_url ?? DefaultProfile))();
+    (() => setPreview(staff?.image_url ?? DefaultProfile))();
   }, [staff]);
 
   // Crop state
@@ -108,12 +132,15 @@ export default function EditStaffProfile({
   function handleSelectWorkingDay(day: Schedule) {
     // If prev === null then insert schedule directly
     // If already selected then remove, else add to working days.
-    setSchedules((prev) =>
-      prev === null
+    setSchedules((prev) => {
+      if (!prev) return prev;
+
+      return prev === null
         ? [day]
         : prev.includes(day)
           ? prev.filter((d) => d !== day)
-          : [...prev, day],
+          : [...prev, day];
+        }
     );
   }
   function handleSelectShift(shift: Shift) {
@@ -150,17 +177,15 @@ export default function EditStaffProfile({
       username: username,
       password: password,
       email: email,
-      role: selectedRole,
-      status: selectedStatus,
-      shift_type: selectedShift,
-      schedules: schedules,
+      role: selectedRole || null,
+      status: selectedStatus || null,
+      shift_type: selectedShift || null,
+      schedules: schedules || null,
     };
 
-    console.log("Update Staff Data");
-    console.table(data);
 
     editStaff(
-      { userId: staff.id, data: data, image: file },
+      { userId: staffId, data: data, image: file },
       {
         onSuccess: () => {
           onClose();
@@ -172,7 +197,7 @@ export default function EditStaffProfile({
   function handleDeleteStaff(e: React.FormEvent) {
     e.preventDefault();
 
-    deleteStaff(staff.id, {
+    deleteStaff(staffId, {
       onSuccess: () => {
         onClose();
       },
@@ -203,7 +228,7 @@ export default function EditStaffProfile({
             <input
               spellCheck={false}
               onChange={(e) => setName(e.target.value)}
-              placeholder={staff.name}
+              placeholder={staff?.name}
               type="text"
               className="placeholder:text-sm placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
@@ -215,7 +240,7 @@ export default function EditStaffProfile({
             <input
               spellCheck={false}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder={staff.username}
+              placeholder={staff?.username}
               type="text"
               className="placeholder:text-sm lowercase placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
@@ -234,7 +259,7 @@ export default function EditStaffProfile({
         </label>
         <input
           onChange={(e) => setEmail(e.target.value)}
-          placeholder={staff.email}
+          placeholder={staff?.email}
           type="email"
           className="border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
         />
@@ -277,8 +302,8 @@ export default function EditStaffProfile({
           <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
             {DAY_ORDER.map((day) => {
               const isSelected =
-                schedules === null ? false : schedules.includes(day);
-              const isCurrentSchedule = currentSchedules.includes(day);
+                schedules === null ? false : schedules?.includes(day);
+              const isCurrentSchedule = currentSchedules?.includes(day);
               return (
                 <button
                   key={day}
@@ -388,7 +413,7 @@ export default function EditStaffProfile({
                   key={status}
                   type="button"
                   onClick={() => handleSelectStatus(status)}
-                  className={`relative py-4 text-xs ${isSelected ? config.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
+                  className={`relative py-4 text-xs ${isSelected ? config?.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                 >
                   {status === "ON_LEAVE" ? "ON LEAVE" : status}
                   {/* Show current shift label */}

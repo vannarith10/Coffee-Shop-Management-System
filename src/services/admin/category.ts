@@ -64,3 +64,10 @@ export async function getAllCategoryNames() {
 export async function getSalesByCategory({ range }: { range: Range }) {
   return await api.get(`/api/v2/reports/sales-by-category/${range}`);
 }
+
+
+
+
+export async function getCategoryById (id: string) {
+  return await api.get(`/api/v2/category/${id}`);
+}

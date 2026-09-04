@@ -12,11 +12,11 @@ import { toast } from "sonner";
 import MyPopupForm from "../animation/MyPopupForm";
 import FormHeader from "../animation/FormHeader";
 import { useUpdateCategory } from "../../hooks/category/useUpdateCategory";
-import { useGetAllCategories } from "../../hooks/category/useGetAllCategories";
 import { useSearchParams } from "react-router-dom";
 import ButtonCancel from "../ui/ButtonCancel";
 import ButtonSubmit from "../ui/ButtonSubmit";
 import CustomSelect from "../ui/CustomSelect";
+import { useGetCategoryById } from "../../hooks/category/useGetCategoryById";
 
 type Props = {
   isOpen: boolean;
@@ -25,7 +25,6 @@ type Props = {
 
 export default function EditCategory({ isOpen, onClose }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("categoryPage") || 1);
   const id = searchParams.get("id") ?? "";
 
   useEffect(() => {
@@ -34,46 +33,44 @@ export default function EditCategory({ isOpen, onClose }: Props) {
     }
   }, [id, onClose]);
 
-  const { category } = useGetAllCategories(page);
+  const { data: category } = useGetCategoryById(id);
 
-  const selectedCategory = category?.categories.find(
-    (c) => c.category_id === id,
-  );
-
-  useEffect(() => {
-    if (category && !selectedCategory) {
-      onClose();
-    }
-  }, [category, selectedCategory, onClose]);
+  const [currentName, setCurrentName] = useState<string>();
+  const [currentType, setCurrentType] = useState<CATEGORY_TYPE>();
+  const [currentStatus, setCurrentStatus] = useState<boolean>();
 
   const [categoryName, setCategoryName] = useState<string>("");
   const [categoryType, setCategoryType] = useState<CATEGORY_TYPE | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
-    if (selectedCategory) {
+    if (category) {
       (() => {
-        setCategoryName(selectedCategory.category_name);
-        setCategoryType(selectedCategory.category_type);
-        setIsActive(selectedCategory.is_active);
+        setCurrentName(category.category_name);
+        setCurrentType(category.category_type);
+        setCurrentStatus(category.is_active);
+        //
+        setCategoryName(category.category_name);
+        setCategoryType(category.category_type);
+        setIsActive(category.is_active);
       })();
     }
-  }, [selectedCategory]);
+  }, [category]);
 
   const { mutate: updateCategory, isPending, isError } = useUpdateCategory();
 
   //=======================
+  //
   // Submit
+  //
   //=======================
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const data: PatchCategoryRequest = {
-      new_name:
-        categoryName === selectedCategory?.category_name ? null : categoryName,
-      new_type:
-        categoryType === selectedCategory?.category_type ? null : categoryType,
-      new_status: isActive === selectedCategory?.is_active ? null : isActive,
+      new_name: categoryName === currentName ? null : categoryName,
+      new_type: categoryType === currentType ? null : categoryType,
+      new_status: isActive === currentStatus ? null : isActive,
     };
 
     const allNull = Object.values(data).every((value) => value === null);
@@ -121,7 +118,7 @@ export default function EditCategory({ isOpen, onClose }: Props) {
           </label>
           <input
             onChange={(e) => setCategoryName(e.target.value)}
-            placeholder={selectedCategory?.category_name}
+            placeholder={currentName}
             type="text"
             className="placeholder:text-sm placeholder:font-bold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
           />

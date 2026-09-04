@@ -18,7 +18,6 @@ export function useUpdateCategoryWebsocket({ onCategoryUpdate }: Props) {
         try {
           const category: Category = JSON.parse(message.body);
           onCategoryUpdate(category);
-          console.log("Category Updated Successfully...");
           toast.success(
             "Category " + category.category_name + " has been updated",
             { duration: 5000, id: "category-update" },
