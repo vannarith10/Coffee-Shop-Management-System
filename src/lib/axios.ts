@@ -1,7 +1,6 @@
 //
 //  lib/axios.ts
 //
-
 import axios from "axios";
 import { useAuthStore } from "../stores/useAuthStore";
 

@@ -43,7 +43,11 @@ export default function ProductDetailPage() {
   const [isOpen, setIsOpen] = useState(true);
   const { id } = useParams<{ id: string }>();
   const safeId = id ?? "";
-  const { data:product, isLoading, isError } = useGetASingleProduct({ id: safeId });
+  const {
+    data: product,
+    isLoading,
+    isError,
+  } = useGetASingleProduct({ id: safeId });
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   // NEW
@@ -220,12 +224,16 @@ export default function ProductDetailPage() {
       }}
     >
       {isOpen && (
-        <MyPopupForm onClose={() => setIsOpen(false)}>
-          <>
+        <MyPopupForm onClose={() => setIsOpen(false)} handleSubmit={handleSaveButton}>
+
+
+          {/* <>
             <main
               onClick={(e) => e.stopPropagation()}
               className="flex flex-col gap-6 overflow-y-scroll scrollbar-hide w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] max-h-[90vh] bg-background-primary border-4 border-border shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000"
-            >
+            > */}
+
+
               {/* ---------------------------------
                            Form header
               ---------------------------------- */}
@@ -240,7 +248,9 @@ export default function ProductDetailPage() {
                             Product Image
                             *
               -------------------------------------------- */}
-              <div className={` flex justify-center items-center bg-background-secondary mx-6 p-6 rounded-lg border-2 ${isEditing? "border-green-500" : "border-border"}`}>
+              <div
+                className={` flex justify-center items-center bg-background-secondary mx-6 p-6 rounded-lg border-2 ${isEditing ? "border-green-500" : "border-border"}`}
+              >
                 {isLoading && <TextLoader text="Loading image..." />}
                 {!isLoading && !isError && (
                   <>
@@ -258,8 +268,7 @@ export default function ProductDetailPage() {
                         hidden={!isEditing}
                         className={` absolute bg-black/30 backdrop-blur-xs w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400 active:text-gray-200`}
                       >
-
-                        <Camera className="size-10 group-hover:size-12 text-white transition-all duration-300 ease-out"/>
+                        <Camera className="size-10 group-hover:size-12 text-white transition-all duration-300 ease-out" />
                       </span>
                     </label>
 
@@ -431,6 +440,7 @@ export default function ProductDetailPage() {
                   <div className="flex justify-end">
                     {!isEditing && (
                       <button
+                      type="button"
                         onClick={handleEditButton}
                         className="flex items-center bg-background-secondary-hover px-4 py-2 border border-border hover:bg-sidebar cursor-pointer rounded-md gap-2 active:scale-80 transition-all duration-200 ease-out"
                       >
@@ -440,13 +450,16 @@ export default function ProductDetailPage() {
                     {isEditing && (
                       <div className="flex gap-2">
                         <button
+                          type="button"
                           onClick={handleCancelButton}
                           className="px-4 py-2 text-white font-semibold rounded-md cursor-pointer bg-text-error/50 hover:bg-text-error active:scale-80 outline-none transition-all duration-200 ease-out"
                         >
                           Cancel
                         </button>
+
                         <button
-                          onClick={handleSaveButton}
+                          type="submit"
+                          // onClick={handleSaveButton}
                           className="px-10 py-2 text-white font-semibold bg-green-700/80 hover:bg-green-600 border border-border rounded-md cursor-pointer active:scale-80 outline-none transition-all duration-200 ease-out"
                         >
                           {!isSaving && !isSavingError && "Save"}
@@ -532,7 +545,10 @@ export default function ProductDetailPage() {
                   </a>
                 </div>
               </div>
-            </main>
+
+
+            {/* </main> */}
+
 
             {/* ------------------------------------------------
                           *
@@ -552,7 +568,7 @@ export default function ProductDetailPage() {
                 handleSetZoom={handleSetZoom}
               />
             )}
-          </>
+          {/* </> */}
         </MyPopupForm>
       )}
     </AnimatePresence>

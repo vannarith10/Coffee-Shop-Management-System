@@ -105,6 +105,7 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
             Button Confirm
       -----------------------*/}
       <button
+        type="button"
         onClick={handleConfirmOrder}
         className=" uppercase bg-green-600/30 hover:bg-green-600/70 py-10 px-10 md:px-20 text-sm lg:text-xl font-bold rounded-lg cursor-pointer active:scale-80 outline-none transition-all duration-300 ease-out shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1500"
       >
@@ -115,6 +116,7 @@ const ConfirmFinalize = ({ id }: { id: string }) => {
             Button Cancel
       -----------------------*/}
       <button
+        type="button"
         onClick={() => navigate(-1)}
         className="font-semibold text-text-error cursor-pointer hover:underline underline-offset-4 active:scale-80 transition-all duration-200 ease-out"
       >

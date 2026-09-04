@@ -1,38 +1,38 @@
 import { Image } from "lucide-react";
-import React from "react";
-import styled from "styled-components";
+
 
 interface Props {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClear: () => void;
+  preview: string;
+  handleInputImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Form = ({ onChange, onClear }: Props) => {
+const ImageInput = ({ preview, handleInputImage } : Props) => {
   return (
-    <div className=" w-40 xl:w-60 aspect-square p-4 flex flex-col gap-4 items-center justify-between outline-2 outline-dashed outline-white rounded-xl">
-      <label
-        htmlFor="file"
-        className="h-2/3 w-full bg-blue-400 hover:bg-blue-500 flex flex-col items-center justify-center p-2 gap-2 rounded-md cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
-      >
-        <Image size={48} />
-        <span className="text-xs md:text-sm">Upload an image</span>
-        <input
-          id="file"
-          type="file"
-          accept="image/*"
-          className=" hidden"
-          onChange={onChange}
-        />
+    <div className="flex justify-center ">
+      <label htmlFor="imageUpload" className="group cursor-pointer w-fit">
+        <div className="relative w-40 h-40 xl:w-60 xl:h-60 shrink-0 rounded-md overflow-hidden border-2 border-border hover:border-border-hover">
+          <img
+            src={preview}
+            alt="profile"
+            className="w-full h-full object-cover "
+          />
+          <span className="absolute hover:bg-gray-400/50 backdrop-blur-xs rounded-md opacity-0 hover:opacity-100 w-full h-full flex justify-center items-center z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-700 transition-all duration-300 ease-out">
+            <Image
+              size={64}
+              className="group-active:scale-80 transition-all duration-300 ease-out"
+            />
+          </span>
+        </div>
       </label>
-      <button
-        type="button"
-        onClick={onClear}
-        className="w-full h1/3 text-xs py-2 text-text-error font-semibold hover:bg-red-600/30 border rounded-md cursor-pointer active:scale-80 transition-all duration-200 ease-out outline-none"
-      >
-        Clear
-      </button>
+      <input
+        id="imageUpload"
+        type="file"
+        accept="image/*"
+        onChange={handleInputImage}
+        className="hidden"
+      />
     </div>
   );
 };
 
-export default Form;
+export default ImageInput;

@@ -1,3 +1,6 @@
+//
+//
+//
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 
@@ -15,6 +18,7 @@ const PasswordInput = ({ onChange, value }: Props) => {
       className={`relative w-full flex ${isFocus ? "border-green-600" : "border-border"} border-2  rounded-md overflow-hidden`}
     >
       <input
+        placeholder="password"
         autoComplete="new-password"
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
@@ -22,7 +26,7 @@ const PasswordInput = ({ onChange, value }: Props) => {
         minLength={8}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        className="px-4 py-2 bg-transparent placeholder:text-sm placeholder:font-semibold w-full focus:outline-none "
+        className=" placeholder:text-text-secondary px-4 py-2 bg-background-secondary/50 w-full focus:outline-none "
       />
       <button
         type="button"

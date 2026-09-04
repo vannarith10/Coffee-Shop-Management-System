@@ -19,11 +19,11 @@ const ProductTab = () => {
         </p>
       </div>
 
-      <ScrollToTheTop/>
-      <AddNewProductForm/>
-      <ProductFilter/>
-      <DisplayProduct/>
-      <Outlet/>
+      <ScrollToTheTop />
+      <AddNewProductForm />
+      <ProductFilter />
+      <DisplayProduct />
+      <Outlet />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export default function CategoryTab() {
           Oversee and manage your categories.
         </p>
       </div>
-      <ScrollToTheTop/>
+      <ScrollToTheTop />
       <AddNewCategory />
       <CategoryStatus />
       <ListCategory />

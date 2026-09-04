@@ -48,8 +48,8 @@ export const CATEGORY_TYPES_ARRAY: CATEGORY_TYPE[] = [
 
 
 export const CategoryStatusOptions = [
-  { label: "Enable", value: true },
-  { label: "Disable", value: false },
+  { label: "Enable", value: true, bg: "bg-green-600" },
+  { label: "Disable", value: false, bg: "bg-red-500" },
 ];
 
 

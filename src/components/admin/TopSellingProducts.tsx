@@ -15,25 +15,18 @@ import TextLoader from "../ui/TextLoader";
 import { RotateCcw } from "lucide-react";
 import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
 
-
 export default function TopSellingProductsChart() {
-
   // const [page, setPage] = useState(1);
   const page = 1;
   const size = 20;
   const [selectedRange, setSelectedRange] = useState<Range>("TODAY");
 
-  const {topSelling, isLoading, isError, refetch, isRefetching} = useTopSellingProduct({range:selectedRange, page, size});
+  const { topSelling, isLoading, isError, refetch, isRefetching } =
+    useTopSellingProduct({ range: selectedRange, page, size });
 
-
-
-  // ==========================
-  // Range Filter
-  // ==========================
   function handleFilterRange(range: Range) {
     setSelectedRange(range);
   }
-  
 
   // ======================================
   // Showing most sold first | Filter
@@ -60,9 +53,12 @@ export default function TopSellingProductsChart() {
 
   return (
     <section className="w-full rounded-lg border-2 border-border bg-background-secondary p-6 mt-4">
-      {/*  */}
-      {/* Header */}
-      <div className="mb-6 flex justify-between items-start">
+      {/* ------------------------------------------------------------
+      *
+                                Header
+      *
+      --------------------------------------------------------------*/}
+      <header className="mb-6 flex justify-between items-start">
         <div>
           <h3 className="text-lg font-bold text-text-primary">
             Top Selling Products
@@ -72,22 +68,32 @@ export default function TopSellingProductsChart() {
           </p>
         </div>
 
-        {/* =========================== */}
-        {/* Refresh button*/}
-        {/* =========================== */}
+      {/* ------------------------------------------------------------
+      *
+                            Button refresh
+      *
+      --------------------------------------------------------------*/}
         <div className="flex items-center">
           <button
             onClick={() => refetch()}
             className="font-bold text-sm text-white items-center flex gap-2 bg-sidebar px-3 py-1 rounded-md cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-100 ease-out outline-none"
           >
-            {isRefetching ? "Syncing..." : (<>Refresh <RotateCcw /></>)}
+            {isRefetching ? (
+              "Syncing..."
+            ) : (
+              <>
+                Refresh <RotateCcw />
+              </>
+            )}
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* ================================= */}
-      {/* Filter range*/}
-      {/* ================================= */}
+      {/* ------------------------------------------------------------
+      *
+                            Range filter
+      *
+      --------------------------------------------------------------*/}
       <div className="w-full mb-4 flex flex-wrap gap-2">
         {RANGES.map((range) => {
           return (
@@ -103,19 +109,22 @@ export default function TopSellingProductsChart() {
         })}
       </div>
 
-      {/* ================================= */}
-      {/* Handle Loading... */}
-      {/* ================================= */}
-      { isLoading && (
+      {/* ------------------------------------------------------------
+      *
+                            Loading...
+      *
+      --------------------------------------------------------------*/}
+      {(isLoading || isRefetching) && (
         <div className="w-full text-xl py-10 flex items-center justify-center">
           <TextLoader text="Loading..." />
         </div>
       )}
 
-
-      {/* ================================== */}
-      {/* Error handling */}
-      {/* ================================== */}
+      {/* ------------------------------------------------------------
+      *
+                              Error
+      *
+      --------------------------------------------------------------*/}
       {isError && (
         <div className="w-full py-20 flex flex-col justify-center items-center gap-4">
           <p className="text-lg font-semibold text-text-error">
@@ -130,10 +139,12 @@ export default function TopSellingProductsChart() {
         </div>
       )}
 
-      {/* ============================ */}
-      {/* Display Data */}
-      {/* ============================ */}
-      {!isLoading && !isError && (
+      {/* ------------------------------------------------------------
+      *
+                            Displaying Data 
+      *
+      --------------------------------------------------------------*/}
+      {!isLoading && !isError && !isRefetching && (
         <div className="space-y-6">
           {filtered?.length == 0 ? (
             <div className="w-full flex justify-center items-center py-10 font-bold">
@@ -156,7 +167,9 @@ export default function TopSellingProductsChart() {
                 {/* Progress Bar */}
                 <ResponsiveContainer width="100%" height={14}>
                   <BarChart
-                    data={[{ ...product, target: topSelling?.units_target || 0 }]}
+                    data={[
+                      { ...product, target: topSelling?.units_target || 0 },
+                    ]}
                     layout="vertical"
                     margin={{
                       top: 0,
@@ -190,10 +203,12 @@ export default function TopSellingProductsChart() {
         </div>
       )}
 
-      {/* FOOTER */}
-      {/*  */}
-      {/* The 3 colors bottom */}
-      <div className="mt-6 border-t-2 pt-4 border-border">
+      {/* ------------------------------------------------------------
+      *
+                                Footer
+      *
+      --------------------------------------------------------------*/}
+      <footer className="mt-6 border-t-2 pt-4 border-border">
         <div className="flex items-center gap-6 text-xs">
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-red-500" />
@@ -214,7 +229,7 @@ export default function TopSellingProductsChart() {
         <p className="mt-2 text-xs font-bold text-muted-foreground text-text-secondary">
           Unit Target: {topSelling?.units_target}
         </p>
-      </div>
+      </footer>
       {/*  */}
     </section>
   );

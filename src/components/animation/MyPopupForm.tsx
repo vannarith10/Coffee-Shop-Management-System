@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+//
+//
+//
+import React, { useEffect, type ReactNode } from "react";
 import { motion } from "framer-motion";
 
 interface Props {
   className?: string;
-  children: React.ReactElement;
+  children: ReactNode;
   onClose: () => void;
+  handleSubmit: (e: React.FormEvent) => void;
 }
 
-const MyPopupForm = ({ children, onClose, className }: Props) => {
+const MyPopupForm = ({ children, onClose, className, handleSubmit }: Props) => {
   // ---------------------------------------------------------------------
   // Blocks scrolling when open the form
   // makes sure the position not go back to the top when closing the from
@@ -43,33 +47,13 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
     >
       <motion.div
         initial={{
-          opacity: 0.4,
+          opacity: 0,
           scale: 0,
-
-          // x: 500,
-          // y: 480,
-          // rotateY: 20,
-          // rotateZ: 20,
-          // skewY: 50,
-          // scaleX: 0.5,
-          // scaleY: 0.1,
-          // borderRadius: 1000,
         }}
         //
         animate={{
           opacity: 1,
           scale: 1,
-
-          // x: 0,
-          // y: 0,
-          // rotateY: 0,
-          // rotateX: 0,
-          // rotateZ: 0,
-          // skewY: 0,
-          // skewX: 0,
-          // scaleX: 1,
-          // scaleY: 1,
-          // borderRadius: 30,
         }}
         //
         exit={{
@@ -95,7 +79,13 @@ const MyPopupForm = ({ children, onClose, className }: Props) => {
           transformPerspective: 1500,
         }}
       >
-        {children}
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          onClick={(e) => e.stopPropagation()}
+          className=" overflow-y-scroll scrollbar-hide h-fit max-h-[90vh] w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] bg-background-secondary flex flex-col p-10 pt-0 gap-6 rounded-2xl border-2 border-border"
+        >
+          {children}
+        </form>
       </motion.div>
     </motion.div>
   );

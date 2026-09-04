@@ -196,13 +196,8 @@ export default function AddNewProductForm() {
 
       <AnimatePresence>
         {isOpen && (
-          <MyPopupForm onClose={onClose}>
-            <div>
-              <form
-                onSubmit={(e) => handleSubmit(e)}
-                onClick={(e) => e.stopPropagation()}
-                className={` w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[70vw] max-w-[90vw] max-h-[90vh] overflow-y-scroll scrollbar-hide flex flex-col gap-4 bg-background-primary border-4 border-border transition-all duration-200 ease-out shimmer shimmer-bg shimmer-color-blue-300/30 shimmer-duration-9000`}
-              >
+          <MyPopupForm onClose={onClose} handleSubmit={handleSubmit}>
+              
                 {/* Form Title */}
                 <FormHeader
                   title="Add New Product"
@@ -374,7 +369,7 @@ export default function AddNewProductForm() {
                     Submit
                   </button>
                 </div>
-              </form>
+              {/* </form> */}
 
               {/* ============================ */}
               {/* Form Image */}
@@ -392,7 +387,7 @@ export default function AddNewProductForm() {
                   handleSetZoom={handleSetZoom}
                 />
               )}
-            </div>
+            {/* </div> */}
           </MyPopupForm>
         )}
       </AnimatePresence>

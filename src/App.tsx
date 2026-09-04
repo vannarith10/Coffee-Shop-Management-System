@@ -20,7 +20,6 @@ import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
 import StaffTab from "./pages/admin/StaffTab";
 import CategoryTab from "./pages/admin/CategoryTab";
-// import InventoryTab from "./pages/admin/InventoryTab";
 import ProductTab from "./pages/admin/ProductTab";
 import ReportTab from "./pages/admin/ReportTab";
 import SettingTab from "./pages/admin/SettingTab";
@@ -52,7 +51,9 @@ const router = createBrowserRouter([
     element: <PrivateRoute />,
     children: [
       // -----------------------------------------------------
+      //
       // ADMIN ROUTE
+      //
       // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.ADMIN]} />,
@@ -77,10 +78,6 @@ const router = createBrowserRouter([
                 path: "category",
                 element: <CategoryTab />,
               },
-              // {
-              //   path: "inventory",
-              //   element: <InventoryTab />,
-              // },
               {
                 path: "products",
                 element: <ProductTab />,
@@ -104,7 +101,9 @@ const router = createBrowserRouter([
         ],
       },
       // -----------------------------------------------------
+      //
       // CASHIER ROUTE
+      //
       // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.CASHIER]} />,
@@ -126,7 +125,9 @@ const router = createBrowserRouter([
         ],
       },
       // -----------------------------------------------------
+      //
       // BARISTA ROUTE
+      //
       // -----------------------------------------------------
       {
         element: <RoleRoute allowedRoles={[Role.BARISTA]} />,
@@ -139,7 +140,11 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // ----------------------------
+  //
   // Catch-All 404 route
+  //
+  // ----------------------------
   {
     path: "*",
     element: <PageNotFound />,

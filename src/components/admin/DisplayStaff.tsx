@@ -40,6 +40,7 @@ export default function DisplayStaff() {
   const hasNext = currentPage < totalPages;
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
+  
 
   function handlePrev() {
     if (hasPrev) {
@@ -167,7 +168,7 @@ export default function DisplayStaff() {
                 ------------------------ */}
                 <button
                   onClick={() => setSelectedStaff(staff)}
-                  className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer"
+                  className="self-start px-2 py-1 text-white bg-sidebar/50 justify-self-end  rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out"
                 >
                   <UserRoundPen />
                 </button>
@@ -254,11 +255,12 @@ export default function DisplayStaff() {
         />
       </section>
 
-      {/* =============================== */}
-      {/* */}
-      {/* FORM: Open Form Edit */}
-      {/* */}
-      {/* =============================== */}
+      
+      {/* -------------------------------------------------
+      *
+                    FORM: Open Form Edit
+      *
+      -------------------------------------------------- */}
       <AnimatePresence>
         {selectedStaff && (
           <EditStaffProfile

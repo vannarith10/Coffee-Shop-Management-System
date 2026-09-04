@@ -167,7 +167,7 @@ const ShopBranding = () => {
       {/* =========================================== */}
       <AnimatePresence>
         {isRemove && (
-          <MyPopupForm onClose={() => setIsRemove(false)}>
+          <MyPopupForm onClose={() => setIsRemove(false)} handleSubmit={handleRemoveLogo}>
             <div className="w-60 flex flex-col gap-4 items-center rounded-xl p-10 border-2 border-white bg-sidebar">
               <div className="p-4 bg-background-secondary-hover rounded-full">
                 <Feather />
@@ -176,7 +176,8 @@ const ShopBranding = () => {
                 Delete logo?
               </h2>
               <button
-                onClick={handleRemoveLogo}
+                type="submit"
+                // onClick={handleRemoveLogo}
                 disabled={isPending}
                 className="font-bold text-white w-full py-2 border border-border hover:border-border-hover rounded-md bg-text-error/50 hover:bg-text-error cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
               >

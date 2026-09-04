@@ -1,6 +1,8 @@
 //
+//
+//
 import { motion } from "framer-motion";
-import { QrCode, Receipt, Send, X } from "lucide-react";
+import { QrCode, Receipt, Send } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import { useState, type ReactNode } from "react";
 import DefaultImage from "../../assets/image-default.jpg";
@@ -43,8 +45,11 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
   );
   const navigate = useNavigate();
 
+  // ----------------------
   // Create Order
-  function handlePlaceOrder() {
+  // ----------------------
+  function handlePlaceOrder(e: React.FormEvent) {
+    e.preventDefault();
     // At least has one item
     if (cart.length < 1 || cart.length == 0) {
       toast.error("No item to order", { duration: 3000, id: "No-Order-Item" });
@@ -64,8 +69,8 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
 
       createCashOrder(request, {
         onSuccess: (res) => {
-          toast.success("Order created", {
-            duration: 3000,
+          toast.success("Order created, waiting for payment confirmation", {
+            duration: 5000,
             id: "Order-Created",
           });
 
@@ -83,14 +88,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
   }
 
   return (
-    <MyPopupForm onClose={onClose}>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="h-[80vh] max-w-[90vw] aspect-4/3 bg-background-secondary border-2 border-border rounded-4xls "
-      >
-        {/* =========================== */}
-        {/* Children elements stay here */}
-        {/* =========================== */}
+    <MyPopupForm onClose={onClose} handleSubmit={handlePlaceOrder} >
         <motion.div
           initial={{
             opacity: 0,
@@ -228,6 +226,7 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
                     const isSelected = key === paymentMethod;
                     return (
                       <button
+                        type="button"
                         key={key}
                         onClick={() =>
                           setPaymentMethod((prev) =>
@@ -263,7 +262,8 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
 
                   {/* button Place Order */}
                   <button
-                    onClick={handlePlaceOrder}
+                    // onClick={handlePlaceOrder}
+                    type="submit"
                     disabled={paymentMethod == null}
                     className={`${paymentMethod !== null ? "bg-green-600 hover:bg-green-700 active:scale-80 cursor-pointer" : "bg-gray-500 cursor-not-allowed"} w-full flex items-center justify-center gap-2 py-6 rounded-lg font-bold text-lg outline-none transition-all duration-200 ease-out`}
                   >
@@ -275,7 +275,6 @@ const PaymentMethodDialog = ({ onClose, note }: Props) => {
             </div>
           </div>
         </motion.div>
-      </div>
     </MyPopupForm>
   );
 };

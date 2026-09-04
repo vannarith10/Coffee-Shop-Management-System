@@ -1,4 +1,4 @@
-//  
+//
 //  LoginPage.tsx
 //
 import { useRef, useState, useEffect } from "react";
@@ -12,17 +12,19 @@ import DarkTemple from "../assets/dark-temple.png";
 import LightTemple from "../assets/light-temple.jpg";
 import { useThemeStore } from "../stores/useThemeStore";
 import { useAuthStore } from "../stores/useAuthStore";
+import PasswordInput from "../components/ui/PasswordInput";
+import TextInput from "../components/ui/TextInput";
+import TextLoader from "../components/ui/TextLoader";
 
 export default function LoginPage() {
-  // const { login } = useAuth();
   const login = useAuthStore().login;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
   const targetRef = useRef<HTMLDivElement>(null);
-  // const { theme } = useTheme();
   const theme = useThemeStore((state) => state.theme);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -52,6 +54,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
+      setIsLoggingIn(true);
       const response = await loginApi({ username, password });
 
       // Save user data
@@ -75,6 +78,8 @@ export default function LoginPage() {
       console.error(error);
       console.log(error);
       setIsError(true);
+    } finally {
+      setIsLoggingIn(false);
     }
   }
 
@@ -108,19 +113,17 @@ export default function LoginPage() {
             <h2 className="font-bold text-2xl text-white text-center">
               Login to System
             </h2>
-            <input
+
+            {/* username */}
+            <TextInput
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              className="w-full p-2 border-2 border-border outline-none bg-background-secondary"
+              onChange={setUsername}
+              placeholder="username"
             />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-2 border-2 border-border outline-none bg-background-secondary"
-            />
+
+            {/* password */}
+            <PasswordInput value={password} onChange={setPassword} />
+
             {isError && (
               <h3 className="text-sm text-red-500">
                 Invalid username or password
@@ -130,7 +133,7 @@ export default function LoginPage() {
               type="submit"
               className="shimmer shimmer-bg shimmer-color-blue-300/50 shimmer-duration-3000 py-4 w-full px-8 font-bold text-text-primary bg-background-secondary rounded-md cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-200 ease-out outline-none"
             >
-              Login
+              {isLoggingIn ? <TextLoader text="Logging in..."/> : "Login"}
             </button>
             <ThemeSwitch />
           </form>

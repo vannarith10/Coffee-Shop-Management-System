@@ -39,9 +39,8 @@ export async function createCategory({
   data,
 }: {
   data: CreateCategoryRequest;
-}) {
-  const response = await api.post("/api/v2/category", data);
-  return response;
+}): Promise<void> {
+   await api.post("/api/v2/category", data);
 }
 
 //

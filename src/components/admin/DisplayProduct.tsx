@@ -1,7 +1,6 @@
 //
 // components/DisplayProduct.tsx
 //
-
 import { useRef } from "react";
 import NoImage from "../../assets/no-image.webp";
 import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
@@ -127,9 +126,9 @@ export default function DisplayProduct() {
                   <button
                     key={product.id}
                     onClick={() => {
-                      navigate(`${product.id}`, { replace: true });
+                      navigate(`${product.id}`, { replace: true, state: {preserveScroll: true} } );
                     }}
-                    className={` group relative cursor-pointer bg-cover bg-center overflow-hidden hover:scale-95 active:scale-80 transition-all duration-300 ease-out `}
+                    className={` group relative cursor-pointer bg-cover bg-center overflow-hidden active:scale-80 transition-all duration-300 ease-out `}
                     // style={{ backgroundImage: `url(${product.image_url})` }}
                   >
                     {/* Background layer */}
@@ -138,7 +137,7 @@ export default function DisplayProduct() {
                       style={{ backgroundImage: `url(${product.image_url})` }}
                     ></div>
                     {/* Overlay with blur */}
-                    <div className="w-full h-full p-4 inset-0 bg-black/30 backdrop-blur-xl transition-all duration-300 ease-out">
+                    <div className="w-full h-full p-4 inset-0 bg-black/30 group-hover:bg-black/10 backdrop-blur-xl transition-all duration-300 ease-out">
                       {/* ----------------------------------------------
                                   image & price & cost
                       ----------------------------------------------- */}

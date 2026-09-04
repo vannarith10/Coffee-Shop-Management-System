@@ -15,7 +15,7 @@ export default function AdminDashboard() {
       <p className="text-text-secondary mb-4 text-xs md:text-sm">
         Overview of coffee shop performance.
       </p>
-      <ScrollToTheTop/>
+      <ScrollToTheTop />
       <BusinessSummary />
       <TopSellingProducts />
       <StockStatus />

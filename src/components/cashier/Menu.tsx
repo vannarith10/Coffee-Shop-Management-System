@@ -36,6 +36,7 @@ const Menu = () => {
 
   const products = data?.pages.flatMap((page) => page.items) ?? [];
 
+  // Hnalde infinite scroll
   useEffect(() => {
     if (!loadMoreRef.current) return;
     const observer = new IntersectionObserver(([entry]) => {
@@ -120,8 +121,12 @@ const Menu = () => {
         {/* =============================== */}
         {products.map((i, idx) => {
           const isOut = i.stock_status === "OUT_OF_STOCK";
+          const isCategoryInactive = !i.is_category_active;
+          const isDisabled = isOut || isCategoryInactive;
+
           return (
             <motion.button
+              type="button"
               key={i.id}
               initial={{ opacity: 0, scale: 0.8, y: -100, x: 0 }}
               animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
@@ -133,8 +138,8 @@ const Menu = () => {
                 delay: (idx % size) * 0.05,
               }}
               onClick={() => handleAddToCart(i)}
-              disabled={isOut}
-              className={`flex flex-col items-start gap-2 ${isOut ? "bg-pink-600/50" : "shimmer shimmer-bg shimmer-color-blue-300/50 shimmer-duration-3000 bg-background-secondary hover:bg-background-secondary-hover active:scale-80"} border border-border p-4 rounded-2xl cursor-pointer outline-none transition-all duration-300 ease-out`}
+              disabled={isDisabled}
+              className={`flex flex-col items-start gap-2 ${isDisabled ? "bg-pink-600/50" : "shimmer shimmer-bg shimmer-color-blue-300/50 shimmer-duration-3000 bg-background-secondary hover:bg-background-secondary-hover active:scale-80"} border border-border p-4 rounded-2xl cursor-pointer outline-none transition-all duration-300 ease-out`}
             >
               <div className="relative w-full max-w-full aspect-square">
                 {/* product image */}
@@ -144,16 +149,16 @@ const Menu = () => {
                   loading="lazy"
                   className="w-full h-full object-cover rounded-lg"
                 />
-                {isOut && (
+                {isDisabled && (
                   <div className="absolute inset-0 bg-gray-500/60 rounded-lg flex items-center justify-center">
-                    <span className="font-bold text-sm lg:text-xl text-pink-300">
-                      OUT
+                    <span className="font-bold text-sm lg:text-xl text-text-secondary">
+                      {isOut ? "OUT" : "Category Inactive"}
                     </span>
                   </div>
                 )}
                 {/* product price */}
                 <span
-                  className={`absolute ${isOut ? "bg-pink-500" : "bg-red-400"} text-white right-2 top-2 font-bold text-sm px-2 py-1 rounded-md`}
+                  className={`absolute ${isDisabled ? "bg-pink-500" : "bg-red-400"} text-white right-2 top-2 font-bold text-sm px-2 py-1 rounded-md`}
                 >
                   ${i.price}
                 </span>

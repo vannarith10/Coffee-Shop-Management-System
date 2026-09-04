@@ -31,7 +31,7 @@ const ShopProfile = ({
               Shop logo
           -------------------- */}
         <div
-          className={` w-12 h-12 shrink-0 flex items-center justify-center rounded-lg overflow-hidden ${isLoading ? "p-2" : ""}`}
+          className={` w-12 h-12 shrink-0 flex items-center justify-center rounded-lg overflow-hidden ${isLoading ? "p-2" : ""} border-2`}
         >
           {/* Handle Loading */}
           {isLoading || isRefetching ? (
@@ -41,7 +41,7 @@ const ShopProfile = ({
             <img
               src={isError ? ErrorImage : data?.image_url || DefaultLogo}
               alt="Shop logo"
-              className="w-full h-full object-cover bg-gray-400 border-2 border-white"
+              className="w-full h-full object-cover bg-gray-400 "
             />
           )}
         </div>

@@ -4,7 +4,7 @@
 //
 // ---------------------------------------------------------------------------
 import { useEffect, useState } from "react";
-import { getAllCategories } from "../services/admin/category";
+import { getAllCategories } from "../../services/admin/category";
 import {
   keepPreviousData,
   useQuery,
@@ -13,15 +13,12 @@ import {
 import type {
   Category,
   GetAllCategoriesResponse,
-} from "../types/category/category";
-import { useCategoryCreate } from "../websocket/category/useCreateCategoryWebsocket";
-import { useUpdateCategoryWebsocket } from "../websocket/category/useUpdateCategoryWebsocket";
+} from "../../types/category/category";
+import { useCategoryCreate } from "../../websocket/category/useCreateCategoryWebsocket";
+import { useUpdateCategoryWebsocket } from "../../websocket/category/useUpdateCategoryWebsocket";
 
-
-
-
-
-export function useCategory(page: number = 1, size: number = 10) {
+export function useGetAllCategories (page: number = 1) {
+  const size = 10;
   const queryClient = useQueryClient();
   const [justUpdatedFieldId, setJustUpdateFieldId] = useState<string | null>(
     null,
@@ -127,10 +124,6 @@ export function useCategory(page: number = 1, size: number = 10) {
   useEffect(() => {
     setTimeout(() => setJustUpdateFieldId(null), 5000);
   }, [justUpdatedFieldId]);
-
-
-
-  
 
   return {
     category: data ?? null,

@@ -17,7 +17,7 @@ export default function StaffTab() {
           Oversee your team and manage shift schedules.
         </p>
       </div>
-      <ScrollToTheTop/>
+      <ScrollToTheTop />
       <AddNewStaff />
       <DisplayStaff />
     </div>

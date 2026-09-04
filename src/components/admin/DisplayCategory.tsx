@@ -7,16 +7,16 @@ import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
-import { useCategory } from "../../hooks/useGetAllCategories.ts";
+import { useGetAllCategories } from "../../hooks/category/useGetAllCategories.ts";
 import { AnimatePresence } from "framer-motion";
 import PageHeader from "../ui/PageHeader.tsx";
 import PageFooter from "../ui/PageFooter.tsx";
 import { useSearchParams } from "react-router-dom";
 
 export default function ListCategory() {
-  const size = 20;
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("categoryPage") || 1);
+  const isEdit = searchParams.get("edit") === "true";
 
   const {
     category,
@@ -26,7 +26,7 @@ export default function ListCategory() {
     justCreatedCategoryId,
     refetch,
     isRefetching,
-  } = useCategory(page, size);
+  } = useGetAllCategories(page);
 
   const targetRef = useRef<HTMLDivElement | null>(null);
 
@@ -66,7 +66,7 @@ export default function ListCategory() {
     null,
   );
 
-  // Scroll to the new Category that just created
+  // Scroll to the new Category that just created or updated
   useEffect(() => {
     if (justCreatedCategoryId || justUpdatedFieldId) {
       targetRef.current?.scrollIntoView({
@@ -76,12 +76,32 @@ export default function ListCategory() {
     }
   }, [justCreatedCategoryId, justUpdatedFieldId]);
 
+  const handleOpenEditCategoryForm = (categoryId: string) => {
+    setSearchParams((prev) => {
+      prev.set("edit", String(true));
+      prev.set("id", categoryId);
+      return prev;
+    });
+  };
+
+  const handleCloseFormEdit = () => {
+    setSelectedCategory(null);
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.delete("edit");
+      params.delete("id");
+      return params;
+    });
+  };
+
   return (
     <>
       <section className="rounded-lg overflow-hidden border-2 border-border">
-        {/* ======================== */}
-        {/* HEADER */}
-        {/* ======================== */}
+        {/* ------------------------------------------------------
+                          *
+                          Header
+                          *
+        ------------------------------------------------------- */}
         <PageHeader
           headerIcon={<ListSortAscending />}
           headerTitle="Category"
@@ -94,9 +114,11 @@ export default function ListCategory() {
           isRefetching={isRefetching}
         />
 
-        {/* ====================== */}
-        {/* Loading */}
-        {/* ====================== */}
+        {/* ------------------------------------------------------
+                          *
+                          Loading...
+                          *
+        ------------------------------------------------------- */}
         {isLoading && !isError && (
           <div className="flex justify-center items-center w-full p-20 text-xl bg-background-secondary">
             <TextLoader text="Loading Categories..." />
@@ -125,7 +147,7 @@ export default function ListCategory() {
                 <div
                   key={category.category_id}
                   ref={justCreated || justUpdated ? targetRef : null}
-                  className={`flex flex-col gap-4 ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
+                  className={`flex flex-col gap-4 transition-all duration-300 ease-out ${justUpdated || justCreated ? "bg-green-700" : disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">
                     {/* Name */}
@@ -134,8 +156,8 @@ export default function ListCategory() {
                     </h2>
                     {/* button edit */}
                     <button
-                      onClick={() => setSelectedCategory(category)}
-                      className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer"
+                      onClick={() => handleOpenEditCategoryForm(category.category_id)}
+                      className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out"
                     >
                       <SquarePen />
                     </button>
@@ -184,17 +206,16 @@ export default function ListCategory() {
         />
       </section>
 
-      {/* =============================== */}
-      {/* To Open Form Edit */}
-      {/* =============================== */}
+      {/* ------------------------------------------------------
+                          *
+                          Form Edit
+                          *
+        ------------------------------------------------------- */}
       <AnimatePresence>
-        {selectedCategory && (
+        {isEdit && (
           <EditCategory
-            category={selectedCategory}
             isOpen={true}
-            onClose={() => {
-              setSelectedCategory(null);
-            }}
+            onClose={handleCloseFormEdit}
           />
         )}
       </AnimatePresence>

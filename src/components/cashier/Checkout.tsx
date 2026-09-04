@@ -67,6 +67,7 @@ const Checkout = () => {
       </div>
       {/* button checkout */}
       <button
+        type="button"
         disabled={!hasItem}
         onClick={() => setCheckedout(true)}
         className={`mt-2 w-full ${hasItem ? "bg-green-600 hover:bg-green-700 cursor-pointer active:scale-80" : "bg-gray-500 cursor-not-allowed"} py-3 rounded-md font-bold text-lg outline-none transition-all duration-200 ease-out`}

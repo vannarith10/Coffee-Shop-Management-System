@@ -7,7 +7,6 @@ import { persist } from "zustand/middleware";
 import { refreshAccessToken } from "../services/auth.service";
 import { websocketManager } from "../websocket/websocket-manager";
 
-
 interface AuthState {
   user: UserInfo | null;
   accessToken: string | null;
@@ -16,11 +15,7 @@ interface AuthState {
 
   initialize: () => Promise<void>;
 
-  login: (
-    user: UserInfo,
-    accessToken: string,
-    refreshToken: string,
-  ) => void;
+  login: (user: UserInfo, accessToken: string, refreshToken: string) => void;
 
   logout: () => Promise<void>;
 
@@ -35,23 +30,64 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       initialized: false,
 
+      // initialize: async () => {
+      //   try {
+      //     const refreshToken = get().refreshToken;
+
+      //     if (!refreshToken) {
+      //       set({
+      //         initialized: true,
+      //         user: null,
+      //       });
+      //       return;
+      //     }
+
+      //     const response: RefreshResponse =
+      //       await refreshAccessToken(refreshToken);
+
+      //     set({
+      //       user: response.user_info,
+      //       accessToken: response.access_token,
+      //       refreshToken: response.refresh.token,
+      //       initialized: true,
+      //     });
+
+      //     websocketManager.connect();
+      //   } catch (error) {
+      //     console.error(error);
+
+      //     set({
+      //       user: null,
+      //       accessToken: null,
+      //       refreshToken: null,
+      //       initialized: true,
+      //     });
+      //   }
+      // },
 
 
-
-      initialize: async () => {
+            initialize: async () => {
         try {
           const refreshToken = get().refreshToken;
 
+          console.log("=== INITIALIZE ===");
+          console.log("refresh token:", refreshToken);
+
           if (!refreshToken) {
+            console.log("NO REFRESH TOKEN");
+
             set({
               initialized: true,
               user: null,
             });
+
             return;
           }
 
-          const response: RefreshResponse =
-            await refreshAccessToken(refreshToken);
+          const response = await refreshAccessToken(refreshToken);
+
+          console.log("REFRESH SUCCESS");
+          console.log(response);
 
           set({
             user: response.user_info,
@@ -62,7 +98,7 @@ export const useAuthStore = create<AuthState>()(
 
           websocketManager.connect();
         } catch (error) {
-          console.error(error);
+          console.error("REFRESH FAILED", error);
 
           set({
             user: null,
@@ -74,7 +110,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
 
-
+      
 
       login: (user, accessToken, refreshToken) => {
         set({
@@ -89,6 +125,10 @@ export const useAuthStore = create<AuthState>()(
 
 
 
+
+
+
+
       logout: async () => {
         await websocketManager.disconnect();
 
@@ -98,9 +138,6 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
         });
       },
-
-
-
 
       refresh: async () => {
         const refreshToken = get().refreshToken;
