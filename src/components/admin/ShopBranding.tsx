@@ -1,5 +1,5 @@
-import { Feather } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { Feather, Trash2 } from "lucide-react";
+import React, { useCallback, useRef, useState } from "react";
 import DefaultImage from "../../assets/image-default.jpg";
 import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
 import Loader from "../ui/Loader";
@@ -9,8 +9,11 @@ import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { useUpdateShopLogo } from "../../hooks/useUpdateShopLogo";
-import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import FormHeader from "../animation/FormHeader";
+import ButtonCancel from "../ui/ButtonCancel";
+import MyPopupForm from "../animation/MyPopupForm";
 
 const ShopBranding = () => {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -36,7 +39,9 @@ const ShopBranding = () => {
   // ============================
   // Remove Logo
   // ============================
-  function handleRemoveLogo() {
+  function handleRemoveLogo(e: React.FormEvent) {
+    e.preventDefault();
+
     removeLogo(undefined, {
       onSuccess: () => {
         setIsRemove(false);
@@ -160,37 +165,46 @@ const ShopBranding = () => {
         Remove Logo
       </button>
 
-      {/* =========================================== */}
-      {/* =========================================== */}
-      {/* Delete Logo Form */}
-      {/* =========================================== */}
-      {/* =========================================== */}
+      {/* -------------------------------------------------
+        * 
+                      Delete Logo
+        *
+      ----------------------------------------------------*/}
+
       <AnimatePresence>
         {isRemove && (
-          <MyPopupForm onClose={() => setIsRemove(false)} handleSubmit={handleRemoveLogo}>
-            <div className="w-60 flex flex-col gap-4 items-center rounded-xl p-10 border-2 border-white bg-sidebar">
-              <div className="p-4 bg-background-secondary-hover rounded-full">
-                <Feather />
-              </div>
-              <h2 className="font-bold text-xl text-white whitespace-nowrap">
-                Delete logo?
+          <MyPopupForm
+            onClose={() => setIsRemove(false)}
+            handleSubmit={handleRemoveLogo}
+          >
+            <FormHeader
+              title={"Deleted Account"}
+              onClose={() => {
+                setIsRemove(false);
+                document.body.classList.remove("overflow-hidden");
+              }}
+            />
+            <div className="flex flex-col w-full items-center gap-4 py-10">
+              <h2 className="font-bold text-xl whitespace-nowrap">
+                Delete Staff?
               </h2>
-              <button
-                type="submit"
-                // onClick={handleRemoveLogo}
-                disabled={isPending}
-                className="font-bold text-white w-full py-2 border border-border hover:border-border-hover rounded-md bg-text-error/50 hover:bg-text-error cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
-              >
-                {isPending ? "Deleting..." : "Delete"}
-              </button>
-              <button
-                onClick={() => {
+              <div className="p-10 w-fit bg-background-secondary-hover rounded-full">
+                <Trash2 size={40} />
+              </div>
+            </div>
+            <div className="w-full grid grid-cols-3 gap-2 sm:gap-4">
+              <ButtonCancel
+                handelCancel={() => {
                   setIsRemove(false);
                   document.body.classList.remove("overflow-hidden");
                 }}
-                className="font-bold w-full py-2 text-white border border-border hover:border-border-hover rounded-md bg-background-secondary-hover/50 hover:bg-background-secondary-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              />
+              <button
+                type="submit"
+                disabled={isPending}
+                className="col-span-2 font-semibold w-full py-4 text-xs sm:text-sm lg:text-lg text-text-secondary rounded-md bg-background-secondary-hover hover:bg-sidebar cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
               >
-                Cancel
+                {isPending ? "Deleting..." : "Delete"}
               </button>
             </div>
           </MyPopupForm>
