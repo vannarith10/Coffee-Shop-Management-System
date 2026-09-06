@@ -34,7 +34,7 @@ export default function ImageCropForm({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className=" fixed inset-0 z-100 backdrop-blur-xs rounded-2xl"
+      className=" fixed inset-0 z-100 backdrop-blur-xs rounded-4xl"
     >
       <motion.div
         initial={{
