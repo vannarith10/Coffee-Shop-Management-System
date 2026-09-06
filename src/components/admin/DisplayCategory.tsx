@@ -1,7 +1,6 @@
 //
 // components/ListCategory.tsx
 //
-import { useEffect, useRef } from "react";
 import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import TextLoader from "../ui/TextLoader.tsx";
@@ -21,13 +20,11 @@ export default function ListCategory() {
     category,
     isLoading,
     isError,
-    justUpdatedFieldId,
-    justCreatedCategoryId,
     refetch,
     isRefetching,
+    highlightedIds,
   } = useGetAllCategories(page);
 
-  const targetRef = useRef<HTMLDivElement | null>(null);
 
   const currentPage = category?.pagination.page ?? page;
   const totalPages = category?.pagination.total_pages ?? 1;
@@ -60,16 +57,6 @@ export default function ListCategory() {
     });
   };
 
-
-  // Scroll to the new Category that just created or updated
-  useEffect(() => {
-    if (justCreatedCategoryId || justUpdatedFieldId) {
-      targetRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }, [justCreatedCategoryId, justUpdatedFieldId]);
 
   const handleOpenEditCategoryForm = (categoryId: string) => {
     setSearchParams((prev) => {
@@ -130,27 +117,24 @@ export default function ListCategory() {
           </div>
         ) : (
           <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
-            {category?.categories?.map((category) => {
-              const isActive = category.is_active;
-              const justUpdated = category.category_id === justUpdatedFieldId;
-              const justCreated =
-                category.category_id === justCreatedCategoryId;
-              const disabled = !category.is_active;
+            {category?.categories?.map((cat) => {
+              const isActive = cat.is_active;
+              const isHighlighted = highlightedIds.has(cat.category_id);
+              const disabled = !cat.is_active;
 
               return (
                 <div
-                  key={category.category_id}
-                  ref={justCreated || justUpdated ? targetRef : null}
-                  className={`flex flex-col gap-4 transition-all duration-300 ease-out ${(justUpdated || justCreated) ? "shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1000" : ""} ${disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
+                  key={cat.category_id}
+                  className={`flex flex-col gap-4 transition-all duration-300 ease-out ${isHighlighted ? "shimmer shimmer-bg shimmer-color-green-600 shimmer-duration-1000" : ""} ${disabled ? "bg-red-500/50" : "bg-background-secondary hover:bg-background-secondary-hover"} p-8 font-bold `}
                 >
                   <div className="w-full flex justify-between items-center">
                     {/* Name */}
-                    <h2 className="col-span-2 text-xl">
-                      {category.category_name}
-                    </h2>
+                    <h2 className="col-span-2 text-xl">{cat.category_name}</h2>
                     {/* button edit */}
                     <button
-                      onClick={() => handleOpenEditCategoryForm(category.category_id)}
+                      onClick={() =>
+                        handleOpenEditCategoryForm(cat.category_id)
+                      }
                       className="px-2 py-1 text-white bg-sidebar/50 justify-self-end rounded-sm font-bold border border-border hover:border-border-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out"
                     >
                       <SquarePen />
@@ -162,9 +146,9 @@ export default function ListCategory() {
                   >
                     <span className="text-white font-semibold ">Type</span>
                     <span
-                      className={`${category.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} px-4 py-2 rounded-md`}
+                      className={`${cat.category_type === "DRINK" ? "bg-blue-500" : "bg-amber-500"} px-4 py-2 rounded-md`}
                     >
-                      {category.category_type}
+                      {cat.category_type}
                     </span>
                   </h4>
                   {/* Status */}
@@ -206,12 +190,7 @@ export default function ListCategory() {
                           *
         ------------------------------------------------------- */}
       <AnimatePresence>
-        {isEdit && (
-          <EditCategory
-            isOpen={true}
-            onClose={handleCloseFormEdit}
-          />
-        )}
+        {isEdit && <EditCategory isOpen={true} onClose={handleCloseFormEdit} />}
       </AnimatePresence>
     </>
   );

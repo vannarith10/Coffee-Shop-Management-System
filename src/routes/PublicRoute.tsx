@@ -40,9 +40,11 @@ export default function PublicRoute({ children }: { children: ReactNode }) {
     );
   }
 
+
   if (user) {
     return <Navigate to={getRoute(user.role)} replace />;
   }
+  
 
   return children;
 }

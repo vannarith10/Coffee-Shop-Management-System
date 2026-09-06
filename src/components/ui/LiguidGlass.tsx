@@ -15,7 +15,7 @@ export function LiquidGlass({ children, className, classChild }: Props) {
       <div
         className="
           absolute inset-0
-          backdrop-blur-[2px]
+          backdrop-blur-[1px]
           filter-[url(#glass-distortion)]
           z-0
           transition-all duration-300 ease-out
@@ -26,7 +26,7 @@ export function LiquidGlass({ children, className, classChild }: Props) {
       <div
         className="
             absolute inset-0 z-3
-            shadow-[inset_0px_0px_30px_0px_var(--black-and-white)]
+            shadow-[inset_0px_0px_30px_0px_rgba(255,255,255,0.5)]
             pointer-events-none
             transition-all duration-300 ease-out
         "

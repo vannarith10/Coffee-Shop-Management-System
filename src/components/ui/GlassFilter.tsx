@@ -11,21 +11,21 @@ export function GlassFilter() {
         <filter id="glass-distortion">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.02 0.01"
-            numOctaves="4"
+            baseFrequency="0.02 0.009"
+            numOctaves="9"
             seed="100"
             result="noise"
           />
-          <feGaussianBlur in="noise" stdDeviation="20" result="blurred" />
+
+          <feGaussianBlur in="noise" stdDeviation="10" result="blurred" />
 
           <feDisplacementMap
             in="SourceGraphic"
             in2="blurred"
-            scale="200"
+            scale="100"
             xChannelSelector="R"
             yChannelSelector="G"
           />
-          
         </filter>
       </defs>
     </svg>

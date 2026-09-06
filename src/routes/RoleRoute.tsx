@@ -1,7 +1,6 @@
 //
 // routes/RoleRoute.tsx
 //
-
 import { useAuthStore } from "../stores/useAuthStore";
 import { Role } from "../types/role";
 import { Navigate, Outlet } from "react-router-dom";

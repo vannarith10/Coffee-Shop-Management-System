@@ -17,16 +17,24 @@ import type {
 import { useCategoryCreate } from "../../websocket/category/useCreateCategoryWebsocket";
 import { useUpdateCategoryWebsocket } from "../../websocket/category/useUpdateCategoryWebsocket";
 
-export function useGetAllCategories (page: number = 1) {
+export function useGetAllCategories(page: number = 1) {
   const size = 10;
   const queryClient = useQueryClient();
-  const [justUpdatedFieldId, setJustUpdateFieldId] = useState<string | null>(
-    null,
-  );
-  const [justCreatedCategoryId, setJustCreatedCategoryId] = useState<
-    string | null
-  >(null);
   const queryKey = ["category", page, size];
+
+  const [highlightedIds, setHighlightedIds] = useState<Set<string>>(new Set());
+
+  const markHighlighted = (id: string) => {
+    setHighlightedIds((prev) => new Set(prev).add(id));
+
+    setTimeout(() => {
+      setHighlightedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }, 6000);
+  };
 
   // ----------------------------------------
   //
@@ -68,7 +76,7 @@ export function useGetAllCategories (page: number = 1) {
   //
   // -------------------------------------------------
   function handleAddNewCategory(newCategory: Category) {
-    setJustCreatedCategoryId(newCategory.category_id);
+    markHighlighted(newCategory.category_id);
 
     queryClient.setQueriesData<GetAllCategoriesResponse>(
       { queryKey: ["category"] },
@@ -93,39 +101,34 @@ export function useGetAllCategories (page: number = 1) {
     );
   }
   useCategoryCreate({ onCategoryCreate: handleAddNewCategory });
-  // Clear category id after 5 sec
-  useEffect(() => {
-    setTimeout(() => setJustCreatedCategoryId(null), 5000);
-  }, [justCreatedCategoryId]);
+
 
   // ---------------------------------------
   //
   // Update Category - Websocket
   //
   // ---------------------------------------
-function updateCategory(updated: Category) {
-  setJustUpdateFieldId(updated.category_id);
+  function updateCategory(updated: Category) {
+    markHighlighted(updated.category_id);
 
-  queryClient.setQueriesData<GetAllCategoriesResponse>(
-    { queryKey: ["category"] },
-    (oldData) => {
-      if (!oldData || !Array.isArray(oldData.categories)) {
-        return oldData;
-      }
+    queryClient.setQueriesData<GetAllCategoriesResponse>(
+      { queryKey: ["category"] },
+      (oldData) => {
+        if (!oldData || !Array.isArray(oldData.categories)) {
+          return oldData;
+        }
 
-      return {
-        ...oldData,
-        categories: oldData.categories.map((cat) =>
-          cat.category_id === updated.category_id ? updated : cat,
-        ),
-      };
-    },
-  );
-}
+        return {
+          ...oldData,
+          categories: oldData.categories.map((cat) =>
+            cat.category_id === updated.category_id ? updated : cat,
+          ),
+        };
+      },
+    );
+  }
   useUpdateCategoryWebsocket({ onCategoryUpdate: updateCategory });
-  useEffect(() => {
-    setTimeout(() => setJustUpdateFieldId(null), 5000);
-  }, [justUpdatedFieldId]);
+
 
   return {
     category: data ?? null,
@@ -133,7 +136,6 @@ function updateCategory(updated: Category) {
     isError,
     isRefetching,
     refetch,
-    justUpdatedFieldId,
-    justCreatedCategoryId,
+    highlightedIds,
   };
 }

@@ -15,7 +15,26 @@ import { useCreateStaffWebSocket } from "../websocket/staff/useCreateStaffWebsoc
 export function useStaff({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
   const queryKey = ["staff", page, size];
+  
+  const [highlightedIds, setHighlightedIds] = useState<Set<string>>(new Set());
 
+  const markHighlighted = (id: string) => {
+    setHighlightedIds((prev) => new Set(prev).add(id));
+
+    setTimeout(() => {
+      setHighlightedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }, 6000);
+  };
+
+  //----------------------------------
+  //
+  // Fetching data
+  //
+  //----------------------------------
   const { data, isLoading, isError, isRefetching, refetch } =
     useQuery<StaffProfileResponse>({
       queryKey,
@@ -26,9 +45,11 @@ export function useStaff({ page, size }: { page: number; size: number }) {
       gcTime: 1000 * 60 * 30,
     });
 
-  // ======================================
+  // ----------------------------------
+  //
   // Fetch next page automatically
-  // ======================================
+  //
+  // ----------------------------------
   const totalPages = data?.pagination.total_pages ?? 1;
   useEffect(() => {
     if (!data) return;
@@ -44,21 +65,13 @@ export function useStaff({ page, size }: { page: number; size: number }) {
     });
   }, [data, page, totalPages, queryClient, size]);
 
+
   //=================================
   // WebSocket | Update Staff
   //=================================
-  const [justUpdatedId, setJustUpdatedId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!justUpdatedId) return;
-    const timer = setTimeout(() => {
-      setJustUpdatedId(null);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, [justUpdatedId]);
-
   function handleStaffUpdated(updated: Staff) {
-    setJustUpdatedId(updated.id);
+    markHighlighted(updated.id);
+
     queryClient.setQueriesData<StaffProfileResponse>(
       { queryKey: ["staff"] },
       (oldData) => {
@@ -80,16 +93,9 @@ export function useStaff({ page, size }: { page: number; size: number }) {
   // ================================================
   // WebSocket | Add New Staff
   // ================================================
-  const [justAddedId, setJustAddedId] = useState<string | null>(null);
-  useEffect(() => {
-    if (!justAddedId) return;
-    const timeout = setTimeout(() => setJustAddedId(null), 5000);
-    return () => clearTimeout(timeout);
-  }, [justAddedId]);
-
   const handleAddNewStaff = useCallback(
     (newStaff: Staff) => {
-      setJustAddedId(newStaff.id);
+      markHighlighted(newStaff.id);
 
       console.log("New Staff ID: ", newStaff.id);
 
@@ -125,7 +131,6 @@ export function useStaff({ page, size }: { page: number; size: number }) {
     isError,
     isRefetching,
     refetch,
-    justUpdatedId,
-    justAddedId,
+    highlightedIds,
   };
 }

@@ -76,7 +76,6 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error(error);
-      console.log(error);
       setIsError(true);
     } finally {
       setIsLoggingIn(false);
@@ -114,7 +113,7 @@ export default function LoginPage() {
               Login to System
             </h2>
 
-            {/* username */}
+            {/* username */}            
             <TextInput
               value={username}
               onChange={setUsername}

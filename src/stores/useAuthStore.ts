@@ -7,19 +7,22 @@ import { persist } from "zustand/middleware";
 import { websocketManager } from "../websocket/websocket-manager";
 import { refreshWithLock } from "../lib/auth-refresh";
 
+
+// Define shape of store
 interface AuthState {
+  // Data state
   user: UserInfo | null;
   accessToken: string | null;
   refreshToken: string | null;
-  initialized: boolean;
+
+  // Process state
+  initialized: boolean; // True: Authentication check completed, False: Still checking
   isInitializing: boolean;
 
+  // Actions
   initialize: () => Promise<void>;
-
   login: (user: UserInfo, accessToken: string, refreshToken: string) => void;
-
   logout: () => Promise<void>;
-
   refresh: () => Promise<string>;
 }
 
@@ -43,19 +46,15 @@ export const useAuthStore = create<AuthState>()(
 
           if (!refreshToken) {
             console.log("NO REFRESH TOKEN");
-
             set({
               initialized: true,
               isInitializing: false,
               user: null,
             });
-
             return;
           }
 
           await refreshWithLock();
-
-          
 
           set({
             initialized: true,
@@ -63,7 +62,6 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (error) {
           console.error("REFRESH FAILED", error);
-
           set({
             user: null,
             accessToken: null,
@@ -73,6 +71,7 @@ export const useAuthStore = create<AuthState>()(
           });
         }
       },
+
 
       login: (user, accessToken, refreshToken) => {
         set({
@@ -84,6 +83,7 @@ export const useAuthStore = create<AuthState>()(
         websocketManager.connect();
       },
 
+
       logout: async () => {
         await websocketManager.disconnect();
 
@@ -94,9 +94,12 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
+
       refresh: async () => {
         return refreshWithLock();
       },
+      
+
     }),
     {
       name: "auth-storage",

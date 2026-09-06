@@ -14,18 +14,19 @@ import { useEffect, useState } from "react";
 export function useStockStatus({ page, size }: { page: number; size: number }) {
   const queryClient = useQueryClient();
   const queryKey = ["productStatus", page, size];
+
   const [justUpdatedIds, setJustUpdatedIds] = useState<Set<string>>(new Set());
 
   const markUpdated = (id: string) => {
-    setJustUpdatedIds(prev => new Set(prev).add(id));
+    setJustUpdatedIds((prev) => new Set(prev).add(id));
 
     setTimeout(() => {
-      setJustUpdatedIds(prev => {
+      setJustUpdatedIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
-      })
-    }, 5000);
+      });
+    }, 6000);
   };
 
   // ---------------------------------------
@@ -94,8 +95,6 @@ export function useStockStatus({ page, size }: { page: number; size: number }) {
       });
     },
   });
-
-
 
   return {
     data,

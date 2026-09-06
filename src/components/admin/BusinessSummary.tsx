@@ -15,11 +15,14 @@ export default function BusinessSummary() {
     {
       title: "Today's Revenue",
       icon: <Wallet />,
-      value: summary?.summary?.today_revenue?.value,
+      value: "$" + Number(summary?.summary?.today_revenue?.value).toLocaleString(
+        "en-US",
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+      ),
       growth: summary?.summary?.today_revenue?.growth_pct ?? 0,
     },
     {
-      title: "Total Orders",
+      title: "Today Orders",
       icon: <ShoppingCart />,
       value: summary?.summary?.today_total_orders?.value,
       growth: summary?.summary?.today_total_orders?.growth_pct ?? 0,
@@ -27,7 +30,12 @@ export default function BusinessSummary() {
     {
       title: "Avg. Order Value",
       icon: <ChartColumn />,
-      value: summary?.summary?.today_average_order_value?.value,
+      value: "$" + Number(
+        summary?.summary?.today_average_order_value?.value,
+      ).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       growth: summary?.summary?.today_average_order_value?.growth_pct ?? 0,
     },
   ];
@@ -79,12 +87,7 @@ export default function BusinessSummary() {
               {/* ------ */}
               <h2 className="text-2xl font-bold text-text-primary z-10">
                 {isLoading && !isError && <TextLoader text="...." />}
-                {!isLoading &&
-                  !isError &&
-                  `$${Number(card.value).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                })}` }
+                {!isLoading && !isError && `${card.value}`}
                 {isError && "Error"}
               </h2>
               {/* -------------------- */}

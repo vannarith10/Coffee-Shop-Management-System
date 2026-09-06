@@ -1,10 +1,9 @@
 //
 // components/DisplayStaff.tsx
 //
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
-import type { Staff } from "../../types/staff";
 import { DAY_ORDER, SCHEDULE_CONFIG } from "../../types/schedule";
 import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
@@ -25,22 +24,14 @@ export default function DisplayStaff() {
   const page = Number(searchParams.get("staffPage") || 1);
   const isOpen = searchParams.get("edit") === "true";
 
-  const {
-    staff,
-    isLoading,
-    isError,
-    isRefetching,
-    refetch,
-    justUpdatedId,
-    justAddedId,
-  } = useStaff({ page, size });
+  const { staff, isLoading, isError, isRefetching, refetch, highlightedIds } =
+    useStaff({ page, size });
   const currentPage = staff?.pagination.page ?? page;
   const totalPages = staff?.pagination.total_pages ?? 1;
   const totalItems = staff?.pagination.total_items ?? 0;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < totalPages;
   const targetRef = useRef<HTMLDivElement | null>(null);
-  
 
   function handlePrev() {
     if (hasPrev) {
@@ -72,21 +63,21 @@ export default function DisplayStaff() {
   }
 
   useEffect(() => {
-    if (justAddedId || justUpdatedId) {
+    if (highlightedIds) {
       targetRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [justAddedId, justUpdatedId]);
+  }, [highlightedIds]);
 
   const handleOpenFormEdit = (id: string) => {
     setSearchParams((prev) => {
       prev.set("edit", String(true));
       prev.set("id", id);
       return prev;
-    })
-  }
+    });
+  };
 
   const handleCloseFormEdit = () => {
     setSearchParams((prev) => {
@@ -94,8 +85,8 @@ export default function DisplayStaff() {
       params.delete("edit");
       params.delete("id");
       return params;
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -115,29 +106,24 @@ export default function DisplayStaff() {
           isRefetching={isRefetching}
         />
 
-        {/* ================================ */}
-        {/* List down each RECORD of profile */}
-        {/* MAIN */}
-        {/* Render unless isLoading = false */}
-        {/* ================================ */}
+        {/* ---------------------------------------------------------
+          *
+                    List down each RECORD of profile
+          *          
+        ---------------------------------------------------------- */}
         {!isLoading && !isError && staff?.staffs.length == 0 ? (
           <div className="w-full flex justify-center items-center py-20 font-bold">
             No data
           </div>
         ) : (
           staff?.staffs.map((staff) => {
-            const isUpdated = staff.id === justUpdatedId;
-            const justAdded = staff.id === justAddedId;
+            const isHighlighted = highlightedIds.has(staff.id);
             const roleColor = COLORS[ROLES.indexOf(staff.role)];
             return (
               <main
-                ref={
-                  staff.id === justAddedId || staff.id === justUpdatedId
-                    ? targetRef
-                    : null
-                }
+                ref={isHighlighted ? targetRef : null}
                 key={staff.id}
-                className={`grid grid-cols-5 items-center-safe p-4 gap-4 ${isUpdated || justAdded ? "shimmer shimmer-bg shimmer-color-blue-400 shimmer-duration-2000" : ""} bg-background-secondary  hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
+                className={`grid grid-cols-5 items-center-safe p-4 gap-4 ${isHighlighted ? "shimmer shimmer-bg shimmer-color-blue-400 shimmer-duration-2000" : ""} bg-background-secondary  hover:bg-background-secondary-hover px-4 border-t border-border-hover`}
               >
                 {/* ====================================== */}
                 {/* PROFILE : img, name, username, email */}
@@ -272,7 +258,6 @@ export default function DisplayStaff() {
         />
       </section>
 
-      
       {/* -------------------------------------------------
       *
                     FORM: Open Form Edit
@@ -280,10 +265,7 @@ export default function DisplayStaff() {
       -------------------------------------------------- */}
       <AnimatePresence>
         {isOpen && (
-          <EditStaffProfile
-            isOpen={true}
-            onClose={handleCloseFormEdit}
-          />
+          <EditStaffProfile isOpen={true} onClose={handleCloseFormEdit} />
         )}
       </AnimatePresence>
     </>

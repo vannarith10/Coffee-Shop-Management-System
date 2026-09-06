@@ -23,6 +23,8 @@ async function performRefresh(): Promise<string> {
   return response.access_token;
 }
 
+
+// បើមាន API Request ច្រើនពេលតែមួយ ហើយ Access Token Expired កុំឱ្យពួកវាទាំងអស់ Refresh Token ក្នុងពេលតែមួយ។
 export async function refreshWithLock() {
 
   if (refreshPromise) {

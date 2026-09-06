@@ -1,7 +1,6 @@
 //
 // security/PrivateRoute.tsx
 //
-
 import { Navigate, Outlet } from "react-router-dom";
 import Loader from "../components/ui/Loader";
 import { useAuthStore } from "../stores/useAuthStore";
@@ -9,6 +8,7 @@ import { useAuthStore } from "../stores/useAuthStore";
 export default function PrivateRoute() {
   const user = useAuthStore((state) => state.user);
   const initialized = useAuthStore((state) => state.initialized);
+
 
   if (!initialized) {
     return (
@@ -23,6 +23,7 @@ export default function PrivateRoute() {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+
 
   return <Outlet />;
 }
