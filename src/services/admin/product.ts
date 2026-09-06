@@ -74,7 +74,7 @@ export async function patchProduct({
   id: string;
   data: UpdateProductRequest;
   image?: File | null;
-}) {
+}): Promise<void> {
   const formData = new FormData();
   formData.append(
     "data",
@@ -83,8 +83,7 @@ export async function patchProduct({
   if (image) {
     formData.append("image", image);
   }
-  const res = await api.patch(`/api/v2/product/${id}/patch`, formData);
-  return res;
+  await api.patch(`/api/v2/product/${id}/patch`, formData);
 }
 
 //

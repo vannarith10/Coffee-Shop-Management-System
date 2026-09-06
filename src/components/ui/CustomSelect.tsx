@@ -13,6 +13,7 @@ interface CustomSelectProps<T> {
   onChange: (value: T) => void;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export default function CustomSelect<T>({
@@ -21,13 +22,12 @@ export default function CustomSelect<T>({
   onChange,
   placeholder = "Select an option",
   className = "",
+  disabled = false,
 }: CustomSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find(
-    (option) => option.value === value
-  );
+  const selectedOption = options.find((option) => option.value === value);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -48,42 +48,36 @@ export default function CustomSelect<T>({
   }, []);
 
   return (
-    <div
-      ref={selectRef}
-      className={`relative w-full ${className}`}
-    >
+    <div ref={selectRef} className={`relative w-full ${className}`}>
       {/* Selected value */}
       <button
+        disabled={disabled}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex w-full items-center justify-between rounded-md border-2 
-          border-border bg-background-secondary p-2 font-bold
+        className={`flex w-full items-center justify-between rounded-md border-2 ${disabled ? "border-border" : "border-green-600"} 
+           bg-background-secondary p-2 font-bold
           transition-all hover:border-border-hover
           focus:border-green-600 focus:outline-none
-          ${
-            value === false
-              ? "text-text-error"
-              : "text-white"
-          }`}
+          ${value === false ? "text-text-error" : "text-white"}`}
       >
-        <span>
-          {selectedOption?.label || placeholder}
-        </span>
+        <span>{selectedOption?.label || placeholder}</span>
 
-        <ChevronDown
-          className={`size-4 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        {!disabled && (
+          <ChevronDown
+            className={`size-4 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        )}
       </button>
 
       {/* Options */}
       <div
-        className={`absolute left-0 top-full z-50 mt-2 w-full overflow-hidden 
+        className={`h-10 max-h-55 overflow-y-scroll  absolute left-0 top-full z-50 mt-2 w-full overflow-hidden 
           rounded-md border border-border bg-background-secondary shadow-lg
-          transition-all duration-200 ${
+          transition-all duration-500 ease-out ${
             isOpen
-              ? "visible translate-y-0 opacity-100"
+              ? "visible translate-y-0 opacity-100 h-55 scrollbar-hide"
               : "invisible -translate-y-2 opacity-0"
           }`}
       >
@@ -99,12 +93,8 @@ export default function CustomSelect<T>({
                 setIsOpen(false);
               }}
               className={`flex w-full items-center gap-2 px-3 py-2 text-left
-                font-medium transition hover:bg-background-secondary-hover
-                ${
-                  isSelected
-                    ? "bg-green-600"
-                    : "bg-background-primary"
-                }`}
+                font-medium hover:bg-background-secondary-hover cursor-pointer transition-all duration-300 ease-out
+                ${isSelected ? "bg-green-600" : "bg-background-primary"}`}
             >
               {/* Optional status indicator */}
               {option.bg && (

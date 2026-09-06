@@ -3,7 +3,7 @@
 
 import { getASingleProduct } from "../services/admin/product";
 import type { Product } from "../types/product";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export function useGetASingleProduct({ id }: { id: string }) {
   const queryKey = ["single-product", id];
@@ -11,8 +11,7 @@ export function useGetASingleProduct({ id }: { id: string }) {
   return useQuery<Product>({
     queryKey,
     queryFn: () => getASingleProduct({ id }).then((res) => res.data as Product),
-    placeholderData: keepPreviousData,
-    staleTime: 1000 * 60,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }
