@@ -17,8 +17,8 @@ const SettingTab = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <ScrollToTheTop />
-        <GeneralInformation />
         <ShopBranding />
+        <GeneralInformation />
       </div>
     </div>
   );

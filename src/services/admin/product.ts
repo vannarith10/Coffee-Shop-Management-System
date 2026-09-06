@@ -53,14 +53,14 @@ export async function addNewProduct({
 }: {
   data: AddNewProductRequest;
   image: File;
-}) {
+}): Promise<void> {
   const formData = new FormData();
   formData.append(
     "data",
     new Blob([JSON.stringify(data)], { type: "application/json" }),
   );
   formData.append("image", image);
-  return await api.post("/api/v2/product/add-new", formData);
+  await api.post("/api/v2/product/add-new", formData);
 }
 
 //

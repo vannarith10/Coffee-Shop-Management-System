@@ -10,7 +10,7 @@ export default function MoneyInput({
   value,
   onChange,
   decimals = 2,
-  className = "w-full border-2 border-border p-2 rounded-md font-bold text-green-600 hover:border-border-hover outline-none",
+  className = "w-full bg-background-secondary/50 border-2 border-border p-2 rounded-md font-bold text-green-600 hover:border-border-hover outline-none",
   readOnly = false,
 }: MoneyInputProps) {
   return (

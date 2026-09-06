@@ -1,33 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AddNewProductRequest } from "../types/product";
 import { addNewProduct } from "../services/admin/product";
-import { toast } from "sonner";
-import axios from "axios";
+import { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";
 
-type CreateProductPayload = {
+type CreateProductRequest = {
   data: AddNewProductRequest;
   image: File;
 };
 
-export function useCreateProduct(onAction?: () => void) {
-  return useMutation({
-    mutationFn: ({ data, image }: CreateProductPayload) =>
+export function useCreateProduct() {
+  return useMutation<void, AxiosError<BackendErrorDetail>, CreateProductRequest >({
+    mutationFn: ({ data, image }: CreateProductRequest) =>
       addNewProduct({ data, image }),
-
-    onSuccess: (res) => {
-      if (res.status === 201) {
-        toast.success("Product created", { duration: 3000 });
-      }
-
-      onAction?.(); // Optional chaining, it's like this statement: if(onAction){onAction();} runs the function we pass to it.
-    },
-
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorData = error.response?.data as BackendErrorDetail;
-        toast.error(errorData?.detail ?? "Unexpected error");
-      }
-    },
   });
 }

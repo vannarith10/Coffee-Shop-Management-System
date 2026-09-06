@@ -54,13 +54,13 @@ export default function CustomSelect<T>({
         disabled={disabled}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex w-full items-center justify-between rounded-md border-2 ${disabled ? "border-border" : "border-green-600"} 
-           bg-background-secondary p-2 font-bold
+        className={`flex w-full items-center justify-between rounded-md border-2 ${disabled ? "border-gray-600" : "border-border"} 
+           bg-background-secondary/50 py-2 px-4 font-bold
           transition-all hover:border-border-hover
           focus:border-green-600 focus:outline-none
           ${value === false ? "text-text-error" : "text-white"}`}
       >
-        <span>{selectedOption?.label || placeholder}</span>
+        <span className=" font-semibold ">{selectedOption?.label || placeholder}</span>
 
         {!disabled && (
           <ChevronDown
@@ -77,22 +77,22 @@ export default function CustomSelect<T>({
           rounded-md border border-border bg-background-secondary shadow-lg
           transition-all duration-500 ease-out ${
             isOpen
-              ? "visible translate-y-0 opacity-100 h-55 scrollbar-hide"
+              ? "visible translate-y-0 opacity-100 h-fit scrollbar-hide"
               : "invisible -translate-y-2 opacity-0"
           }`}
       >
-        {options.map((option) => {
+        {options.map((option, idx) => {
           const isSelected = option.value === value;
 
           return (
             <button
-              key={String(option.value)}
+              key={String(option.value) + idx}
               type="button"
               onClick={() => {
                 onChange(option.value);
                 setIsOpen(false);
               }}
-              className={`flex w-full items-center gap-2 px-3 py-2 text-left
+              className={`flex w-full items-center gap-2 px-4 py-2 text-left
                 font-medium hover:bg-background-secondary-hover cursor-pointer transition-all duration-300 ease-out
                 ${isSelected ? "bg-green-600" : "bg-background-primary"}`}
             >

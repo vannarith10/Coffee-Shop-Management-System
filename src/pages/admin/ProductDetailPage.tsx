@@ -204,7 +204,7 @@ export default function ProductDetailPage() {
         },
 
         onError: (err) => {
-          toast.error(err.response?.data.detail, { duration: 5000 });
+          toast.error(err.response?.data.detail || "Unexpected error" , { duration: 5000 });
         },
       },
     );
@@ -385,7 +385,7 @@ export default function ProductDetailPage() {
                       onClick={() => setNewStockStatus(option.value)}
                       key={option.value}
                       disabled={!isEditing}
-                      className={`relative  font-bold text-white text-sm ${isSelected ? `bg-${option.color} ${option.border}` : "bg-background-secondary-hover"} border-2 border-border px-4 py-2 rounded-md transition-all duration-200 ease-out ${isEditing ? "cursor-pointer active:scale-90" : "cursor-not-allowed"}`}
+                      className={`relative  font-bold text-white text-sm ${isSelected ? `bg-${option.color} ${option.border}` : isEditing ? "bg-background-secondary-hover hover:border-border-hover" : "bg-gray-500"} border-2 border-border px-4 py-2 rounded-md transition-all duration-200 ease-out ${isEditing ? "cursor-pointer active:scale-90" : "cursor-not-allowed"}`}
                     >
                       {option.label}
                       {isCurrent && (
@@ -446,7 +446,7 @@ export default function ProductDetailPage() {
                             Dates & ID container
                             *
           --------------------------------------------- */}
-          <div className="min-w-48 mb-6 h-full max-h-fit flex flex-col justify-start p-4 gap-4 bg-background-secondary-hover rounded-xl border-2 border-border ">
+          <div className="min-w-48 h-full max-h-fit flex flex-col justify-start p-4 gap-4 bg-background-secondary-hover rounded-xl border-2 border-border ">
             {/* -----------------------------
                               ID
             ------------------------------ */}
