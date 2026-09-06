@@ -1,17 +1,17 @@
 import { Store } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useGetShopInfo } from "../../hooks/useGetShopInfo";
 import { toast } from "sonner";
 import { useUpdateShopInfo } from "../../hooks/useUpdateShopInfo";
 
 const GeneralInformation = () => {
-  const { data, isLoading, isError, isRefetching, refetch } = useGetShopInfo();
+  const { data } = useGetShopInfo();
   const [isEditing, setIsEditing] = useState(false);
   //
-  const [newShopName, setNewShopName] = useState<string>();
-  const [newContact, setNewContact] = useState<string>();
-  const [newAddress, setNewAddress] = useState<string>();
-  const [newDescription, setNewDescription] = useState<string>();
+  const [newShopName, setNewShopName] = useState<string>("");
+  const [newContact, setNewContact] = useState<string>("");
+  const [newAddress, setNewAddress] = useState<string>("");
+  const [newDescription, setNewDescription] = useState<string>("");
   //
   const { mutate: update, isPending: updating } = useUpdateShopInfo();
 
@@ -19,10 +19,12 @@ const GeneralInformation = () => {
   function onEditing() {
     setIsEditing(true);
 
-    setNewShopName(data?.name);
-    setNewContact(data?.contact.toString());
-    setNewAddress(data?.address);
-    setNewDescription(data?.description);
+    if (data) {
+      setNewShopName(data?.name);
+      setNewContact(data?.contact.toString());
+      setNewAddress(data?.address);
+      setNewDescription(data?.description);
+    }
   }
 
   function handleSave() {
@@ -79,7 +81,7 @@ const GeneralInformation = () => {
         </label>
         <input
           onChange={(e) => setNewShopName(e.target.value)}
-          value={isEditing ? newShopName : data?.name}
+          value={isEditing ? newShopName : data?.name ?? ""}
           type="text"
           disabled={!isEditing}
           className={`${isEditing ? "bg-background-secondary-hover" : "bg-background-secondary"} uppercase border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover`}
@@ -98,7 +100,7 @@ const GeneralInformation = () => {
             const onlyDigits = e.target.value.replace(/\D/g, "");
             setNewContact(onlyDigits);
           }}
-          value={isEditing ? newContact : data?.contact}
+          value={isEditing ? newContact : data?.contact ?? ""}
           type="tel"
           inputMode="numeric"
           disabled={!isEditing}
@@ -115,7 +117,7 @@ const GeneralInformation = () => {
         </label>
         <textarea
           disabled={!isEditing}
-          value={isEditing ? newAddress : data?.address}
+          value={isEditing ? newAddress : data?.address ?? ""}
           name="address"
           id=""
           rows={3}
@@ -133,7 +135,7 @@ const GeneralInformation = () => {
         </label>
         <textarea
           disabled={!isEditing}
-          value={isEditing ? newDescription : data?.description}
+          value={isEditing ? newDescription : data?.description ?? ""}
           name="about shop"
           id=""
           rows={5}
@@ -161,13 +163,7 @@ const GeneralInformation = () => {
         {/* Button Edit & Save */}
         {/* --------------------------- */}
         <button
-          onClick={() => {
-            if (!isEditing) {
-              onEditing();
-            } else {
-              handleSave();
-            }
-          }}
+          onClick={isEditing ? handleSave : onEditing}
           className={`font-semibold px-8 py-2 text-text-secondary border border-border hover:border-border-hover rounded-md ${isEditing ? "bg-green-600" : "bg-background-secondary-hover"} cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none`}
         >
           {isEditing ? (updating ? "Saving" : "Save") : "Edit"}
