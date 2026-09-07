@@ -9,11 +9,8 @@ import { LiquidGlass } from "../components/ui/LiguidGlass";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { gsap } from "gsap";
 
-import DarkTemple from "../assets/dark-temple.png";
-import LightTemple from "../assets/light-temple.jpg";
-
-import DarkComicTemple from "../assets/comic-temple-dark.png";
-import LightComicTemple from "../assets/comic-temple-light.png";
+import DarkComicTemple from "../assets/bayon-dark.jpeg";
+import LightComicTemple from "../assets/bayon-light.jpeg";
 
 import { useThemeStore } from "../stores/useThemeStore";
 import { useAuthStore } from "../stores/useAuthStore";
