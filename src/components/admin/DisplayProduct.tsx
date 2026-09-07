@@ -2,7 +2,7 @@
 // components/DisplayProduct.tsx
 //
 import { useRef } from "react";
-import NoImage from "../../assets/no-image.webp";
+import NoImage from "../../assets/picture.jpg";
 import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
 import { RotateCcw, SquareChartGantt } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";

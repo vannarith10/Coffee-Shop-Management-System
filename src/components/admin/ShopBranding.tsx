@@ -1,6 +1,6 @@
 import { Feather, Trash2 } from "lucide-react";
 import React, { useCallback, useRef, useState } from "react";
-import DefaultImage from "../../assets/image-default.jpg";
+import DefaultImage from "../../assets/picture.jpg";
 import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
 import Loader from "../ui/Loader";
 import { useDeleteShopLogo } from "../../hooks/useDeleteShopLogo";
@@ -10,7 +10,6 @@ import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { useUpdateShopLogo } from "../../hooks/useUpdateShopLogo";
 import { AnimatePresence } from "framer-motion";
-import { motion } from "framer-motion";
 import FormHeader from "../animation/FormHeader";
 import ButtonCancel from "../ui/ButtonCancel";
 import MyPopupForm from "../animation/MyPopupForm";

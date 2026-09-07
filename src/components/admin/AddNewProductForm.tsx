@@ -6,7 +6,7 @@ import type {
 } from "../../types/product";
 import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
 import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import DefaultImage from "../../assets/image-default.jpg";
+import DefaultImage from "../../assets/picture.jpg";
 import type { Area } from "react-easy-crop";
 import { base64ToFile } from "../../utils/convertor";
 import { getCroppedImg } from "../../utils/crop-helper";

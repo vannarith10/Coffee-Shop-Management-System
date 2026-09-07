@@ -8,8 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { LiquidGlass } from "../components/ui/LiguidGlass";
 import ThemeSwitch from "../components/ui/ThemeSwitch";
 import { gsap } from "gsap";
+
 import DarkTemple from "../assets/dark-temple.png";
 import LightTemple from "../assets/light-temple.jpg";
+
+import DarkComicTemple from "../assets/comic-temple-dark.png";
+import LightComicTemple from "../assets/comic-temple-light.png";
+
 import { useThemeStore } from "../stores/useThemeStore";
 import { useAuthStore } from "../stores/useAuthStore";
 import PasswordInput from "../components/ui/PasswordInput";
@@ -91,7 +96,7 @@ export default function LoginPage() {
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-out ${
           theme === "dark" ? "opacity-100" : "opacity-0"
         }`}
-        style={{ backgroundImage: `url(${DarkTemple})` }}
+        style={{ backgroundImage: `url(${DarkComicTemple})` }}
       />
 
       {/* Light background */}
@@ -99,7 +104,7 @@ export default function LoginPage() {
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-out ${
           theme === "light" ? "opacity-100" : "opacity-0"
         }`}
-        style={{ backgroundImage: `url(${LightTemple})` }}
+        style={{ backgroundImage: `url(${LightComicTemple})` }}
       />
 
       {/* Foreground */}

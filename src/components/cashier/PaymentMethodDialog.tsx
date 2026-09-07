@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { QrCode, Receipt, Send } from "lucide-react";
 import useCartStore from "../../hooks/cashier/useCartStore";
 import { useState, type ReactNode } from "react";
-import DefaultImage from "../../assets/image-default.jpg";
+import DefaultImage from "../../assets/picture.jpg";
 import { toast } from "sonner";
 import { useCreateOrder } from "../../hooks/cashier/useCreateOrder";
 import type { CreateOrderRequest } from "../../types/order";

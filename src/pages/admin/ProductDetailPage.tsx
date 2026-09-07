@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { STATUS_OPTIONS } from "../../types/stock-status";
 import ButtonCopy from "../../components/ui/ButtonCopy";
-import DefaultPicture from "../../assets/no-image.webp";
+import Picture from "../../assets/picture.jpg";
 import type { Area } from "react-easy-crop";
 import ImageCropForm from "../../components/ui/ImageCropForm";
 import { getCroppedImg } from "../../utils/crop-helper";
@@ -67,7 +67,7 @@ export default function ProductDetailPage() {
   const [newDescription, setNewDescription] = useState<string | null>(null);
   const [newStockStatus, setNewStockStatus] =
     useState<PRODUCT_STOCK_STATUS | null>(null);
-  const [preview, setPreview] = useState<string>(DefaultPicture);
+  const [preview, setPreview] = useState<string>(Picture);
 
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState<string | null>(null);
@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
         setNewCost(product.cost_price.toString());
         setNewDescription(product.description);
         setNewStockStatus(product.stock_status);
-        setPreview(product.image_url || DefaultPicture);
+        setPreview(product.image_url || Picture);
       }
     })();
   }, [product]);
@@ -120,7 +120,7 @@ export default function ProductDetailPage() {
       setNewCost(product.cost_price.toString());
       setNewDescription(product.description);
       setNewStockStatus(product.stock_status);
-      setPreview(product.image_url || DefaultPicture);
+      setPreview(product.image_url || Picture);
       setFile(null);
     }
   };

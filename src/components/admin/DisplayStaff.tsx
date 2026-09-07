@@ -133,7 +133,7 @@ export default function DisplayStaff() {
                   <img
                     src={staff.image_url || DefaultProfile}
                     alt="profile"
-                    className="w-14 h-14 lg:w-14 lg:h-14 rounded-full border-2 border-border object-cover"
+                    className="w-14 h-14 sm:w-18 sm:h-18 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-sm border-2 border-border object-cover transition-all duration-300 ease-out"
                   />
                   {/* ------------------------
                             user info

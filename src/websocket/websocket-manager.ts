@@ -17,35 +17,33 @@ class WebSocketManager {
 
   private subscriptions = new Map<string, SubscriptionEntry>();
 
-
-
-
   async connect() {
     if (this.client) {
       console.log("WebSocket already initialized.");
       return;
     }
 
-    let token = useAuthStore.getState().accessToken;
-
-    if (!token) {
-      console.warn("WS: access token is missing.");
-      return;
-    }
-
-    if (isTokenExpired(token, 30)){
-      token = await useAuthStore.getState().refresh();
-    }
-
     const client = new Client({
-      brokerURL: `${
-        import.meta.env.VITE_API_WEBSOCKET_BASE_URL
-      }/ws?token=${token}`,
-
       reconnectDelay: 5000,
 
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      beforeConnect: async () => {
+        let token = useAuthStore.getState().accessToken;
+
+        if (!token) {
+          throw new Error("Missing token");
+        }
+
+        if (isTokenExpired(token, 30)) {
+          token = await useAuthStore.getState().refresh();
+        }
+
+        client.brokerURL = `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${token}`;
+
+        console.log("WS using token:", token.substring(0, 20));
+      },
+
+      heartbeatIncoming: 10000,
+      heartbeatOutgoing: 10000,
 
       onConnect: () => {
         /**
@@ -56,7 +54,7 @@ class WebSocketManager {
           return;
         }
 
-        console.log("+++ WS Connected +++");
+        console.log("+++ WS Connected +++", new Date().toISOString());
 
         this.restoreSubscriptions();
       },
@@ -73,20 +71,23 @@ class WebSocketManager {
         console.error("WebSocket Error:", event);
       },
 
-      // debug: (message) => {
-      //   console.debug("[STOMP]", message);
-      // },
+      onWebSocketClose: (event) => {
+        console.log("WS CLOSE", {
+          code: event.code,
+          reason: event.reason,
+          wasClean: event.wasClean,
+        });
+      },
+
+      debug: (message) => {
+        console.debug("[STOMP]", message);
+      },
     });
 
     this.client = client;
 
     client.activate();
   }
-
-
-
-
-
 
   subscribe(destination: string, handler: MessageHandler): () => void {
     let entry = this.subscriptions.get(destination);
@@ -145,6 +146,8 @@ class WebSocketManager {
       return;
     }
 
+    console.log("Subscribing:", destination);
+
     entry.stompSubscription = client.subscribe(destination, (message) => {
       entry.handlers.forEach((handler) => {
         try {
@@ -156,7 +159,6 @@ class WebSocketManager {
     });
   }
 
-  
   private restoreSubscriptions() {
     console.log("Restoring WebSocket subscriptions...");
 

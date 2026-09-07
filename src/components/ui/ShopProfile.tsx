@@ -2,7 +2,7 @@
 // Displays Shop's name ans logo
 //
 import Loader from "./Loader";
-import DefaultLogo from "../../assets/no-image.webp";
+import DefaultLogo from "../../assets/picture.jpg";
 import ErrorImage from "../../assets/error-image.jpg";
 import TextLoader from "../ui/TextLoader";
 import type { ShopNameAndLogo } from "../../types/shop-setting";

@@ -6,7 +6,7 @@ import type { UserInfo } from "../types/user";
 import { persist } from "zustand/middleware";
 import { websocketManager } from "../websocket/websocket-manager";
 import { refreshWithLock } from "../lib/auth-refresh";
-
+import { scheduleTokenRefresh } from "../lib/auth-token-scheduler";
 
 // Define shape of store
 interface AuthState {
@@ -25,7 +25,6 @@ interface AuthState {
   logout: () => Promise<void>;
   refresh: () => Promise<string>;
 }
-
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -72,7 +71,6 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-
       login: (user, accessToken, refreshToken) => {
         set({
           user,
@@ -82,7 +80,6 @@ export const useAuthStore = create<AuthState>()(
 
         websocketManager.connect();
       },
-
 
       logout: async () => {
         await websocketManager.disconnect();
@@ -94,16 +91,17 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-
       refresh: async () => {
         return refreshWithLock();
       },
-      
-
     }),
     {
       name: "auth-storage",
       onRehydrateStorage: () => (state) => {
+        if (state?.accessToken) {
+          scheduleTokenRefresh(state.accessToken);
+        }
+        
         if (state) {
           state.initialize();
         }

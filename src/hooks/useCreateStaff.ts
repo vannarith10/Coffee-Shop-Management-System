@@ -5,7 +5,7 @@ import { createStaffAccount } from "../services/admin/staff";
 import type { CreateStaffRequest, CreateStaffResponse } from "../types/staff";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";
-import { toast } from "sonner";
+
 
 type CreateStaffRequests = {
   data: CreateStaffRequest;
@@ -20,12 +20,5 @@ export function useCreateStaff() {
   >({
     mutationFn: ({ data, image }) =>
       createStaffAccount({ data: data, image: image }).then((res) => res.data),
-
-    onError: (error) => {
-      toast.error(
-        error.response?.data?.detail ?? "Failed to update shop logo",
-        { duration: 3000 },
-      );
-    },
   });
 }
