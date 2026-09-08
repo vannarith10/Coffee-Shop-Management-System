@@ -119,17 +119,19 @@ export default function DisplayProduct() {
       {!isLoading && !isError && (
         <>
           {products!.product_items?.length > 0 ? (
-            <main className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
+            <main className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 p-1 gap-1">
               {products?.product_items?.map((product) => {
                 const config = STOCK_STATUS_CONFIG[product.stock_status];
                 return (
                   <button
                     key={product.id}
                     onClick={() => {
-                      navigate(`${product.id}`, { replace: true, state: {preserveScroll: true} } );
+                      navigate(`${product.id}`, {
+                        replace: true,
+                        state: { preserveScroll: true },
+                      });
                     }}
-                    className={` group relative cursor-pointer bg-cover bg-center overflow-hidden active:scale-80 transition-all duration-300 ease-out `}
-                    // style={{ backgroundImage: `url(${product.image_url})` }}
+                    className={` group relative flex cursor-pointer bg-cover bg-center overflow-hidden active:scale-80 transition-all duration-300 ease-out `}
                   >
                     {/* Background layer */}
                     <div
@@ -137,50 +139,49 @@ export default function DisplayProduct() {
                       style={{ backgroundImage: `url(${product.image_url})` }}
                     ></div>
                     {/* Overlay with blur */}
-                    <div className="w-full h-full p-4 inset-0 bg-black/30 group-hover:bg-black/10 backdrop-blur-xl transition-all duration-300 ease-out">
+                    <div className="w-full h-full flex gap-4 p-4 inset-0 bg-black/30 group-hover:bg-black/10 backdrop-blur-xl transition-all duration-300 ease-out">
                       {/* ----------------------------------------------
                                   image & price & cost
                       ----------------------------------------------- */}
-                      <div className=" w-full grid grid-cols-2 gap-x-6">
+                      <div className=" w-[50%] max-w-50 shrink-0 flex flex-col gap-x-6 ">
                         <img
                           src={product.image_url || NoImage}
                           alt="product image"
                           loading="lazy"
-                          className=" max-h-40 aspect-square object-center rounded-md"
+                          className=" w-full max-h-50 max-w-50 shrink-0 aspect-square object-cover rounded-md"
                         />
 
-                        {/* Price & Stock */}
-                        <div className=" flex flex-col ">
-                          <h5 className="text-start text-2xl md:text-xl lg:text-2xl font-bold text-green-400 text-nowrap">
-                            Price ${product.price}
+                        {/* Name */}
+                        <h3 className="font-bold text-2xl md:text-xl lg:text-2xl text-left py-2">
+                          {product.name}
+                        </h3>
+
+                        {/* Category */}
+                        <div className="w-full flex flex-col items-start gap-2">
+                          <h5 className="font-bold text-sm bg-background-secondary-hover px-4 py-1">
+                            {product.category_name}
                           </h5>
-                          <h5 className="text-start text-xl md:text-lg lg:text-xl font-bold ">
-                            Cost ${product.cost_price}
+                          <h5 className="font-semibold text-sm">
+                            {product.category_type}
                           </h5>
-                          <h6
-                            className={`mt-2 text-start font-bold w-fit inline-flex gap-2`}
-                          >
-                            <span className="font-semibold">Stock</span>
-                            <span className={`${config.bg} px-4`}>
-                              {config.label}
-                            </span>
-                          </h6>
                         </div>
                       </div>
 
-                      {/* Name */}
-                      <h3 className="font-bold text-2xl md:text-xl lg:text-2xl text-left py-2">
-                        {product.name}
-                      </h3>
-
-                      {/* Category */}
-                      <div className="w-full flex flex-col items-start gap-2">
-                        <h5 className="font-bold text-sm bg-background-secondary-hover px-4 py-1">
-                          {product.category_name}
+                      {/* Price & Stock */}
+                      <div className=" flex flex-col ">
+                        <h5 className="text-start text-2xl md:text-xl lg:text-2xl font-bold text-green-400 text-nowrap">
+                          Price ${product.price}
                         </h5>
-                        <h5 className="font-semibold text-sm">
-                          {product.category_type}
+                        <h5 className="text-start text-xl md:text-lg lg:text-xl font-bold ">
+                          Cost ${product.cost_price}
                         </h5>
+                        <h6
+                          className={`mt-2 text-start font-bold w-fit inline-flex gap-2`}
+                        >
+                          <span className={`${config.bg} px-4`}>
+                            {config.label}
+                          </span>
+                        </h6>
                       </div>
                     </div>
                   </button>

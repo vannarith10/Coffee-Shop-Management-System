@@ -11,7 +11,6 @@ import type { Area } from "react-easy-crop";
 import { base64ToFile } from "../../utils/convertor";
 import { getCroppedImg } from "../../utils/crop-helper";
 import ImageCropForm from "../ui/ImageCropForm";
-import { toast } from "sonner";
 import { useCreateProduct } from "../../hooks/useCreateProduct";
 import MoneyInput from "../ui/MoneyInput";
 import MyPopupForm from "../animation/MyPopupForm";
@@ -23,19 +22,45 @@ import ButtonCancel from "../ui/ButtonCancel";
 import ButtonSubmit from "../ui/ButtonSubmit";
 import TextInput from "../ui/TextInput";
 import { useSearchParams } from "react-router-dom";
+import { z } from "zod";
+import { Controller, useForm, useWatch, type FieldErrors } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+const createProductSchema = z
+  .object({
+    name: z.string().min(1, "Name is required"),
+    category_name: z.string().min(1, "Category is required"),
+    selling_price: z.coerce.number().positive("Price is required"),
+    cost: z.coerce.number().positive("Cost is required"),
+    description: z.string().nullable(),
+    stock_status: z.string().min(1, "Stock is required"),
+  })
+  .refine((data) => data.cost <= data.selling_price, {
+    message: "Price must be greater than cost",
+    path: ["cost"],
+  });
+
+type CreateProductFormData = z.input<typeof createProductSchema>;
 
 export default function AddNewProductForm() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isOpen = searchParams.get("create") === "true";
 
-  const [productName, setProductName] = useState<string>("");
-  const [productPrice, setProductPrice] = useState<string>("0");
-  const [costPrice, setCostPrice] = useState<string>("0");
-  const [categoryName, setCategoryName] = useState<string | null>(null);
-  const [stockStatus, setStockStatus] = useState<PRODUCT_STOCK_STATUS | null>(
-    null,
-  );
-  const [description, setDescription] = useState<string | null>(null);
+  const { control, handleSubmit, setValue, reset } =
+    useForm<CreateProductFormData>({
+      resolver: zodResolver(createProductSchema),
+      defaultValues: {
+        name: "",
+        category_name: "",
+        selling_price: 0,
+        cost: 0,
+        description: "",
+        stock_status: "",
+      },
+    });
+
+
   const { categoryNameType } = useGetAllCategoryNames();
   const { mutate: createProduct, isError, isPending } = useCreateProduct();
   const [image, setImage] = useState<string | null>(null);
@@ -86,106 +111,49 @@ export default function AddNewProductForm() {
     setCroppedAreaPixels(croppedPixels);
   }, []);
 
-  // ==================
-  // Handle close
-  // ==================
-  function onClose() {
-    setProductName("");
-    setProductPrice("0");
-    setCostPrice("0");
-    setCategoryName(null);
-    setStockStatus(null);
-    setImage(null);
-    setFile(null);
-    setPreview(DefaultImage);
-    handleCloseForm();
-  }
+  const stockStatus = useWatch({ control, name: "stock_status" });
+  const handleSelectStockStatus = (status: PRODUCT_STOCK_STATUS) => {
+    setValue("stock_status", status, { shouldValidate: true });
+  };
+
+  const categoryName = useWatch({ control, name: "category_name" });
+  const handleSelectCategoryName = (categoryName: string) => {
+    setValue("category_name", categoryName);
+  };
 
   // ---------------------------------------
   //
   //  Handle submit
   //
   // ---------------------------------------
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    // Name check
-    if (productName == null || productName == "") {
-      toast.warning("Please input product name", { duration: 3000 });
-      return;
-    }
-    // Price check
-    if (productPrice == null || productPrice == "0") {
-      toast.warning("Please input product price", { duration: 3000 });
-      return;
-    }
-    if (Number(productPrice) < 0) {
-      toast.warning("Price must not be lower than zero", { duration: 3000 });
-      return;
-    }
-
-    // Cost check
-    if (costPrice == null || costPrice == "0") {
-      toast.warning("Please input cost price", { duration: 3000 });
-      return;
-    }
-    if (Number(costPrice) < 0) {
-      toast.warning("Cost price must not be lower than zero", {
-        duration: 3000,
-      });
-      return;
-    }
-
-    // Price & Cost check
-    if (Number(productPrice) < Number(costPrice)) {
-      toast.warning("Price must be greater than or equal cost", {
-        duration: 3000,
-      });
-      return;
-    }
-
-    // Category check
-    if (categoryName == null || categoryName == "") {
-      toast.warning("Please input category name", { duration: 3000 });
-      return;
-    }
-
-    // Stock check
-    if (stockStatus == null) {
-      toast.warning("Please input stock status", { duration: 3000 });
-      return;
-    }
-
-    // Image check
-    if (file == null) {
-      toast.warning("Please update an image", { duration: 3000 });
-      return;
-    }
-
+  const onSubmit = (formData: CreateProductFormData) => {
     const data: AddNewProductRequest = {
-      name: productName,
-      selling_price: Number(productPrice),
-      cost_price: Number(costPrice),
-      category_name: categoryName,
-      stock_status: stockStatus,
-      description: description,
+      name: formData.name,
+      category_name: formData.category_name,
+      selling_price: formData.selling_price as number,
+      cost_price: formData.cost as number,
+      description: formData.description,
+      stock_status: formData.stock_status as PRODUCT_STOCK_STATUS,
     };
 
     createProduct(
-      { data, image: file },
+      { data, image: file! },
       {
         onSuccess: () => {
-          toast.success("Product created successfully", { duration: 5000 });
-          onClose();
+          handleCloseForm();
         },
-
         onError: (err) => {
-          toast.error(err.response?.data.detail || "Unexpected error", {
-            duration: 5000,
-          });
+          toast.error(err.response?.data.detail, { duration: 5000 });
         },
       },
     );
+  };
+
+  const onInvalid = (errors: FieldErrors<CreateProductFormData>) => {
+    const message = Object.values(errors)[0]?.message;
+    if (message) {
+      toast.error(message, {duration: 5000});
+    }
   }
 
   const handleOpenForm = () => {
@@ -201,6 +169,10 @@ export default function AddNewProductForm() {
       params.delete("create");
       return params;
     });
+    reset();
+    setImage(null);
+    setFile(null);
+    setPreview(DefaultImage);
   };
 
   return (
@@ -216,11 +188,18 @@ export default function AddNewProductForm() {
 
       <AnimatePresence>
         {isOpen && (
-          <MyPopupForm onClose={onClose} handleSubmit={handleSubmit}>
-            {/* Form Title */}
+          <MyPopupForm
+            onClose={handleCloseForm}
+            handleSubmit={handleSubmit(onSubmit, onInvalid)}
+          >
+            {/* --------------------------------------------
+            *
+                              Header
+            *
+            ----------------------------------------------*/}
             <FormHeader
               title="Add New Product"
-              onClose={onClose}
+              onClose={handleCloseForm}
               className="w-full sticky top-0 z-100"
             />
 
@@ -241,7 +220,16 @@ export default function AddNewProductForm() {
                   <label htmlFor="name" className="text-xs font-bold">
                     PRODUCT NAME
                   </label>
-                  <TextInput value={productName} onChange={setProductName} />
+                  <Controller
+                    name="name"
+                    control={control}
+                    render={({ field }) => (
+                      <TextInput
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 </div>
                 {/* Category name */}
                 <div className="flex flex-col w-full gap-2">
@@ -256,12 +244,17 @@ export default function AddNewProductForm() {
                         value: cat.category_name,
                       })) ?? []
                     }
-                    onChange={setCategoryName}
+                    onChange={handleSelectCategoryName}
                   />
                 </div>
               </div>
             </div>
 
+            {/* --------------------------------------------
+            *
+                        Price & Cost & Description
+            *
+            ----------------------------------------------*/}
             <div className="w-full flex gap-4 flex-col lg:flex-row bg-background-secondary-hover p-4 rounded-xl">
               <div className="flex flex-col gap-4 w-full">
                 {/* ------------------- */}
@@ -271,7 +264,16 @@ export default function AddNewProductForm() {
                   <label htmlFor="price" className="text-xs font-bold">
                     PRODUCT PRICE
                   </label>
-                  <MoneyInput value={productPrice} onChange={setProductPrice} />
+                  <Controller
+                    name="selling_price"
+                    control={control}
+                    render={({ field }) => (
+                      <MoneyInput
+                        value={String(field.value)}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 </div>
                 {/* ------------------- */}
                 {/* Cost Price          */}
@@ -280,7 +282,16 @@ export default function AddNewProductForm() {
                   <label htmlFor="cost" className="text-xs font-bold">
                     PRODUCT COST
                   </label>
-                  <MoneyInput value={costPrice} onChange={setCostPrice} />
+                  <Controller
+                    name="cost"
+                    control={control}
+                    render={({ field }) => (
+                      <MoneyInput
+                        value={String(field.value)}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 </div>
                 {/* ------------------- */}
                 {/* Description         */}
@@ -289,14 +300,25 @@ export default function AddNewProductForm() {
                   <label htmlFor="description" className="text-xs font-bold">
                     DESCRIPTION (Optional)
                   </label>
-                  <TextInput value={description} onChange={setDescription} />
+                  <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                      <TextInput
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
                 </div>
               </div>
             </div>
 
-            {/* ------------------- */}
-            {/* Stock Status        */}
-            {/* ------------------- */}
+            {/* --------------------------------------------
+            *
+                              Stock
+            *
+            ----------------------------------------------*/}
             <div className=" w-full flex flex-col gap-4 bg-background-secondary-hover p-4 rounded-xl">
               <label htmlFor="stock status" className="text-xs font-bold">
                 STOCK STATUS
@@ -307,7 +329,8 @@ export default function AddNewProductForm() {
                   const config = STOCK_STATUS_CONFIG[stock.value];
                   return (
                     <button
-                      onClick={() => setStockStatus(stock.value)}
+                      key={stock.value}
+                      onClick={() => handleSelectStockStatus(stock.value)}
                       type="button"
                       className={`${isSelected ? config.bg : "bg-background-secondary"} px-8 py-4 font-bold font-mono border border-border rounded-md cursor-pointer active:scale-80 transition-all duration-200 ease-out`}
                     >
@@ -318,17 +341,21 @@ export default function AddNewProductForm() {
               </div>
             </div>
 
-            {/* ========================= */}
-            {/* Buttons | Cancel | Submit*/}
-            {/* ========================= */}
+            {/* --------------------------------------------
+            *
+                        Buttons: Submit & Cancel
+            *
+            ----------------------------------------------*/}
             <div className="w-full grid grid-cols-3 gap-2 sm:gap-4">
-              <ButtonCancel handelCancel={onClose} />
+              <ButtonCancel handelCancel={handleCloseForm} />
               <ButtonSubmit isError={isError} isPending={isPending} />
             </div>
 
-            {/* ============================ */}
-            {/* Form Image */}
-            {/* ============================ */}
+            {/* --------------------------------------------
+            *
+                              Image Form Crop
+            *
+            ----------------------------------------------*/}
             {image && (
               <ImageCropForm
                 image={image}

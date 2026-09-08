@@ -10,6 +10,7 @@ export function useGetCategoryById (id: string) {
     return useQuery<Category>({
         queryKey,
         queryFn: () => getCategoryById(id).then(res => res.data),
+        enabled: !!id,
         staleTime: 0,
         refetchOnMount: "always",
     });

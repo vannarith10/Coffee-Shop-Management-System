@@ -1,7 +1,7 @@
 //
 // components/EditStaffProfile.tsx
 //
-import type { EditStaffDataRequest, Staff } from "../../types/staff";
+import type { EditStaffDataRequest } from "../../types/staff";
 import { useCallback, useEffect, useState } from "react";
 import { getCroppedImg } from "../../utils/crop-helper";
 import type { Area } from "react-easy-crop";

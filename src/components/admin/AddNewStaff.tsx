@@ -61,9 +61,9 @@ const createStaffSchema = z
     password: passwordSchema,
     confirmPassword: z.string(),
 
+    schedules: z.array(string()).min(1, "Select at least one schedule"),
     role: z.string().min(1, "Please select a role"),
     shift: z.string().min(1, "Please select a shift"),
-    schedules: z.array(string()).min(1, "Select at least one schedule"),
     status: z.string().min(1, "Please select status"),
   })
   .refine((data) => data.confirmPassword === data.password, {
@@ -92,7 +92,10 @@ export default function AddNewStaff() {
       username: "",
       password: "",
       confirmPassword: "",
+      role: "",
+      shift: "",
       schedules: [],
+      status: "",
     },
   });
 
@@ -121,6 +124,12 @@ export default function AddNewStaff() {
     name: "password",
   });
 
+  const confirmPassword = useWatch({ control, name: "confirmPassword" });
+  const isConfirmMatch =
+    confirmPassword.length > 0 &&
+    password.length > 0 &&
+    confirmPassword === password;
+
   const requirements = [
     { label: "At least 8 characters", valid: password.length >= 8 },
     { label: "Uppercase", valid: /[A-Z]/.test(password) },
@@ -138,8 +147,6 @@ export default function AddNewStaff() {
   };
 
   const onSubmit = (formData: CreateStaffFormData) => {
-    console.log("SUBMIT CALLED");
-
 
     const data: CreateStaffRequest = {
       full_name: formData.full_name,
@@ -158,7 +165,6 @@ export default function AddNewStaff() {
           handleCloseForm();
         },
         onError: (err) => {
-          console.log("MUTATION ERROR");
           toast.error(err.response?.data.detail, { duration: 5000 });
         },
       },
@@ -229,6 +235,9 @@ export default function AddNewStaff() {
       params.delete("create");
       return params;
     });
+    reset();
+    setFile(null);
+    setPreview(DefaultProfile);
   };
 
   return (
@@ -290,7 +299,6 @@ export default function AddNewStaff() {
                   <input
                     spellCheck={false}
                     {...register("full_name")}
-                    // onChange={(e) => setStaffName(e.target.value)}
                     placeholder="Vyra Vannarith"
                     type="text"
                     className="placeholder:text-sm placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
@@ -303,7 +311,6 @@ export default function AddNewStaff() {
                   <input
                     spellCheck={false}
                     {...register("username")}
-                    // onChange={(e) => setUsername(e.target.value)}
                     placeholder="vyra.vannarith"
                     type="text"
                     className="placeholder:text-sm lowercase placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
@@ -360,6 +367,17 @@ export default function AddNewStaff() {
                     />
                   )}
                 />
+                <div className="space-y-1 text-sm">
+                  <p
+                    className={
+                      isConfirmMatch ? "text-green-500" : "text-gray-400"
+                    }
+                  >
+                    {isConfirmMatch
+                      ? "✓ Passwords match"
+                      : "✕ Passwords do not match"}
+                  </p>
+                </div>
               </div>
             </div>
 

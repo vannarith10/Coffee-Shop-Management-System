@@ -206,7 +206,7 @@ export default function DisplayStaff() {
                       return (
                         <li
                           key={config.label}
-                          className="flex items-center bg-sidebar text-white px-4 rounded-xs font-bold  "
+                          className="flex items-center bg-sidebar text-white px-2 sm:px-4 rounded-xs font-bold  "
                         >
                           {config.label}
                         </li>

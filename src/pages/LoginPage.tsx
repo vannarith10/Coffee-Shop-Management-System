@@ -90,7 +90,7 @@ export default function LoginPage() {
     >
       {/* Dark background */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-out ${
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-2000 ease-out ${
           theme === "dark" ? "opacity-100" : "opacity-0"
         }`}
         style={{ backgroundImage: `url(${DarkComicTemple})` }}
@@ -98,7 +98,7 @@ export default function LoginPage() {
 
       {/* Light background */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-out ${
+        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-2000 ease-out ${
           theme === "light" ? "opacity-100" : "opacity-0"
         }`}
         style={{ backgroundImage: `url(${LightComicTemple})` }}

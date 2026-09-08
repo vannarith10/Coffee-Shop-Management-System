@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import type { BackendErrorDetail } from "../types/error";
 import type { EditStaffDataRequest } from "../types/staff";
-import { toast } from "sonner";
 import { editStaffDetail } from "../services/admin/staff";
 
 interface EditStaffRequest {
@@ -22,13 +21,5 @@ export function useEditStaff() {
         data: request.data,
         file: request.image,
       }),
-
-    onError: (error) => {
-      toast.error(
-        error.response?.data?.detail ?? "Failed to update staff profile",
-        { duration: 5000 },
-      );
-      console.log(error.response);
-    },
   });
 }

@@ -10,6 +10,7 @@ export function useGetASingleProfile (id: string) {
     return useQuery<Staff>({
         queryKey,
         queryFn: () => getASpecificProfile(id).then((res) => res.data),
+        enabled: !!id, // prevent empty string, id = "" => not execute
         staleTime: 0,
         refetchOnMount: "always",
     })

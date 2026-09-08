@@ -226,7 +226,7 @@ export default function ProductDetailPage() {
                            Form header
               ---------------------------------- */}
           <FormHeader
-            title="Edit Category"
+            title="Product Detail"
             onClose={() => setIsOpen(false)}
             className=" w-full sticky top-0 z-100"
           />

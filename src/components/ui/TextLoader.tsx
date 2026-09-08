@@ -13,7 +13,7 @@ export default function TextLoader({ text = "Loading...", className }:Props) {
         {text.split("").map((char, index) => (
           <div
             key={index}
-            className={`letter font-bold ${className}`}
+            className={`letter font-bold text-xs sm:text-sm md:text-sm lg:text-lg ${className}`}
             style={{ "--i": index + 1 } as React.CSSProperties}
           >
             {char}

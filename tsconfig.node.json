@@ -18,7 +18,9 @@
     "noUnusedLocals": false, // edited
     "noUnusedParameters": false, // edited
     "erasableSyntaxOnly": false, // edited
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "strict": true // added for Zod
   },
   "include": ["vite.config.ts"]
 }
