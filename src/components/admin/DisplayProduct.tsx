@@ -13,7 +13,7 @@ import PageHeader from "../ui/PageHeader";
 import PageFooter from "../ui/PageFooter";
 
 export default function DisplayProduct() {
-  const size = 20;
+  const size = 10;
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("productPage") || 1);
 

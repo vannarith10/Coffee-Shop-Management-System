@@ -40,6 +40,25 @@ import ImageInput from "../../components/ui/ImageInput";
 import CustomSelect from "../../components/ui/CustomSelect";
 import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
 import { usePatchProduct } from "../../hooks/product/usePatchProduct";
+import z from "zod";
+import {
+  Controller,
+  useForm,
+  useWatch,
+  type FieldErrors,
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const updateProductSchema = z.object({
+  newName: z.string().nullable(),
+  newCategoryName: z.string().nullable(),
+  newSellingPrice: z.number().positive().nullable(),
+  newCostPrice: z.number().positive().nullable(),
+  newDescription: z.string().nullable(),
+  newStockStatus: z.string().nullable(),
+});
+
+type UpdateProductFormData = z.infer<typeof updateProductSchema>;
 
 export default function ProductDetailPage() {
   const [isOpen, setIsOpen] = useState(true);
@@ -52,6 +71,7 @@ export default function ProductDetailPage() {
     refetch,
   } = useGetASingleProduct({ id: safeId });
   const navigate = useNavigate();
+  const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { categoryNameType } = useGetAllCategoryNames();
   const {
@@ -59,45 +79,100 @@ export default function ProductDetailPage() {
     isPending,
     isError: isPatchError,
   } = usePatchProduct();
-  // NEW
-  const [newProductName, setNewProductName] = useState<string | null>(null);
-  const [newCategoryName, setNewCategoryName] = useState<string | null>(null);
-  const [newPrice, setNewPrice] = useState<string>("0");
-  const [newCost, setNewCost] = useState<string>("0");
-  const [newDescription, setNewDescription] = useState<string | null>(null);
-  const [newStockStatus, setNewStockStatus] =
-    useState<PRODUCT_STOCK_STATUS | null>(null);
-  const [preview, setPreview] = useState<string>(Picture);
-
   const [isEditing, setIsEditing] = useState(false);
+  const [preview, setPreview] = useState<string>(Picture);
   const [image, setImage] = useState<string | null>(null);
-
-  // CROP STATE
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [file, setFile] = useState<File | null>(null);
 
-  // ==============================
-  // Load values
-  // ==============================
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { dirtyFields },
+  } = useForm<UpdateProductFormData>({
+    resolver: zodResolver(updateProductSchema),
+    defaultValues: {
+      newName: null,
+      newCategoryName: null,
+      newSellingPrice: null,
+      newCostPrice: null,
+      newDescription: null,
+      newStockStatus: null,
+    },
+  });
+
   useEffect(() => {
-    (() => {
-      if (product) {
-        setNewProductName(product.name);
-        setNewCategoryName(product.category_name);
-        setNewPrice(product.price.toString());
-        setNewCost(product.cost_price.toString());
-        setNewDescription(product.description);
-        setNewStockStatus(product.stock_status);
-        setPreview(product.image_url || Picture);
-      }
-    })();
-  }, [product]);
+    if (product) {
+      reset({
+        newName: product.name,
+        newCategoryName: product.category_name,
+        newSellingPrice: product.price,
+        newCostPrice: product.cost_price,
+        newDescription: product.description,
+        newStockStatus: product.stock_status,
+      });
 
-  // ================================
-  // Handle Edit button
-  // ================================
+      (() => setPreview(product.image_url || Picture))();
+    }
+  }, [product, reset]);
+
+  const category = useWatch({ control, name: "newCategoryName" });
+  const stock = useWatch({ control, name: "newStockStatus" });
+
+  // ---------------------------------------
+  //
+  //              Submit
+  //
+  // ---------------------------------------
+  const onSubmit = (formData: UpdateProductFormData) => {
+    const hasFormChanges = Object.keys(dirtyFields).length > 0;
+    const hasImageChange = file !== null;
+
+    if (!hasFormChanges && !hasImageChange) {
+      toast.error("At least one field must be updated");
+      return;
+    }
+
+    const data: UpdateProductRequest = {
+      name: formData.newName,
+      category_name: formData.newCategoryName,
+      selling_price: formData.newSellingPrice,
+      cost_price: formData.newCostPrice,
+      description: formData.newDescription,
+      stock_status: formData.newStockStatus as PRODUCT_STOCK_STATUS,
+    };
+    patchProduct(
+      { id: safeId, data, image: file },
+      {
+        onError: (err) => {
+          toast.error(err.response?.data.detail, { duration: 5000 });
+        },
+        onSuccess: () => {
+          refetch();
+          setIsEditing(false);
+        },
+      },
+    );
+  };
+
+  // ---------------------------------------
+  //
+  //          Catch error to show
+  //
+  // ---------------------------------------
+  const onInvalid = (errors: FieldErrors<UpdateProductFormData>) => {
+    // We may get many errors, but we want to show only the first one.
+    const message = Object.values(errors)[0]?.message;
+    if (message) {
+      toast.error(message);
+    }
+  };
+
+  // Click to be able to edit product details
   const handleEditButton = () => {
     setIsEditing(true);
     inputRef.current?.focus();
@@ -107,22 +182,19 @@ export default function ProductDetailPage() {
     });
   };
 
-  // ===========================================
-  // Cancel button | Set to current values
-  // ===========================================
+  // Click to stop editing and reset value back
   const handleCancelButton = () => {
     setIsEditing(false);
-    // Reset
-    if (product) {
-      setNewProductName(product.name);
-      setNewCategoryName(product.category_name);
-      setNewPrice(product.price.toString());
-      setNewCost(product.cost_price.toString());
-      setNewDescription(product.description);
-      setNewStockStatus(product.stock_status);
-      setPreview(product.image_url || Picture);
-      setFile(null);
-    }
+    setPreview(product?.image_url || Picture);
+    setFile(null);
+    reset({
+      newName: product?.name,
+      newCategoryName: product?.category_name,
+      newSellingPrice: product?.price,
+      newCostPrice: product?.cost_price,
+      newDescription: product?.description,
+      newStockStatus: product?.stock_status,
+    });
   };
 
   // ================================
@@ -159,55 +231,8 @@ export default function ProductDetailPage() {
     // Convert to file in order to send to backend
     const file = base64ToFile(croppedImage, "profile.jpg");
     setFile(file);
-
     setZoom(1);
     setImage(null);
-  };
-
-  // ------------------------------------------
-  //
-  //  Handle Submit
-  //
-  // ------------------------------------------
-  const handleSaveButton = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const data: UpdateProductRequest = {
-      name: newProductName === product?.name ? null : newProductName,
-      category_name:
-        newCategoryName === product?.category_name ? null : newCategoryName,
-      selling_price:
-        Number(newPrice) === product?.price ? null : Number(newPrice),
-      cost_price:
-        Number(newCost) === product?.cost_price ? null : Number(newCost),
-      description:
-        newDescription === product?.description ? null : newDescription,
-      stock_status:
-        newStockStatus === product?.stock_status ? null : newStockStatus,
-    };
-
-    // Check if all values are null
-    const allNull = Object.values(data).every((value) => value === null);
-
-    if (allNull && file == null) {
-      toast.error("At least one field is edited to update", { duration: 5000 });
-      return;
-    }
-
-    patchProduct(
-      { id: safeId, data, image: file ?? null },
-      {
-        onSuccess: () => {
-          toast.success("Product has been updated", { duration: 5000 });
-          setIsEditing(false);
-          refetch();
-        },
-
-        onError: (err) => {
-          toast.error(err.response?.data.detail || "Unexpected error" , { duration: 5000 });
-        },
-      },
-    );
   };
 
   return (
@@ -220,11 +245,13 @@ export default function ProductDetailPage() {
       {isOpen && (
         <MyPopupForm
           onClose={() => setIsOpen(false)}
-          handleSubmit={handleSaveButton}
+          handleSubmit={handleSubmit(onSubmit, onInvalid)}
         >
-          {/* ---------------------------------
-                           Form header
-              ---------------------------------- */}
+          {/* ------------------------------------------
+              *
+                              Header
+              *
+            ------------------------------------------- */}
           <FormHeader
             title="Product Detail"
             onClose={() => setIsOpen(false)}
@@ -233,7 +260,7 @@ export default function ProductDetailPage() {
 
           {/* -------------------------------------------
                             *
-                            Product Image
+                             Image
                             *
               -------------------------------------------- */}
           <div
@@ -248,34 +275,34 @@ export default function ProductDetailPage() {
 
           {/* ---------------------------------------------
                               *
-                              Product Details
+                              Details
                               *
               ---------------------------------------------- */}
           <div
             className={`min-w-48 flex flex-col p-4 bg-background-secondary-hover rounded-xl border-2 ${isEditing ? "border-green-500" : "border-border"} `}
           >
-            {/* ----------------- */}
-            {/* Product Name */}
-            {/* ----------------- */}
+            {/* ------------------------------------------
+              *
+                              Product Name
+              *
+            ------------------------------------------- */}
             <div className="flex items-center gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <FolderPen />
                 <span className="whitespace-nowrap font-semibold">Name</span>
               </div>
               <input
-                ref={inputRef}
                 type="text"
-                value={
-                  !isEditing ? (product?.name ?? "") : (newProductName ?? "")
-                }
+                {...register("newName")}
                 readOnly={!isEditing}
-                onChange={(e) => setNewProductName(e.target.value)}
                 className={`${isEditing ? "text-white" : "text-amber-400"} w-full font-bold text-2xl outline-none `}
               />
             </div>
-            {/* ------------------------- */}
-            {/* Category Name */}
-            {/* ------------------------- */}
+            {/* ------------------------------------------
+              *
+                              Category Name
+              *
+            ------------------------------------------- */}
             <div className="flex items-center gap-4 border-b border-border py-4 ">
               <div className="flex gap-2">
                 <ChartBarStacked />
@@ -284,26 +311,34 @@ export default function ProductDetailPage() {
                 </span>
               </div>
 
-              <CustomSelect
-                disabled={!isEditing}
-                value={
-                  !isEditing
-                    ? (product?.category_name ?? "")
-                    : (newCategoryName ?? "")
-                }
-                options={
-                  categoryNameType?.map((cat) => ({
-                    label: cat.category_name,
-                    value: cat.category_name,
-                  })) ?? []
-                }
-                onChange={setNewCategoryName}
-              />
+              {!isEditing && (
+                <span className="font-bold text-xs sm:text-sm md:text-lg ">
+                  {product?.category_name}
+                </span>
+              )}
+
+              {isEditing && (
+                <CustomSelect
+                  disabled={!isEditing}
+                  value={category || ""}
+                  options={
+                    categoryNameType?.map((cat) => ({
+                      label: cat.category_name,
+                      value: cat.category_name,
+                    })) ?? []
+                  }
+                  onChange={(categoryName: string) =>
+                    setValue("newCategoryName", categoryName)
+                  }
+                />
+              )}
             </div>
-            {/* ----------------------- */}
-            {/* Category Type */}
-            {/* Read Only */}
-            {/* ----------------------- */}
+            {/* ------------------------------------------
+              *
+                            Category Type
+                            - read-only -
+              *
+            ------------------------------------------- */}
             <div
               className={` ${isEditing ? "text-gray-500 cursor-not-allowed" : "text-text-primary"} flex gap-4 items-center border-b border-border py-4 `}
             >
@@ -315,39 +350,57 @@ export default function ProductDetailPage() {
               </div>
               <span className="font-bold">{product?.category_type}</span>
             </div>
-            {/* ------------------------ */}
-            {/* Price */}
-            {/* ------------------------ */}
+            {/* ------------------------------------------
+              *
+                              Price
+              *
+            ------------------------------------------- */}
             <div className="flex items-center gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <DollarSign />
                 <span className="whitespace-nowrap font-semibold">Price</span>
               </div>
-              <MoneyInput
-                value={newPrice}
-                onChange={setNewPrice}
-                readOnly={!isEditing}
-                className="w-full outline-none font-bold text-xl text-green-600"
+              <Controller
+                name="newSellingPrice"
+                control={control}
+                render={({ field }) => (
+                  <MoneyInput
+                    value={String(field.value)}
+                    onChange={field.onChange}
+                    readOnly={!isEditing}
+                    className="w-full outline-none font-bold text-xl text-green-600"
+                  />
+                )}
               />
             </div>
-            {/* ------------------------ */}
-            {/* Cost */}
-            {/* ------------------------ */}
+            {/* ------------------------------------------
+              *
+                              Cost
+              *
+            ------------------------------------------- */}
             <div className="flex gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <CircleDollarSign />
                 <span className="whitespace-nowrap font-semibold">Cost</span>
               </div>
-              <MoneyInput
-                value={newCost}
-                onChange={setNewCost}
-                readOnly={!isEditing}
-                className="w-full outline-none font-bold text-xl text-green-600"
+              <Controller
+                name="newCostPrice"
+                control={control}
+                render={({ field }) => (
+                  <MoneyInput
+                    value={String(field.value)}
+                    onChange={field.onChange}
+                    readOnly={!isEditing}
+                    className="w-full outline-none font-bold text-xl text-green-600"
+                  />
+                )}
               />
             </div>
-            {/* ------------------------- */}
-            {/* Description */}
-            {/* ------------------------- */}
+            {/* ------------------------------------------
+              *
+                            Description
+              *
+            ------------------------------------------- */}
             <div className="flex gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <FileText />
@@ -356,18 +409,16 @@ export default function ProductDetailPage() {
                 </span>
               </div>
               <input
-                type="text"
-                value={
-                  !isEditing ? product?.description || "" : newDescription!
-                }
                 readOnly={!isEditing}
-                onChange={(e) => setNewDescription(e.target.value)}
+                {...register("newDescription")}
                 className="w-full outline-none font-semibold text-sm"
               />
             </div>
-            {/* ------------------------- */}
-            {/* Stock Status */}
-            {/* ------------------------- */}
+            {/* ------------------------------------------
+              *
+                            Stock Status
+              *
+            ------------------------------------------- */}
             <div className="flex flex-col gap-4 border-b border-border py-4 pb-4">
               <div className="flex gap-2">
                 <Box />
@@ -377,12 +428,12 @@ export default function ProductDetailPage() {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {STATUS_OPTIONS.map((option) => {
-                  const isSelected = newStockStatus === option.value;
+                  const isSelected = stock === option.value;
                   const isCurrent = option.value === product?.stock_status;
                   return (
                     <button
                       type="button"
-                      onClick={() => setNewStockStatus(option.value)}
+                      onClick={() => setValue("newStockStatus", option.value)}
                       key={option.value}
                       disabled={!isEditing}
                       className={`relative  font-bold text-white text-sm ${isSelected ? `bg-${option.color} ${option.border}` : isEditing ? "bg-background-secondary-hover hover:border-border-hover" : "bg-gray-500"} border-2 border-border px-4 py-2 rounded-md transition-all duration-200 ease-out ${isEditing ? "cursor-pointer active:scale-90" : "cursor-not-allowed"}`}
@@ -426,7 +477,6 @@ export default function ProductDetailPage() {
 
                     <button
                       type="submit"
-                      // onClick={handleSaveButton}
                       className="px-10 py-2 text-white font-semibold bg-green-700/80 hover:bg-green-600 border border-border rounded-md cursor-pointer active:scale-80 outline-none transition-all duration-200 ease-out"
                     >
                       {!isPending && !isPatchError && "Save"}
@@ -471,7 +521,6 @@ export default function ProductDetailPage() {
                 <Calendar /> Created At
               </h4>
               <h4 className="text-sm font-semibold text-text-secondary">
-                {/* {formatDate(product?.created_at)} */}
                 {formatDateTime(product?.created_at, {
                   showDate: true,
                   showTime: false,
@@ -480,8 +529,8 @@ export default function ProductDetailPage() {
               </h4>
             </div>
             {/* ---------------------------
-                              Updated At
-                    ---------------------------- */}
+                      Updated At
+            ---------------------------- */}
             <div className="bg-background-secondary p-2 flex flex-col items-start sm:flex-row sm:justify-between sm:items-center md:flex-col lg:flex-row md:items-start gap-2">
               <h4 className="inline-flex justify-self-start gap-2 font-semibold text-text-secondary">
                 <CalendarDays /> Updated At
@@ -492,7 +541,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* ------------------------- */}
-            {/* Image URL */}
+            {/*       Image URL */}
             {/* ------------------------- */}
             <div className="flex flex-col bg-background-secondary p-2 gap-4 border-b border-border py-2 pb-4">
               <div className="flex justify-between items-center">
@@ -531,7 +580,6 @@ export default function ProductDetailPage() {
               handleSetZoom={handleSetZoom}
             />
           )}
-          {/* </> */}
         </MyPopupForm>
       )}
     </AnimatePresence>
