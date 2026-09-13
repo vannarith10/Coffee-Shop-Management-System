@@ -43,7 +43,7 @@ const MyPopupForm = ({ children, onClose, className, handleSubmit }: Props) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
       onClick={onClose}
-      className={`fixed inset-0 z-99 bg-black/10 backdrop-blur-lg flex justify-center items-center ${className}`}
+      className={`fixed inset-0 z-300 bg-black/10 backdrop-blur-lg flex justify-center items-center ${className}`}
     >
       <motion.div
         initial={{

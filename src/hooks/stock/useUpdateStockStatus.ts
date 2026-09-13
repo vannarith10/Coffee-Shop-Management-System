@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../../types/error";
-import type { PRODUCT_STOCK_STATUS } from "../../types/product";
+import type { BackendErrorDetail } from "@/types";
+import type { PRODUCT_STOCK_STATUS } from "@/types";
 import { updateStockStatus } from "../../services/admin/stock";
 
 type Request = {

@@ -2,14 +2,13 @@
 
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../../types/error";
+import type { BackendErrorDetail } from "@/types";
 import {
   type CreateCashOrderResponse,
   type CreateOrderRequest,
 } from "../../types/order";
 import { createCashOrder } from "../../services/cashier/order";
 import { toast } from "sonner";
-
 
 export function useCreateOrder() {
   return useMutation<
@@ -20,12 +19,10 @@ export function useCreateOrder() {
     mutationFn: (request: CreateOrderRequest) =>
       createCashOrder(request).then((res) => res.data),
 
-
     onError: (error) => {
-      toast.error(
-        error.response?.data?.detail ?? "Failed to make an order",
-        { duration: 3000 },
-      );
+      toast.error(error.response?.data?.detail ?? "Failed to make an order", {
+        duration: 3000,
+      });
     },
   });
 }

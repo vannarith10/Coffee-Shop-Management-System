@@ -2,7 +2,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { useEffect, useState } from "react";
 import { useGetRevenueTrends } from "../../hooks/useGetRevenueTrends";
 import { DefaultRevenueTrends } from "../../utils/default-values";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader } from "@/components/ui";
 import { RotateCcw } from "lucide-react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -68,7 +68,6 @@ const RevenueTrends = () => {
             Daily revenue distribution for the current period
           </p>
         </div>
-
 
         {/* --------------------------- */}
         {/* Date picker */}

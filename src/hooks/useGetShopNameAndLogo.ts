@@ -2,7 +2,7 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getShopImageAndName } from "../services/admin/shop";
-import type { ShopNameAndLogo } from "../types/shop-setting";
+import type { ShopNameAndLogo } from "@/types";
 
 
 

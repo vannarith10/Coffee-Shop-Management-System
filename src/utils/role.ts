@@ -1,9 +1,9 @@
 //util/role.ts
 
-import { type Role } from "../types/role";
+import { ROLES, type RoleType } from "@/types";
 
-export const isAdmin = (role?: Role) => role === "ADMIN"
+export const isAdmin = (role?: RoleType) => role === ROLES.ADMIN;
 
-export const isCashier = (role?: Role) => role === "CASHIER"
+export const isCashier = (role?: RoleType) => role === ROLES.CASHIER;
 
-export const isBarista = (role?: Role) => role === "BARISTA"
+export const isBarista = (role?: RoleType) => role === ROLES.BARISTA;

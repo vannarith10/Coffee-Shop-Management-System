@@ -3,7 +3,7 @@
 // WebSocket Manager
 //
 import { useEffect } from "react";
-import type { Category } from "../../types/category/category";
+import type { Category } from "@/types";
 import { toast } from "sonner";
 import { websocketManager } from "../websocket-manager";
 

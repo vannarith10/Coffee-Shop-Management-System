@@ -4,10 +4,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import type {
-  PRODUCT_STOCK_STATUS,
-  UpdateProductRequest,
-} from "../../types/product";
+import type { PRODUCT_STOCK_STATUS, UpdateProductRequest } from "@/types";
 import TextLoader from "../../components/ui/TextLoader";
 import {
   Box,
@@ -23,7 +20,7 @@ import {
   ScanBarcode,
   Tag,
 } from "lucide-react";
-import { STATUS_OPTIONS } from "../../types/stock-status";
+import { STATUS_OPTIONS } from "@/types";
 import ButtonCopy from "../../components/ui/ButtonCopy";
 import Picture from "../../assets/picture.jpg";
 import type { Area } from "react-easy-crop";
@@ -34,7 +31,7 @@ import { useGetASingleProduct } from "../../hooks/useGetASingleProduct";
 import MoneyInput from "../../components/ui/MoneyInput";
 import MyPopupForm from "../../components/animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
-import FormHeader from "../../components/animation/FormHeader";
+import FormHeader from "../../components/ui/FormHeader";
 import { formatDateTime } from "../../utils/dateFormatter";
 import ImageInput from "../../components/ui/ImageInput";
 import CustomSelect from "../../components/ui/CustomSelect";

@@ -2,12 +2,8 @@ import { ResponsiveHeatMap } from "@nivo/heatmap";
 import { useGetBusiestHours } from "../../hooks/useGetBusiestHours";
 import { RotateCcw } from "lucide-react";
 
-
 const BusiestHours = () => {
-  const { data, isLoading, isError, isRefetching, refetch } =
-    useGetBusiestHours();
-
-
+  const { data, isRefetching, refetch } = useGetBusiestHours();
 
   return (
     <section className="h-120s xl:h-150 flex flex-col p-4 bg-background-secondary rounded-lg border-2 border-border">
@@ -82,12 +78,8 @@ const BusiestHours = () => {
           />
         </div>
       </div>
-
-
     </section>
   );
 };
-
-
 
 export default BusiestHours;

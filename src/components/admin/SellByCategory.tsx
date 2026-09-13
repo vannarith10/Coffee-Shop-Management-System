@@ -3,10 +3,10 @@
 import { ResponsivePie } from "@nivo/pie";
 import { COLORS } from "../../utils/colors";
 import { useGetSalesByCategory } from "../../hooks/useGetSalesByCategory";
-import { RANGES, type Range } from "../../types/business-analytics";
+import { RANGES, type Range } from "@/types";
 import { useState } from "react";
 import { RotateCcw } from "lucide-react";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader } from "@/components/ui";
 
 interface ChartDatum {
   id: string;

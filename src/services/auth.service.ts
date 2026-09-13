@@ -4,8 +4,8 @@
 import type { AxiosError } from "axios";
 import { authApi } from "../lib/axios";
 import type { LoginRequest, LoginResponse } from "../types/auth";
-import type { BackendErrorDetail } from "../types/error";
-import type { RefreshTokenResponse } from "../types/token";
+import type { BackendErrorDetail } from "@/types";
+import type { RefreshTokenResponse } from "@/types";
 
 
 

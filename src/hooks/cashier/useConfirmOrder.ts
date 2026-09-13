@@ -2,9 +2,8 @@
 
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../../types/error";
+import type { BackendErrorDetail } from "@/types";
 import { confirmOrder } from "../../services/cashier/order";
-
 
 export function useConfirmOrder() {
   return useMutation<void, AxiosError<BackendErrorDetail>, string>({

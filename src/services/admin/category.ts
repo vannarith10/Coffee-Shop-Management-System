@@ -1,9 +1,9 @@
 import api from "../../lib/axios";
-import type { Range } from "../../types/business-analytics";
+import type { Range } from "@/types";
 import type {
   CreateCategoryRequest,
   PatchCategoryRequest,
-} from "../../types/category/category";
+} from "@/types";
 
 //
 // GET ALL

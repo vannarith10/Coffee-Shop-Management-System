@@ -1,15 +1,81 @@
-// types/product.ts
-//
-import type { CATEGORY_TYPE } from "./category/category";
-import type { Pagination } from "./pagination";
-
-export type PRODUCT_STOCK_STATUS = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
+import type { Pagination } from "./common";
+import type { PRODUCT_STOCK_STATUS, CATEGORY_TYPE } from "./enums"; // Updated import
 
 export const STOCK_STATUS = {
   normal: "IN_STOCK",
   low: "LOW_STOCK",
   out: "OUT_OF_STOCK",
-};
+} as const;
+
+export const STOCK_STATUS_CONFIG = {
+  IN_STOCK: {
+    label: "IN",
+    bg: "bg-green-600",
+    bg50: "bg-green-600/50",
+    bg20: "bg-green-600/20",
+    bg_hover: "hover:bg-green-600",
+    bg50_hover: "hover:bg-green-600/50",
+    bg20_hover: "hover:bg-green-600/20",
+  },
+  LOW_STOCK: {
+    label: "LOW",
+    bg: "bg-amber-600",
+    bg50: "bg-amber-600/50",
+    bg20: "bg-amber-600/20",
+    bg_hover: "hover:bg-amber-600",
+    bg50_hover: "hover:bg-amber-600/50",
+    bg20_hover: "hover:bg-amber-600/20",
+  },
+  OUT_OF_STOCK: {
+    label: "OUT",
+    bg: "bg-red-600",
+    bg50: "bg-red-600/50",
+    bg20: "bg-red-600/20",
+    bg_hover: "hover:bg-red-600",
+    bg50_hover: "hover:bg-red-600/50",
+    bg20_hover: "hover:bg-red-600/20",
+  },
+} as const;
+
+export type StockStatusKey = keyof typeof STOCK_STATUS_CONFIG;
+
+export const STATUS_OPTIONS: {
+  value: PRODUCT_STOCK_STATUS;
+  label: string;
+  description: string;
+  accent: string;
+  border: string;
+  bg: string;
+  color: string;
+}[] = [
+  {
+    value: "IN_STOCK",
+    label: "In",
+    description: "Stock level is healthy",
+    accent: "accent-green-600",
+    border: "border-green-500",
+    bg: "bg-green-500/50",
+    color: "green-600",
+  },
+  {
+    value: "LOW_STOCK",
+    label: "Low",
+    description: "Stock is running low",
+    accent: "accent-yellow-600",
+    border: "border-yellow-500",
+    bg: "bg-yellow-500/50",
+    color: "amber-600",
+  },
+  {
+    value: "OUT_OF_STOCK",
+    label: "Out",
+    description: "Out of stock",
+    accent: "accent-red-600",
+    border: "border-red-500",
+    bg: "bg-red-500/50",
+    color: "red-600",
+  },
+];
 
 export interface ProductStock {
   id: string;
@@ -53,7 +119,7 @@ export interface UpdateProductRequest {
   stock_status: PRODUCT_STOCK_STATUS | null | undefined;
 }
 
-interface TopProduct {
+export interface TopProduct {
   product_id: string;
   product_name: string;
   image_url: string;
@@ -75,17 +141,11 @@ export interface AddNewProductRequest {
   description: string | null;
 }
 
-// --------------------------------
-// Cashier | Product Menu Response
-// --------------------------------
 export interface ProductMenuResponse {
   pagination: Pagination;
   items: ProductMenuItem[];
 }
 
-// --------------------------------
-// Cashier | Product Menu Item
-// --------------------------------
 export interface ProductMenuItem {
   id: string;
   name: string;

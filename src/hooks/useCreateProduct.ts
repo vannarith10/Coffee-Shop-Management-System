@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { AddNewProductRequest } from "../types/product";
 import { addNewProduct } from "../services/admin/product";
 import { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../types/error";
+import type { BackendErrorDetail } from "@/types";
 
 type CreateProductRequest = {
   data: AddNewProductRequest;

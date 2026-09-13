@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "../services/user.service";
-import type { GetUserProfileResponse } from "../types/user";
+import type { GetUserProfileResponse } from "@/types";
 
 
 export function useGetUserProfile () {

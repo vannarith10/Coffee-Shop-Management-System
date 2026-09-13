@@ -1,6 +1,3 @@
-// ------------------------------
-// components/AddNewCategory.tsx
-// ------------------------------
 import { RotateCcw, SquarePlus } from "lucide-react";
 import { useState } from "react";
 import {
@@ -9,15 +6,14 @@ import {
   type CATEGORY_STATUS,
   type CATEGORY_TYPE,
   type CreateCategoryRequest,
-} from "../../types/category/category";
+} from "@/types";
 import { toast } from "sonner";
 import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
-import FormHeader from "../animation/FormHeader";
+import FormHeader from "../ui/FormHeader";
 import { useCreateCategory } from "../../hooks/category/useCreateCategory";
-import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
+import { ButtonCancel, ButtonSubmit } from "@/components/ui";
 import { useSearchParams } from "react-router-dom";
 
 export default function AddNewCategory() {
@@ -29,7 +25,7 @@ export default function AddNewCategory() {
   );
   const { mutate: createCategory, isError, isPending } = useCreateCategory();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const isOpen = searchParams.get("create") === "true";
 
   const handleOpenForm = () => {

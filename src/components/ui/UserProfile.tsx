@@ -1,5 +1,5 @@
 //
-import type { GetUserProfileResponse } from "../../types/user";
+import type { GetUserProfileResponse } from "@/types";
 import Loader from "./Loader";
 import DefaultProfile from "../../assets/user-profile.png";
 

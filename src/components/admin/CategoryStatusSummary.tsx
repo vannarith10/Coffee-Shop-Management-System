@@ -1,13 +1,10 @@
-//
-// components/CategoryStatus.tsx
-//
 import {
   ChartColumnStacked,
   Croissant,
   CupSoda,
   ShieldAlert,
 } from "lucide-react";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader } from "@/components/ui";
 import SpotlightCard from "../animation/SpotlightCard";
 import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
 import type { JSX } from "react/jsx-runtime";
@@ -15,8 +12,7 @@ import type { JSX } from "react/jsx-runtime";
 // Showing the numbers on the top of Category Tab
 //
 export default function CategoryStatus() {
-  const { statusSummary, isLoading, isError } =
-    useCategoryStatusSummary();
+  const { statusSummary, isLoading, isError } = useCategoryStatusSummary();
 
   return (
     <section className="grid grid-cols-2 xl:grid-cols-4 gap-4">
@@ -64,7 +60,6 @@ export default function CategoryStatus() {
           </div>
         ))}
 
-
       {/* ================================ */}
       {/* Renders Cards */}
       {/* ================================ */}
@@ -74,8 +69,7 @@ export default function CategoryStatus() {
           const config = ItemMap[key];
           return (
             <SpotlightCard key={key} rounded="lg">
-              <div
-               className="h-full flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
+              <div className="h-full flex flex-col gap-4 bg-background-secondary p-6 rounded-lg border-2 border-border">
                 <div className="flex justify-between">
                   {/* Title & Icon*/}
                   <h3 className="text-text-secondary font-semibold text-xs md:text-sm">

@@ -1,16 +1,11 @@
-//
-// components/DisplayProduct.tsx
-//
 import { useRef } from "react";
 import NoImage from "../../assets/picture.jpg";
-import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
+import { STOCK_STATUS_CONFIG } from "@/types";
 import { RotateCcw, SquareChartGantt } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
 import { useAdminProduct } from "../../hooks/useAdminProduct";
 import { useProductFilter } from "../../hooks/useProductFilter";
-import PageHeader from "../ui/PageHeader";
-import PageFooter from "../ui/PageFooter";
 
 export default function DisplayProduct() {
   const size = 10;

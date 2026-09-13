@@ -1,6 +1,3 @@
-// components/TopSellingProducts.tsx
-//
-
 import { useState } from "react";
 import {
   ResponsiveContainer,
@@ -10,8 +7,8 @@ import {
   YAxis,
   Cell,
 } from "recharts";
-import { RANGES, type Range } from "../../types/business-analytics";
-import TextLoader from "../ui/TextLoader";
+import { RANGES, type Range } from "@/types";
+import { TextLoader } from "@/components/ui";
 import { RotateCcw } from "lucide-react";
 import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
 
@@ -68,7 +65,7 @@ export default function TopSellingProductsChart() {
           </p>
         </div>
 
-      {/* ------------------------------------------------------------
+        {/* ------------------------------------------------------------
       *
                             Button refresh
       *

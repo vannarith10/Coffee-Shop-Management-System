@@ -7,9 +7,11 @@ interface Props {
   value: string | null;
   onChange: (value: string) => void;
   placeholder?: string;
+  name?: string;
+  autoComplete?: string;
 }
 
-const TextInput = ({ onChange, value, placeholder }: Props) => {
+const TextInput = ({ onChange, value, placeholder, name, autoComplete }: Props) => {
   const [isFocus, setIsFocus] = useState(false);
 
   return (
@@ -17,6 +19,8 @@ const TextInput = ({ onChange, value, placeholder }: Props) => {
       className={`relative w-full flex ${isFocus ? "border-green-600" : "border-border"} border-2  rounded-md overflow-hidden`}
     >
       <input
+        name={name}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}

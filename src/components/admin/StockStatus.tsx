@@ -1,20 +1,13 @@
-//
-// components/admin/StockStatus.tsx
-//
 import { Layers2, SquarePen } from "lucide-react";
 import type { ProductStock } from "../../types/product";
 import { useState } from "react";
-import { STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import { Ellipsis } from "lucide-react";
+import { STOCK_STATUS_CONFIG } from "@/types";
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
 import { useStockStatus } from "../../hooks/useStockStatus";
-import { getPageNumbers } from "../../utils/page-numbers";
 import { AnimatePresence } from "framer-motion";
-import PageHeader from "../ui/PageHeader";
 import { useSearchParams } from "react-router-dom";
-import PageFooter from "../ui/PageFooter";
 
 export default function StockStatus() {
   const size = 20;

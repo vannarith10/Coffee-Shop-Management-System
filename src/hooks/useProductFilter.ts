@@ -1,4 +1,4 @@
-import type { CATEGORY_TYPE } from "../types/category/category";
+import type { CATEGORY_TYPE } from "@/types";
 import { create } from "zustand";
 
 type ProductFilterStore = {

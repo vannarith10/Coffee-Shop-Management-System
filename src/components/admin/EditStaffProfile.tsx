@@ -1,50 +1,132 @@
-//
-// components/EditStaffProfile.tsx
-//
-import type { EditStaffDataRequest } from "../../types/staff";
 import { useCallback, useEffect, useState } from "react";
 import { getCroppedImg } from "../../utils/crop-helper";
 import type { Area } from "react-easy-crop";
-import { DAY_ORDER, type Schedule } from "../../types/schedule";
-import { SHIFT_ORDER, type Shift } from "../../types/shift";
-import { base64ToFile } from "../../utils/convertor";
-import { ROLES, type Role } from "../../types/role";
 import {
+  DAY_ORDER,
+  type Schedule,
+  type EditStaffDataRequest,
+  SHIFT_ORDER,
+  type Shift,
+  type RoleType,
   STATUSES,
   USER_STATUS_COLOR_CONFIG,
   type Status,
-} from "../../types/status";
+  ROLES_ARRAY,
+} from "@/types";
+import { base64ToFile } from "../../utils/convertor";
 import { Trash2 } from "lucide-react";
 import { useDeleteStaff } from "../../hooks/useDeleteStaff";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence, motion } from "framer-motion";
-import FormHeader from "../animation/FormHeader";
-import PasswordInput from "../ui/PasswordInput";
-import ImageInput from "../ui/ImageInput";
+import {
+  FormHeader,
+  PasswordInput,
+  ImageInput,
+  ImageCropForm,
+  ButtonCancel,
+  ButtonSubmit,
+} from "@/components/ui";
 import { useEditStaff } from "../../hooks/useEditStaff";
 import DefaultProfile from "../../assets/user-profile.png";
-import ImageCropForm from "../ui/ImageCropForm";
-import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
 import { useSearchParams } from "react-router-dom";
 import { useGetASingleProfile } from "../../hooks/staff/useGetASingleProfile";
+import z from "zod";
+import {
+  Controller,
+  useForm,
+  useWatch,
+  type FieldErrors,
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { editStaffSchema } from "@/validation";
 
-interface UpdateStaffProfile {
-  isOpen: boolean;
-  onClose: () => void;
-}
+type EditStaffFormData = z.infer<typeof editStaffSchema>;
 
-export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
+export default function EditStaffProfile() {
   const [searchParams, setSearchParams] = useSearchParams();
   const staffId = searchParams.get("id") || "";
 
   useEffect(() => {
     if (!staffId.trim()) {
-      onClose();
+      return;
     }
-  }, [staffId, onClose]);
+  }, [staffId]);
 
-  const { data: staff } = useGetASingleProfile(staffId);
+  const { data: staff, error } = useGetASingleProfile(staffId);
+  // Image preview
+  const [preview, setPreview] = useState<string>(DefaultProfile);
+  const [file, setFile] = useState<File | null>(null);
+
+  const {
+    handleSubmit,
+    setValue,
+    reset,
+    control,
+    register,
+    formState: { dirtyFields },
+  } = useForm<EditStaffFormData>({
+    resolver: zodResolver(editStaffSchema),
+    defaultValues: {
+      name: null,
+      username: null,
+      email: null,
+      password: null,
+      confirmPassword: null,
+      role: null,
+      schedules: null,
+      shift: null,
+      status: null,
+    },
+  });
+
+  const selectedShift = useWatch({ control, name: "shift" });
+  const selectedRole = useWatch({ control, name: "role" });
+  const selectedStatus = useWatch({ control, name: "status" });
+  const schedules = useWatch({ control, name: "schedules" }) ?? [];
+  const handleSelectSchedule = (day: Schedule) => {
+    const updateSchedules = schedules?.includes(day)
+      ? schedules.filter((d) => d !== day)
+      : [...schedules, day];
+
+    setValue("schedules", updateSchedules, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  useEffect(() => {
+    if (staff) {
+      reset({
+        name: staff.name,
+        username: staff.username,
+        email: staff.email,
+        password: null,
+        confirmPassword: null,
+        role: staff.role,
+        schedules: staff.schedules,
+        shift: staff.shift,
+        status: staff.status,
+      });
+
+      (() => setPreview(staff?.image_url ?? DefaultProfile))();
+    }
+  }, [staff, reset]);
+
+  const handleCloseFormEdit = useCallback(() => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.delete("edit");
+      params.delete("id");
+      return params;
+    });
+  }, [setSearchParams]);
+
+  useEffect(() => {
+    if (error) {
+      handleCloseFormEdit();
+    }
+  }, [error, handleCloseFormEdit]);
 
   const { mutate: deleteStaff, isPending } = useDeleteStaff();
   const [isDeletingStaff, setIsDeletingStaff] = useState(false);
@@ -53,47 +135,53 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
     isError,
     isPending: isUpdatePending,
   } = useEditStaff();
-  const [currentRole, setCurrentRole] = useState<Role>();
-  const [currentStatus, setCurrentStatus] = useState<Status>();
-  const [currentShift, setCurrentShift] = useState<Shift>();
-  const [currentSchedules, setCurrentSchedules] = useState<Schedule[]>();
-  //
-  const [name, setName] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
-  //
-  const [selectedRole, setSelectedRole] = useState<Role>();
-  const [selectedStatus, setSelectedStatus] = useState<Status>();
-  const [selectedShift, setSelectedShift] = useState<Shift>();
-  const [schedules, setSchedules] = useState<Schedule[]>();
 
+  // ----------------------------------------
+  //
+  //                Submit
+  //
+  // ----------------------------------------
+  const onSubmit = (formData: EditStaffFormData) => {
+    if (!staff?.id) return;
 
-  useEffect(() => {
-    if (staff) {
-      (() => {
-        setCurrentRole(staff.role);
-        setCurrentStatus(staff.status);
-        setCurrentShift(staff.shift);
-        setCurrentSchedules(staff.schedules);
-        // set selected to show their currect values
-        setSelectedRole(staff.role);
-        setSelectedStatus(staff.status);
-        setSelectedShift(staff.shift);
-        setSchedules(staff.schedules);
-      })();
+    const hasFormChanges = Object.keys(dirtyFields).length > 0;
+    const hasImageChange = file !== null;
+
+    if (!hasFormChanges && !hasImageChange) {
+      toast.error("At least one field must be updated");
+      return;
     }
-  }, [staff]);
 
+    const data: EditStaffDataRequest = {
+      name: formData.name,
+      username: formData.username,
+      password: formData.password,
+      email: formData.email,
+      role: formData.role as RoleType,
+      status: formData.status as Status,
+      shift_type: formData.shift as Shift,
+      schedules: formData.schedules as Schedule[],
+    };
 
-  // Image preview
-  const [preview, setPreview] = useState<string>(DefaultProfile);
-  const [file, setFile] = useState<File | null>(null);
+    editStaff(
+      { userId: staff?.id, data, image: file },
+      {
+        onError: (err) => {
+          toast.error(err.response?.data.detail, { duration: 5000 });
+        },
+        onSuccess: () => {
+          handleCloseFormEdit();
+        },
+      },
+    );
+  };
 
-  useEffect(() => {
-    (() => setPreview(staff?.image_url ?? DefaultProfile))();
-  }, [staff]);
+  const onInvalid = (errors: FieldErrors<EditStaffFormData>) => {
+    const message = Object.values(errors)[0]?.message;
+    if (message) {
+      toast.error(message, { duration: 5000 });
+    }
+  };
 
   // Crop state
   const [image, setImage] = useState<string | null>(null);
@@ -123,37 +211,9 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
     // Convert base64 to file
     const file = base64ToFile(croppedImage, "profile.jpg");
     setFile(file);
-
     setZoom(1);
     setImage(null); // Close modal
   }
-
-  // HANDLE SELECT WORKING DAYS
-  function handleSelectWorkingDay(day: Schedule) {
-    // If prev === null then insert schedule directly
-    // If already selected then remove, else add to working days.
-    setSchedules((prev) => {
-      if (!prev) return prev;
-
-      return prev === null
-        ? [day]
-        : prev.includes(day)
-          ? prev.filter((d) => d !== day)
-          : [...prev, day];
-        }
-    );
-  }
-  function handleSelectShift(shift: Shift) {
-    setSelectedShift(shift);
-  }
-  function handleSelectRole(role: Role) {
-    setSelectedRole(role);
-  }
-  function handleSelectStatus(status: Status) {
-    setSelectedStatus(status);
-  }
-
-  if (!open) return null;
 
   const handleCancelCrop = () => {
     setImage(null);
@@ -164,52 +224,26 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
     setZoom(Number(e.target.value));
   };
 
-  // ----------------------------------------------
-  //
-  //                  Submit
-  //
-  // ----------------------------------------------
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    //
-    const data: EditStaffDataRequest = {
-      name: name,
-      username: username,
-      password: password,
-      email: email,
-      role: selectedRole || null,
-      status: selectedStatus || null,
-      shift_type: selectedShift || null,
-      schedules: schedules || null,
-    };
-
-
-    editStaff(
-      { userId: staffId, data: data, image: file },
-      {
-        onSuccess: () => {
-          onClose();
-        },
-      },
-    );
-  }
-
   function handleDeleteStaff(e: React.FormEvent) {
     e.preventDefault();
 
     deleteStaff(staffId, {
       onSuccess: () => {
-        onClose();
+        // onClose();
+        handleCloseFormEdit();
       },
     });
   }
 
   return (
-    <MyPopupForm onClose={onClose} handleSubmit={handleSubmit}>
+    <MyPopupForm
+      onClose={handleCloseFormEdit}
+      handleSubmit={handleSubmit(onSubmit, onInvalid)}
+    >
       <FormHeader
         title="Edit Staff Account"
         description="Fill in the details to edit a staff account."
-        onClose={onClose}
+        onClose={handleCloseFormEdit}
         className="w-full sticky top-0 z-100"
       />
 
@@ -226,10 +260,8 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
               NAME
             </label>
             <input
+              {...register("name")}
               spellCheck={false}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={staff?.name}
-              type="text"
               className="placeholder:text-sm placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
           </div>
@@ -238,10 +270,8 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
               USERNAME
             </label>
             <input
+              {...register("username")}
               spellCheck={false}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder={staff?.username}
-              type="text"
               className="placeholder:text-sm lowercase placeholder:font-semibold border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
             />
           </div>
@@ -258,8 +288,7 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
           EMAIL
         </label>
         <input
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={staff?.email}
+          {...register("email")}
           type="email"
           className="border-2 border-border w-full p-2 rounded-md focus:outline-none focus:border-green-600 hover:border-border-hover"
         />
@@ -275,16 +304,25 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
           <label htmlFor="name" className="text-xs font-bold">
             PASSWORD
           </label>
-          <PasswordInput onChange={setPassword} value={password} />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <PasswordInput onChange={field.onChange} value={field.value} />
+            )}
+          />
         </div>
 
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="name" className="text-xs font-bold">
             CONFIRM PASSWORD
           </label>
-          <PasswordInput
-            onChange={setConfirmPassword}
-            value={confirmPassword}
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <PasswordInput onChange={field.onChange} value={field.value} />
+            )}
           />
         </div>
       </div>
@@ -303,12 +341,12 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
             {DAY_ORDER.map((day) => {
               const isSelected =
                 schedules === null ? false : schedules?.includes(day);
-              const isCurrentSchedule = currentSchedules?.includes(day);
+              const isCurrentSchedule = staff?.schedules?.includes(day);
               return (
                 <button
                   key={day}
                   type="button"
-                  onClick={() => handleSelectWorkingDay(day)}
+                  onClick={() => handleSelectSchedule(day)}
                   className={`relative ${isSelected ? "bg-green-600" : "bg-background-secondary"} outline-none px-8 py-4 text-xs font-semibold border-2 border-border cursor-pointer hover:border-border-hover rounded-md active:scale-80 transition-all duration-300 ease-out`}
                 >
                   {day}
@@ -335,13 +373,18 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
           </label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {SHIFT_ORDER.map((shift) => {
-              const isCurrentShift = shift === currentShift;
+              const isCurrentShift = shift === staff?.shift;
               const isSelected = shift === selectedShift;
               return (
                 <button
                   key={shift}
                   type="button"
-                  onClick={() => handleSelectShift(shift)}
+                  onClick={() => {
+                    setValue("shift", shift, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
                   className={`relative py-4 text-xs ${isSelected ? "bg-green-600" : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                 >
                   {shift === "FULL_DAY" ? "FULL DAY" : shift}
@@ -368,14 +411,19 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
             ROLE
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {ROLES.map((role) => {
-              const isCurrentRole = role === currentRole;
+            {ROLES_ARRAY.map((role) => {
+              const isCurrentRole = role === staff?.role;
               const isSelected = role === selectedRole;
               return (
                 <button
                   key={role}
                   type="button"
-                  onClick={() => handleSelectRole(role)}
+                  onClick={() => {
+                    setValue("role", role, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
                   className={`relative py-4 text-xs ${isSelected ? "bg-green-600" : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                 >
                   {role}
@@ -403,17 +451,21 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {STATUSES.map((status) => {
-              const isCurrentStatus = status === currentStatus;
+              const isCurrentStatus = status === staff?.status;
               const isSelected = status === selectedStatus;
               // get color from specific status
-              const config =
-                selectedStatus && USER_STATUS_COLOR_CONFIG[selectedStatus];
+              const color = USER_STATUS_COLOR_CONFIG[selectedStatus as Status];
               return (
                 <button
                   key={status}
                   type="button"
-                  onClick={() => handleSelectStatus(status)}
-                  className={`relative py-4 text-xs ${isSelected ? config?.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
+                  onClick={() => {
+                    setValue("status", status, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  className={`relative py-4 text-xs ${isSelected ? color?.background_color : "bg-background-secondary"} outline-none font-semibold rounded-md border-2 border-border hover:border-border-hover cursor-pointer active:scale-110 transition-all duration-200 ease-out`}
                 >
                   {status === "ON_LEAVE" ? "ON LEAVE" : status}
                   {/* Show current shift label */}
@@ -445,7 +497,7 @@ export default function EditStaffProfile({ onClose }: UpdateStaffProfile) {
       {/* BUTTONS: CANCEL & SUBMIT */}
       {/* ======================================= */}
       <div className="w-full grid grid-cols-3 gap-2 sm:gap-4">
-        <ButtonCancel handelCancel={onClose} />
+        <ButtonCancel handelCancel={handleCloseFormEdit} />
         <ButtonSubmit isError={isError} isPending={isUpdatePending} />
       </div>
 

@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../types/error";
+import type { BackendErrorDetail } from "@/types";
 import { deleteProfile } from "../services/admin/staff";
 import { toast } from "sonner";
 

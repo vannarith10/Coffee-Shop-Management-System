@@ -4,18 +4,20 @@
 
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../../types/error";
-import type { RetrieveOrderStatus } from "../../types/barista/order";
+import type { BackendErrorDetail } from "@/types";
+import type { RetrieveOrderStatus } from "@/types";
 import { updateOrderStatus } from "../../services/barista/order";
 
 interface UpdateStatusRequest {
-    id: string;
-    status: RetrieveOrderStatus;
+  id: string;
+  status: RetrieveOrderStatus;
 }
 
-export function useUpdateOrderStatus () {
-
-    return useMutation<void, AxiosError<BackendErrorDetail>, UpdateStatusRequest> ({
-        mutationFn: ({id, status}) => updateOrderStatus({id: id, status: status})
-    });
+export function useUpdateOrderStatus() {
+  return useMutation<void, AxiosError<BackendErrorDetail>, UpdateStatusRequest>(
+    {
+      mutationFn: ({ id, status }) =>
+        updateOrderStatus({ id: id, status: status }),
+    },
+  );
 }

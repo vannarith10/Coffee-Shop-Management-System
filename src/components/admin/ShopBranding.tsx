@@ -2,18 +2,20 @@ import { Feather, Trash2 } from "lucide-react";
 import React, { useCallback, useRef, useState } from "react";
 import DefaultImage from "../../assets/picture.jpg";
 import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
-import Loader from "../ui/Loader";
+import {
+  Loader,
+  ImageCropForm,
+  FormHeader,
+  ButtonCancel,
+  TextLoader,
+} from "@/components/ui";
 import { useDeleteShopLogo } from "../../hooks/useDeleteShopLogo";
-import ImageCropForm from "../ui/ImageCropForm";
 import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { useUpdateShopLogo } from "../../hooks/useUpdateShopLogo";
 import { AnimatePresence } from "framer-motion";
-import FormHeader from "../animation/FormHeader";
-import ButtonCancel from "../ui/ButtonCancel";
 import MyPopupForm from "../animation/MyPopupForm";
-import TextLoader from "../ui/TextLoader";
 
 const ShopBranding = () => {
   const { data, isLoading, isError, isRefetching, refetch } =
@@ -153,7 +155,7 @@ const ShopBranding = () => {
         disabled={updating}
         className="font-bold w-full py-2 text-text-secondary border border-border hover:border-border-hover rounded-md bg-background-secondary-hover cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
       >
-        {updating ? <TextLoader text="Uploading..."/> : "Upload Logo"}
+        {updating ? <TextLoader text="Uploading..." /> : "Upload Logo"}
       </button>
       {/* ==================== */}
       {/* Button Remove */}
@@ -204,7 +206,7 @@ const ShopBranding = () => {
                 disabled={isPending}
                 className="col-span-2 font-semibold w-full py-4 text-xs sm:text-sm lg:text-lg text-text-secondary rounded-md bg-background-secondary-hover hover:bg-sidebar cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
               >
-                {isPending ? <TextLoader text="Deleting..."/> : "Delete"}
+                {isPending ? <TextLoader text="Deleting..." /> : "Delete"}
               </button>
             </div>
           </MyPopupForm>

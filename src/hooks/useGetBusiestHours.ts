@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { type BusiestHoursResponse } from "../types/business-analytics";
+import { type BusiestHoursResponse } from "@/types";
 import { getBusiestHours } from "../services/admin/report";
 
 

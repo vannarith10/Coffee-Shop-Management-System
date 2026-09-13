@@ -2,11 +2,10 @@
 // Tanstack
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import type { Range } from "../types/business-analytics";
 import { getTopSellingProduct } from "../services/admin/product";
 import type { TopSellingResponse } from "../types/product";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../types/error";
+import type { BackendErrorDetail, Range } from "@/types";
 import { toast } from "sonner";
 import { useEffect } from "react";
 

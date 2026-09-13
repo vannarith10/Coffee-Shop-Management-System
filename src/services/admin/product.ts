@@ -1,6 +1,6 @@
 import api from "../../lib/axios";
-import type { TopSellingProductRequest } from "../../types/business-analytics";
-import type { CATEGORY_TYPE } from "../../types/category/category";
+import type { TopSellingProductRequest } from "@/types";
+import type { CATEGORY_TYPE } from "@/types";
 import type {
   AddNewProductRequest,
   UpdateProductRequest,

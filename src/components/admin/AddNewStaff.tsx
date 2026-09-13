@@ -1,17 +1,16 @@
-//
-// components/AddNewStaff.tsx
-//
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import { ROLES, type Role } from "../../types/role";
-import { SHIFT_ORDER, type Shift } from "../../types/shift";
 import {
   STATUSES,
   USER_STATUS_COLOR_CONFIG,
   type Status,
-} from "../../types/status";
-import { DAY_ORDER, type Schedule } from "../../types/schedule";
-import ImageCropForm from "../ui/ImageCropForm";
+  type RoleType,
+  SHIFT_ORDER,
+  type Shift,
+  DAY_ORDER,
+  type Schedule,
+  ROLES_ARRAY,
+} from "@/types";
 import DefaultProfile from "../../assets/user-profile.png";
 import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
@@ -21,14 +20,17 @@ import type { CreateStaffRequest } from "../../types/staff";
 import { useCreateStaff } from "../../hooks/useCreateStaff";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
-import FormHeader from "../animation/FormHeader";
-import PasswordInput from "../ui/PasswordInput";
 import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
-import ImageInput from "../ui/ImageInput";
+import {
+  ImageInput,
+  ButtonSubmit,
+  PasswordInput,
+  FormHeader,
+  ImageCropForm,
+} from "@/components/ui";
 import { useSearchParams } from "react-router-dom";
 //
-import { string, z } from "zod";
+import z from "zod";
 import {
   Controller,
   useForm,
@@ -36,40 +38,7 @@ import {
   type FieldErrors,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-  .refine((password) => /[a-z]/.test(password), {
-    message: "Password must contain at least one lowercase letter",
-  })
-  .refine((password) => /[A-Z]/.test(password), {
-    message: "Password must contain at least one uppercase letter",
-  })
-  .refine((password) => /\d/.test(password), {
-    message: "Password must contain at least one number",
-  })
-  .refine((password) => /[@$!%*?&#]/.test(password), {
-    message: "Password must contain at least one special character",
-  });
-
-const createStaffSchema = z
-  .object({
-    full_name: z.string().min(3, "Name is required"),
-    username: z.string().min(3, "Username must be at least 3 charecters"),
-
-    password: passwordSchema,
-    confirmPassword: z.string(),
-
-    schedules: z.array(string()).min(1, "Select at least one schedule"),
-    role: z.string().min(1, "Please select a role"),
-    shift: z.string().min(1, "Please select a shift"),
-    status: z.string().min(1, "Please select status"),
-  })
-  .refine((data) => data.confirmPassword === data.password, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
+import { createStaffSchema } from "@/validation";
 
 type CreateStaffFormData = z.infer<typeof createStaffSchema>;
 
@@ -78,26 +47,20 @@ export default function AddNewStaff() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isOpen = searchParams.get("create") === "true";
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm<CreateStaffFormData>({
-    resolver: zodResolver(createStaffSchema),
-    defaultValues: {
-      full_name: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-      role: "",
-      shift: "",
-      schedules: [],
-      status: "",
-    },
-  });
+  const { control, register, handleSubmit, setValue, reset } =
+    useForm<CreateStaffFormData>({
+      resolver: zodResolver(createStaffSchema),
+      defaultValues: {
+        full_name: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+        role: "STAFF",
+        shift: "FULL_DAY",
+        schedules: [],
+        status: "ACTIVE",
+      },
+    });
 
   const selectedRole = useWatch({
     control,
@@ -147,12 +110,11 @@ export default function AddNewStaff() {
   };
 
   const onSubmit = (formData: CreateStaffFormData) => {
-
     const data: CreateStaffRequest = {
       full_name: formData.full_name,
       username: formData.username,
       password: formData.password,
-      role: formData.role as Role,
+      role: formData.role as RoleType,
       shift: formData.shift as Shift,
       schedules: formData.schedules as Schedule[],
       status: formData.status as Status,
@@ -417,7 +379,7 @@ export default function AddNewStaff() {
                 ROLE
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {ROLES.map((role) => {
+                {ROLES_ARRAY.map((role) => {
                   const isSelected = role === selectedRole;
                   return (
                     <button

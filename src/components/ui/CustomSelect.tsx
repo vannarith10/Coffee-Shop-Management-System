@@ -9,7 +9,7 @@ export interface SelectOption<T> {
 
 interface CustomSelectProps<T> {
   value: T;
-  options: SelectOption<T>[];
+  options: readonly SelectOption<T>[];
   onChange: (value: T) => void;
   placeholder?: string;
   className?: string;
@@ -60,7 +60,9 @@ export default function CustomSelect<T>({
           focus:border-green-600 focus:outline-none
           ${value === false ? "text-text-error" : "text-white"}`}
       >
-        <span className=" font-semibold ">{selectedOption?.label || placeholder}</span>
+        <span className=" font-semibold ">
+          {selectedOption?.label || placeholder}
+        </span>
 
         {!disabled && (
           <ChevronDown

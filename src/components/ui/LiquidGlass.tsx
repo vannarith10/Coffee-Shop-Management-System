@@ -8,7 +8,7 @@ type Props = {
   classChild?: string;
 };
 
-export function LiquidGlass({ children, className, classChild }: Props) {
+export default function LiquidGlass({ children, className, classChild }: Props) {
   return (
     <div className={`relative isolate overflow-hidden ${className}`}>
       {/* Distortion + Blur */}

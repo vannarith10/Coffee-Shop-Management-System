@@ -18,6 +18,14 @@ class WebSocketManager {
   private subscriptions = new Map<string, SubscriptionEntry>();
 
   async connect() {
+    // 1. Check for token BEFORE initializing anything
+    const token = useAuthStore.getState().accessToken;
+
+    if (!token) {
+      console.warn("WebSocket connection skipped: No access token available.");
+      return;
+    }
+
     if (this.client) {
       console.log("WebSocket already initialized.");
       return;
@@ -27,19 +35,35 @@ class WebSocketManager {
       reconnectDelay: 5000,
 
       beforeConnect: async () => {
-        let token = useAuthStore.getState().accessToken;
+        let currentToken = useAuthStore.getState().accessToken;
 
-        if (!token) {
+        // 2. Abort reconnection if the token is missing
+        if (!currentToken) {
+          console.warn(
+            "WebSocket connection aborted: Token is missing. Stopping reconnection.",
+          );
+          await this.client?.deactivate();
+          this.client = null;
           throw new Error("Missing token");
         }
 
-        if (isTokenExpired(token, 30)) {
-          token = await useAuthStore.getState().refresh();
+        // 3. Handle token refresh gracefully
+        if (isTokenExpired(currentToken, 30)) {
+          try {
+            currentToken = await useAuthStore.getState().refresh();
+            if (!currentToken) {
+              throw new Error("Token refresh returned no token");
+            }
+          } catch (err) {
+            console.error("WebSocket token refresh failed:", err);
+            // Abort further reconnection attempts if refresh fails
+            await this.client?.deactivate();
+            this.client = null;
+            throw new Error("Token refresh failed", { cause: err });
+          }
         }
 
-        client.brokerURL = `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${token}`;
-
-        console.log("WS using token:", token.substring(0, 20));
+        client.brokerURL = `${import.meta.env.VITE_API_WEBSOCKET_BASE_URL}/ws?token=${currentToken}`;
       },
 
       heartbeatIncoming: 10000,

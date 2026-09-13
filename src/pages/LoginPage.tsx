@@ -3,20 +3,19 @@
 //
 import { useRef, useState, useEffect } from "react";
 import { login as loginApi } from "../services/auth.service";
-import { Role } from "../types/role";
 import { useNavigate } from "react-router-dom";
-import { LiquidGlass } from "../components/ui/LiguidGlass";
-import ThemeSwitch from "../components/ui/ThemeSwitch";
+import {
+  LiquidGlass,
+  ThemeSwitch,
+  PasswordInput,
+  TextInput,
+  TextLoader,
+} from "@/components/ui";
 import { gsap } from "gsap";
-
 import DarkComicTemple from "../assets/bayon-dark.jpeg";
 import LightComicTemple from "../assets/bayon-light.jpeg";
-
 import { useThemeStore } from "../stores/useThemeStore";
 import { useAuthStore } from "../stores/useAuthStore";
-import PasswordInput from "../components/ui/PasswordInput";
-import TextInput from "../components/ui/TextInput";
-import TextLoader from "../components/ui/TextLoader";
 
 export default function LoginPage() {
   const login = useAuthStore().login;
@@ -63,13 +62,13 @@ export default function LoginPage() {
       login(response.user_info, response.access_token, response.refresh.token);
 
       switch (response.user_info.role) {
-        case Role.ADMIN:
+        case "ADMIN":
           navigate("/admin", { replace: true });
           break;
-        case Role.CASHIER:
+        case "CASHIER":
           navigate("/cashier", { replace: true });
           break;
-        case Role.BARISTA:
+        case "BARISTA":
           navigate("/barista", { replace: true });
           break;
         default:
@@ -115,8 +114,10 @@ export default function LoginPage() {
               Login to System
             </h2>
 
-            {/* username */}            
+            {/* username */}
             <TextInput
+              name="username-login"
+              autoComplete="username"
               value={username}
               onChange={setUsername}
               placeholder="username"
@@ -134,7 +135,7 @@ export default function LoginPage() {
               type="submit"
               className="shimmer shimmer-bg shimmer-color-blue-300/50 shimmer-duration-3000 py-4 w-full px-8 font-bold text-text-primary bg-background-secondary rounded-md cursor-pointer hover:bg-background-secondary-hover active:scale-90 transition-all duration-200 ease-out outline-none"
             >
-              {isLoggingIn ? <TextLoader text="Logging in..."/> : "Login"}
+              {isLoggingIn ? <TextLoader text="Logging in..." /> : "Login"}
             </button>
             <ThemeSwitch />
           </form>

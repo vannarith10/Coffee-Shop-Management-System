@@ -1,22 +1,16 @@
-//
-// components/DisplayStaff.tsx
-//
 import { useEffect, useRef } from "react";
 import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
-import { DAY_ORDER, SCHEDULE_CONFIG } from "../../types/schedule";
+import { DAY_ORDER, ROLES_ARRAY, SCHEDULE_CONFIG } from "@/types";
 import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
 import { useStaff } from "../../hooks/useGetStaffProfiles";
-import { USER_STATUS_COLOR_CONFIG } from "../../types/status";
+import { USER_STATUS_COLOR_CONFIG } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { COLORS } from "../../utils/colors";
-import { ROLES } from "../../types/role";
-import PageHeader from "../ui/PageHeader";
 import { useSearchParams } from "react-router-dom";
-import PageFooter from "../ui/PageFooter";
 
 export default function DisplayStaff() {
   const size = 10;
@@ -79,14 +73,6 @@ export default function DisplayStaff() {
     });
   };
 
-  const handleCloseFormEdit = () => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      params.delete("edit");
-      params.delete("id");
-      return params;
-    });
-  };
 
   return (
     <>
@@ -118,7 +104,7 @@ export default function DisplayStaff() {
         ) : (
           staff?.staffs.map((staff) => {
             const isHighlighted = highlightedIds.has(staff.id);
-            const roleColor = COLORS[ROLES.indexOf(staff.role)];
+            const roleColor = COLORS[ROLES_ARRAY.indexOf(staff.role)];
             return (
               <main
                 ref={isHighlighted ? targetRef : null}
@@ -263,11 +249,7 @@ export default function DisplayStaff() {
                     FORM: Open Form Edit
       *
       -------------------------------------------------- */}
-      <AnimatePresence>
-        {isOpen && (
-          <EditStaffProfile isOpen={true} onClose={handleCloseFormEdit} />
-        )}
-      </AnimatePresence>
+      <AnimatePresence>{isOpen && <EditStaffProfile />}</AnimatePresence>
     </>
   );
 }

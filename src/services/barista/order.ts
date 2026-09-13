@@ -1,5 +1,5 @@
 import api from "../../lib/axios";
-import type { RetrieveOrderStatus } from "../../types/barista/order";
+import type { RetrieveOrderStatus } from "@/types";
 
 export async function getOrders(
   page: number,

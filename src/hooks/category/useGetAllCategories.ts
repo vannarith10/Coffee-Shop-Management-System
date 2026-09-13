@@ -10,10 +10,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import type {
-  Category,
-  GetAllCategoriesResponse,
-} from "../../types/category/category";
+import type { Category, GetAllCategoriesResponse } from "@/types";
 import { useCategoryCreate } from "../../websocket/category/useCreateCategoryWebsocket";
 import { useUpdateCategoryWebsocket } from "../../websocket/category/useUpdateCategoryWebsocket";
 
@@ -102,7 +99,6 @@ export function useGetAllCategories(page: number = 1) {
   }
   useCategoryCreate({ onCategoryCreate: handleAddNewCategory });
 
-
   // ---------------------------------------
   //
   // Update Category - Websocket
@@ -128,7 +124,6 @@ export function useGetAllCategories(page: number = 1) {
     );
   }
   useUpdateCategoryWebsocket({ onCategoryUpdate: updateCategory });
-
 
   return {
     category: data ?? null,

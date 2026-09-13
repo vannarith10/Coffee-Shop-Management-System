@@ -3,7 +3,7 @@
 //
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../types/error";
+import type { BackendErrorDetail } from "@/types";
 import type { EditStaffDataRequest } from "../types/staff";
 import { editStaffDetail } from "../services/admin/staff";
 

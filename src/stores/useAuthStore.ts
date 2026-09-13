@@ -2,7 +2,7 @@
 //  stores/useAuthStore.ts
 //
 import { create } from "zustand";
-import type { UserInfo } from "../types/user";
+import type { UserInfo } from "@/types";
 import { persist } from "zustand/middleware";
 import { websocketManager } from "../websocket/websocket-manager";
 import { refreshWithLock } from "../lib/auth-refresh";

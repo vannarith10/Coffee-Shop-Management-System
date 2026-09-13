@@ -2,11 +2,11 @@
 // routes/RoleRoute.tsx
 //
 import { useAuthStore } from "../stores/useAuthStore";
-import { Role } from "../types/role";
+import { type RoleType } from "@/types";
 import { Navigate, Outlet } from "react-router-dom";
 
 interface Props {
-  allowedRoles: Role[];
+  allowedRoles: RoleType[];
 }
 
 export default function RoleRoute({ allowedRoles }: Props) {

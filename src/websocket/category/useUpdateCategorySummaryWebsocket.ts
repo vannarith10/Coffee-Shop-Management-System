@@ -9,7 +9,7 @@
 // ----------------------------------------------------------
 //
 import { useEffect } from "react";
-import type { CategoryStatusSummaryResponse } from "../../types/category/category";
+import type { CategoryStatusSummaryResponse } from "@/types";
 import { websocketManager } from "../websocket-manager";
 
 export function useCategoryStatusUpdate({

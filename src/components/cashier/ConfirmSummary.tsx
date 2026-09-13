@@ -1,5 +1,5 @@
 import { BadgeDollarSign, ChevronsDown, QrCode, Receipt } from "lucide-react";
-import type { PaymentMethod } from "../../types/order";
+import type { PaymentMethod } from "@/types";
 import type { ReactNode } from "react";
 import { useGetOrderInfo } from "../../hooks/cashier/useGetOrderInfo";
 import { useNavigate } from "react-router-dom";

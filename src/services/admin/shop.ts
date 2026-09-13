@@ -1,11 +1,5 @@
-
 import api, { publicApi } from "../../lib/axios";
-import type { ShopLogoUpdateResponse, UpdateShopInfoRequest } from "../../types/shop-setting";
-
-
-
-
-
+import type { ShopLogoUpdateResponse, UpdateShopInfoRequest } from "@/types";
 
 //
 // Get shop's image and name
@@ -14,14 +8,12 @@ export const getShopImageAndName = async () => {
   return await publicApi.get("/api/v2/shop-profile/shop-name/shop-image");
 };
 
-
 //
 // Get Shop Info
 //
 export async function getShopInfo() {
   return await api.get("/api/v2/shop-profile");
 }
-
 
 //
 // void doens't need to return
@@ -30,7 +22,6 @@ export async function getShopInfo() {
 export async function deleteShopLogo(): Promise<void> {
   await api.delete("/api/v2/shop-profile/delete-logo");
 }
-
 
 //
 // Update Shop Logo
@@ -42,7 +33,6 @@ export async function updateShopLogo(
   formData.append("image", image);
   return await api.put("/api/v2/shop-profile/update-logo", formData);
 }
-
 
 //
 // Update Shop Info

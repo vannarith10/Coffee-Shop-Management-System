@@ -12,7 +12,7 @@ import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
 import type {
   BaristaOrderItem,
   BaristaOrderQueue,
-} from "../../types/barista/order";
+} from "@/types";
 import { useGetQueuedOrder } from "../../websocket/order/useGetQueuedOrder";
 
 const breakpointColumnsObj = {

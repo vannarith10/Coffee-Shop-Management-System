@@ -2,19 +2,19 @@
 // secutiry/PublicRoute.tsx
 //
 
-import { Role } from "../types/role";
 import { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import Loader from "../components/ui/Loader";
 import { useAuthStore } from "../stores/useAuthStore";
+import { type RoleType } from "@/types";
 
-function getRoute(role: Role) {
+function getRoute(role: RoleType) {
   switch (role) {
-    case Role.ADMIN:
+    case "ADMIN":
       return "/admin";
-    case Role.CASHIER:
+    case "CASHIER":
       return "/cashier";
-    case Role.BARISTA:
+    case "BARISTA":
       return "/barista";
     default:
       return "/unauthorized";
@@ -40,11 +40,9 @@ export default function PublicRoute({ children }: { children: ReactNode }) {
     );
   }
 
-
   if (user) {
     return <Navigate to={getRoute(user.role)} replace />;
   }
-  
 
   return children;
 }

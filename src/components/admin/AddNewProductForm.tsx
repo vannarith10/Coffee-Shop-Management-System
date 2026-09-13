@@ -1,29 +1,33 @@
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import type {
-  AddNewProductRequest,
-  PRODUCT_STOCK_STATUS,
-} from "../../types/product";
+import type { AddNewProductRequest, PRODUCT_STOCK_STATUS } from "@/types";
 import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
-import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
+import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
 import DefaultImage from "../../assets/picture.jpg";
 import type { Area } from "react-easy-crop";
 import { base64ToFile } from "../../utils/convertor";
 import { getCroppedImg } from "../../utils/crop-helper";
-import ImageCropForm from "../ui/ImageCropForm";
 import { useCreateProduct } from "../../hooks/useCreateProduct";
-import MoneyInput from "../ui/MoneyInput";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
-import FormHeader from "../animation/FormHeader";
-import ImageInput from "../ui/ImageInput";
-import CustomSelect from "../ui/CustomSelect";
-import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
-import TextInput from "../ui/TextInput";
+import {
+  MoneyInput,
+  FormHeader,
+  ImageInput,
+  CustomSelect,
+  ButtonCancel,
+  ButtonSubmit,
+  TextInput,
+  ImageCropForm,
+} from "@/components/ui";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { Controller, useForm, useWatch, type FieldErrors } from "react-hook-form";
+import {
+  Controller,
+  useForm,
+  useWatch,
+  type FieldErrors,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
@@ -59,7 +63,6 @@ export default function AddNewProductForm() {
         stock_status: "",
       },
     });
-
 
   const { categoryNameType } = useGetAllCategoryNames();
   const { mutate: createProduct, isError, isPending } = useCreateProduct();
@@ -152,9 +155,9 @@ export default function AddNewProductForm() {
   const onInvalid = (errors: FieldErrors<CreateProductFormData>) => {
     const message = Object.values(errors)[0]?.message;
     if (message) {
-      toast.error(message, {duration: 5000});
+      toast.error(message, { duration: 5000 });
     }
-  }
+  };
 
   const handleOpenForm = () => {
     setSearchParams((prev) => {

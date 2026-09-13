@@ -1,21 +1,20 @@
-//
-// components/EditCategory.tsx
-//
 import { useEffect, useState } from "react";
 import {
   CATEGORY_TYPES_ARRAY,
   CategoryStatusOptions,
   type CATEGORY_TYPE,
   type PatchCategoryRequest,
-} from "../../types/category/category";
+} from "@/types";
 import { toast } from "sonner";
 import MyPopupForm from "../animation/MyPopupForm";
-import FormHeader from "../animation/FormHeader";
+import {
+  FormHeader,
+  ButtonCancel,
+  ButtonSubmit,
+  CustomSelect,
+} from "@/components/ui";
 import { useUpdateCategory } from "../../hooks/category/useUpdateCategory";
 import { useSearchParams } from "react-router-dom";
-import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
-import CustomSelect from "../ui/CustomSelect";
 import { useGetCategoryById } from "../../hooks/category/useGetCategoryById";
 
 type Props = {

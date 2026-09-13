@@ -3,8 +3,8 @@
 //
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../../types/error";
-import type { PatchCategoryRequest } from "../../types/category/category";
+import type { BackendErrorDetail } from "@/types";
+import type { PatchCategoryRequest } from "@/types";
 import { patchCategory } from "../../services/admin/category";
 
 type Request = {

@@ -4,8 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateShopLogo } from "../services/admin/shop";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetail } from "../types/error";
-import type { ShopLogoUpdateResponse } from "../types/shop-setting";
+import type { ShopLogoUpdateResponse, BackendErrorDetail } from "@/types";
 
 export function useUpdateShopLogo() {
   const queryClient = useQueryClient();

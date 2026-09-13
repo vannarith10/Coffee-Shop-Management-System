@@ -1,11 +1,9 @@
-// components/BusinessSummary.tsx
-//
 import { RotateCcw, Wallet } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { ChartColumn } from "lucide-react";
 import SpotlightCard from "../animation/SpotlightCard";
 import { useBusinessSummary } from "../../hooks/useBusinessSummary";
-import TextLoader from "../ui/TextLoader";
+import { TextLoader } from "@/components/ui";
 
 export default function BusinessSummary() {
   const { summary, isLoading, isError, refetch, isRefetching } =
@@ -15,10 +13,12 @@ export default function BusinessSummary() {
     {
       title: "Today's Revenue",
       icon: <Wallet />,
-      value: "$" + Number(summary?.summary?.today_revenue?.value).toLocaleString(
-        "en-US",
-        { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-      ),
+      value:
+        "$" +
+        Number(summary?.summary?.today_revenue?.value).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
       growth: summary?.summary?.today_revenue?.growth_pct ?? 0,
     },
     {
@@ -30,12 +30,14 @@ export default function BusinessSummary() {
     {
       title: "Avg. Order Value",
       icon: <ChartColumn />,
-      value: "$" + Number(
-        summary?.summary?.today_average_order_value?.value,
-      ).toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
+      value:
+        "$" +
+        Number(
+          summary?.summary?.today_average_order_value?.value,
+        ).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
       growth: summary?.summary?.today_average_order_value?.growth_pct ?? 0,
     },
   ];

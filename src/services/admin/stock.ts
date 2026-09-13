@@ -1,7 +1,7 @@
 
 
 
-import type { PRODUCT_STOCK_STATUS } from "../../types/product";
+import type { PRODUCT_STOCK_STATUS } from "@/types";
 import api from "../../lib/axios";
 
 //

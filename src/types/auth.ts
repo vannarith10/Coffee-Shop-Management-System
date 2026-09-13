@@ -1,14 +1,26 @@
-// types/auth.ts
+import type { RoleType } from "./enums";
 
-import type { UserInfo } from "./user";
+export interface UserInfo {
+  id: string;
+  username: string;
+  role: RoleType;
+  image_url: string;
+}
 
+export interface GetUserProfileResponse {
+  user_id: string;
+  username: string;
+  name: string;
+  image_url: string | null;
+  role: RoleType;
+}
 
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
-export interface LoginResponse {
+export interface AuthTokens {
   access_token: string;
   token_type: string;
   expires_in: number;
@@ -16,5 +28,10 @@ export interface LoginResponse {
     token: string;
     expires_at: string;
   };
+}
+
+export interface LoginResponse extends AuthTokens {
   user_info: UserInfo;
 }
+
+export type RefreshTokenResponse = LoginResponse;

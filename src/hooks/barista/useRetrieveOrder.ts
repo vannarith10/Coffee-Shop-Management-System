@@ -2,14 +2,9 @@
 // hooks/barista/useRetrieveOrder.ts
 //
 import { useInfiniteQuery } from "@tanstack/react-query";
-import type {
-  BaristaOrderQueue,
-  RetrieveOrderStatus,
-} from "../../types/barista/order";
-import type { BackendErrorDetail } from "../../types/error";
+import type { BaristaOrderQueue, RetrieveOrderStatus } from "@/types";
+import type { BackendErrorDetail } from "@/types";
 import { getOrders } from "../../services/barista/order";
-
-
 
 interface OrderQueueRequest {
   size: number;

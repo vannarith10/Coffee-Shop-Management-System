@@ -1,4 +1,4 @@
-import type { RevenuTrendsResponse } from "../types/business-analytics";
+import type { RevenuTrendsResponse } from "@/types";
 
 
 

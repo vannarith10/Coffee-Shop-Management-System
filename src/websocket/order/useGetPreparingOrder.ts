@@ -2,7 +2,7 @@
 // websocket/order/useGetPreparingOrder.ts | BARISTA
 //
 import { useEffect } from "react";
-import type { BaristaOrderItem } from "../../types/barista/order";
+import type { BaristaOrderItem } from "@/types";
 import { websocketManager } from "../websocket-manager";
 import { toast } from "sonner";
 

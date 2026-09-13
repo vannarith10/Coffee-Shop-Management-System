@@ -12,7 +12,6 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RoleRoute from "./routes/RoleRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-import { Role } from "./types/role";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CashierDashboard from "./pages/cashier/CashierDashboard";
 import BaristaDashboard from "./pages/barista/BaristaDashboard";
@@ -26,10 +25,10 @@ import SettingTab from "./pages/admin/SettingTab";
 import ProductDetailPage from "./pages/admin/ProductDetailPage";
 import CashierLayout from "./layouts/CashierLayout";
 import ConfirmOrder from "./pages/cashier/ConfirmOrder";
-import { GlassFilter } from "./components/ui/GlassFilter";
-import { useAuthStore } from "./stores/useAuthStore";
-import Loader from "./components/ui/Loader";
+import { GlassFilter } from "@/components/ui";
 import { websocketManager } from "./websocket/websocket-manager";
+import { useAuthStore } from "./stores/useAuthStore";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -57,7 +56,7 @@ const router = createBrowserRouter([
       //
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.ADMIN]} />,
+        element: <RoleRoute allowedRoles={["ADMIN"]} />,
         children: [
           {
             path: "/admin",
@@ -107,7 +106,7 @@ const router = createBrowserRouter([
       //
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.CASHIER]} />,
+        element: <RoleRoute allowedRoles={["CASHIER"]} />,
         children: [
           {
             path: "/cashier",
@@ -131,7 +130,7 @@ const router = createBrowserRouter([
       //
       // -----------------------------------------------------
       {
-        element: <RoleRoute allowedRoles={[Role.BARISTA]} />,
+        element: <RoleRoute allowedRoles={["BARISTA"]} />,
         children: [
           {
             path: "/barista",
@@ -153,8 +152,15 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const accessToken = useAuthStore((state) => state.accessToken);
 
-  websocketManager.connect();
+  useEffect(() => {
+    if (accessToken) {
+      websocketManager.connect();
+    } else {
+      websocketManager.disconnect();
+    }
+  }, [accessToken]);
 
   return (
     <div className="w-screen min-w-80 min-h-screen bg-background-primary transition-colors duration-500 ease-out">

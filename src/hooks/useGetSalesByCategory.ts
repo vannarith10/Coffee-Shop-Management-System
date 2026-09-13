@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSalesByCategory } from "../services/admin/category";
-import type { GetSalesByCategoryResponse } from "../types/category/category";
-import { RANGES, type Range } from "../types/business-analytics";
+import type { GetSalesByCategoryResponse } from "@/types";
+import { RANGES, type Range } from "@/types";
 import { useEffect } from "react";
 
 export function useGetSalesByCategory({ range }: { range: Range }) {

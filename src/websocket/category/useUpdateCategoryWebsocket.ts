@@ -2,7 +2,7 @@
 //  websocket/category/useUpdateCategoryWebsocket.ts
 //  
 import { useEffect } from "react";
-import type { Category } from "../../types/category/category";
+import type { Category } from "@/types";
 import { websocketManager } from "../websocket-manager";
 import { toast } from "sonner";
 

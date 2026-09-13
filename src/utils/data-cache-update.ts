@@ -2,9 +2,9 @@
 //
 
 import type {
-  Category,
   GetAllCategoriesResponse,
-} from "../types/category/category";
+} from "../types";
+import { type Category } from "../types";
 import type { ProductStock, StockStatusResponse } from "../types/product";
 import type { Staff, StaffProfileResponse } from "../types/staff";
 

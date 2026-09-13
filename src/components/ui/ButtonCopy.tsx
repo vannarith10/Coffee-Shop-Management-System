@@ -23,6 +23,7 @@ export default function ButtonCopy({
 
   return (
     <button
+      type="button"
       onClick={handleCopy}
       className={`text-xs active:scale-70 cursor-pointer ${!copied && "hover:bg-background-secondary-hover"} p-2 rounded-full transition-all duration-200 ease-out outline-none`}
     >

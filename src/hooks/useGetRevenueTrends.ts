@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRevenueTrends } from "../services/admin/report";
-import type { RevenuTrendsResponse } from "../types/business-analytics";
+import type { RevenuTrendsResponse } from "@/types";
 
 
 export function useGetRevenueTrends ({month, year}:{month: number, year: number}) {

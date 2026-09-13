@@ -1,18 +1,12 @@
-//
-// components/UpdateStockStatus.tsx
-//
-
 import { useState } from "react";
 import type { ProductStock } from "../../types/product";
-import type { PRODUCT_STOCK_STATUS } from "../../types/product";
+import type { PRODUCT_STOCK_STATUS } from "@/types";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
-import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "../../types/stock-status";
-import TextLoader from "../ui/TextLoader";
+import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
 import MyPopupForm from "../animation/MyPopupForm";
 import { useUpdateStockStatus } from "../../hooks/stock/useUpdateStockStatus";
-import ButtonCancel from "../ui/ButtonCancel";
-import ButtonSubmit from "../ui/ButtonSubmit";
+import { ButtonCancel, ButtonSubmit } from "@/components/ui";
 
 interface UpdateStockStatusProps {
   product: ProductStock;

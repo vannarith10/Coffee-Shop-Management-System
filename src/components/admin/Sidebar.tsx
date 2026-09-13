@@ -1,19 +1,14 @@
-//
-// components/Sidebar.tsx
-//
-import LogoutButton from "../ui/LogoutButton.tsx";
-import ThemeSwitch from "../ui/ThemeSwitch.tsx";
+import { LogoutButton, ThemeSwitch, ShopProfile } from "@/components/ui";
 import { NavLink } from "react-router-dom";
 import { links } from "../../constants/navLinks.ts";
 import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo.ts";
-import ShopProfile from "../ui/ShopProfile.tsx";
 
 export default function Sidebar() {
   const { data, isLoading, isError, isRefetching, refetch } =
     useGetShopNameAndLogo();
 
   return (
-    <aside className="sticky top-0 h-screen w-60 lg:w-80 bg-sidebar p-4 hidden md:flex flex-col justify-between transition-all duration-500 ease-out shrink-0">
+    <aside className="z-200 sticky top-0 h-screen w-60 lg:w-80 bg-sidebar p-4 hidden md:flex flex-col justify-between transition-all duration-500 ease-out shrink-0">
       <section className="flex flex-col gap-10">
         {/* -----------------------------------------
                       *

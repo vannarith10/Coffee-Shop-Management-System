@@ -1,14 +1,9 @@
-//
-// components/ListCategory.tsx
-//
+import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
 import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
-import TextLoader from "../ui/TextLoader.tsx";
 import { ListSortAscending } from "lucide-react";
 import { useGetAllCategories } from "../../hooks/category/useGetAllCategories.ts";
 import { AnimatePresence } from "framer-motion";
-import PageHeader from "../ui/PageHeader.tsx";
-import PageFooter from "../ui/PageFooter.tsx";
 import { useSearchParams } from "react-router-dom";
 
 export default function ListCategory() {
@@ -24,7 +19,6 @@ export default function ListCategory() {
     isRefetching,
     highlightedIds,
   } = useGetAllCategories(page);
-
 
   const currentPage = category?.pagination.page ?? page;
   const totalPages = category?.pagination.total_pages ?? 1;
@@ -56,7 +50,6 @@ export default function ListCategory() {
       return prev;
     });
   };
-
 
   const handleOpenEditCategoryForm = (categoryId: string) => {
     setSearchParams((prev) => {
