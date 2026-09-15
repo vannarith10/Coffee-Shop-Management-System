@@ -1,16 +1,16 @@
 import type { Pagination } from "./common";
-import type { RoleType, Status, Shift, Schedule } from "./enums";
+import type { RoleType, StatusType, ShiftType, ScheduleType } from "./enums";
 
 export interface Staff {
   id: string;
   name: string;
   username: string;
   role: RoleType;
-  shift: Shift;
-  schedules: Schedule[];
+  shift: ShiftType;
+  schedules: ScheduleType[];
   email: string;
   phone_number: string;
-  status: Status;
+  status: StatusType;
   image_url: string;
 }
 
@@ -26,9 +26,9 @@ export interface EditStaffDataRequest {
   password: string | null;
   email: string | null;
   role: RoleType | null;
-  status: Status | null;
-  shift_type: Shift | null;
-  schedules: Schedule[] | null;
+  status: StatusType | null;
+  shift_type: ShiftType | null;
+  schedules: ScheduleType[] | null;
 }
 
 export interface CreateStaffRequest {
@@ -36,9 +36,9 @@ export interface CreateStaffRequest {
   username: string;
   password: string;
   role: RoleType;
-  shift: Shift;
-  schedules: Schedule[];
-  status: Status;
+  shift: ShiftType;
+  schedules: ScheduleType[];
+  status: StatusType;
 }
 
 export type CreateStaffResponse = Staff;

@@ -1,11 +1,11 @@
 import type { Pagination } from "./common";
-import type { PRODUCT_STOCK_STATUS, CATEGORY_TYPE } from "./enums"; // Updated import
+import type { StockStatusType, CategoryType } from "./enums"; // Updated import
 
-export const STOCK_STATUS = {
-  normal: "IN_STOCK",
-  low: "LOW_STOCK",
-  out: "OUT_OF_STOCK",
-} as const;
+// export const STOCK_STATUS = {
+//   normal: "IN_STOCK",
+//   low: "LOW_STOCK",
+//   out: "OUT_OF_STOCK",
+// } as const;
 
 export const STOCK_STATUS_CONFIG = {
   IN_STOCK: {
@@ -40,7 +40,7 @@ export const STOCK_STATUS_CONFIG = {
 export type StockStatusKey = keyof typeof STOCK_STATUS_CONFIG;
 
 export const STATUS_OPTIONS: {
-  value: PRODUCT_STOCK_STATUS;
+  value: StockStatusType;
   label: string;
   description: string;
   accent: string;
@@ -81,8 +81,8 @@ export interface ProductStock {
   id: string;
   name: string;
   category_name: string;
-  category_type: CATEGORY_TYPE;
-  status: PRODUCT_STOCK_STATUS;
+  category_type: CategoryType;
+  status: StockStatusType;
 }
 
 export interface StockStatusResponse {
@@ -98,9 +98,9 @@ export interface Product {
   cost_price: number;
   description: string | null;
   image_url: string | null;
-  category_type: CATEGORY_TYPE;
+  category_type: CategoryType;
   category_name: string;
-  stock_status: PRODUCT_STOCK_STATUS;
+  stock_status: StockStatusType;
   created_at: string;
   updated_at: string | null;
 }
@@ -116,7 +116,7 @@ export interface UpdateProductRequest {
   selling_price: number | null | undefined;
   cost_price: number | null | undefined;
   description: string | null | undefined;
-  stock_status: PRODUCT_STOCK_STATUS | null | undefined;
+  stock_status: StockStatusType | null | undefined;
 }
 
 export interface TopProduct {
@@ -137,7 +137,7 @@ export interface AddNewProductRequest {
   selling_price: number;
   cost_price: number;
   category_name: string;
-  stock_status: PRODUCT_STOCK_STATUS;
+  stock_status: StockStatusType;
   description: string | null;
 }
 
@@ -152,9 +152,9 @@ export interface ProductMenuItem {
   price: number;
   image_url: string;
   description: string;
-  category_type: CATEGORY_TYPE;
+  category_type: CategoryType;
   category_name: string;
   is_category_active: boolean;
   is_available: boolean;
-  stock_status: PRODUCT_STOCK_STATUS;
+  stock_status: StockStatusType;
 }

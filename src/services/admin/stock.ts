@@ -1,7 +1,7 @@
 
 
 
-import type { PRODUCT_STOCK_STATUS } from "@/types";
+import type { StockStatusType } from "@/types";
 import api from "../../lib/axios";
 
 //
@@ -12,7 +12,7 @@ export async function updateStockStatus({
   newStatus,
 }: {
   productId: string;
-  newStatus: PRODUCT_STOCK_STATUS;
+  newStatus: StockStatusType;
 }): Promise<void> {
   await api.post<void>(
     `/api/v2/product/update/${productId}/stock-status?status=${newStatus}`,

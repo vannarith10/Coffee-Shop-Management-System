@@ -14,17 +14,22 @@ export const ROLES = {
 export const ROLES_ARRAY = Object.values(ROLES);
 export type RoleType = (typeof ROLES_ARRAY)[number];
 
-
 // ----------------------------------------------
 //
 // Status
 //
 // ----------------------------------------------
-export const STATUS = ["ACTIVE", "INACTIVE", "ON_LEAVE", "SUSPENDED"] as const;
-export type Status = (typeof STATUS)[number];
-export const STATUSES: Status[] = [...STATUS];
+export const STATUS = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+  ON_LEAVE: "ON_LEAVE",
+  SUSPENDED: "SUSPENDED",
+} as const;
+export const STATUS_ARRAY = Object.values(STATUS);
+export type StatusType = (typeof STATUS_ARRAY)[number];
+export const STATUSES: StatusType[] = [...STATUS_ARRAY];
 export const USER_STATUS_COLOR_CONFIG: Record<
-  Status,
+  StatusType,
   { background_color: string }
 > = {
   ACTIVE: { background_color: "bg-green-600" },
@@ -38,27 +43,33 @@ export const USER_STATUS_COLOR_CONFIG: Record<
 // Shift
 //
 // ----------------------------------------------
-export const SHIFT = ["MORNING", "AFTERNOON", "FULL_DAY"] as const;
-export type Shift = (typeof SHIFT)[number];
-export const SHIFT_ORDER: Shift[] = [...SHIFT];
+export const SHIFT = {
+  MORNING: "MORNING",
+  AFTERNOON: "AFTERNOON",
+  FULL_DAY: "FULL_DAY",
+} as const;
+export const SHIFT_ARRAY = Object.values(SHIFT);
+export type ShiftType = (typeof SHIFT_ARRAY)[number];
+export const SHIFT_ORDER: ShiftType[] = [...SHIFT_ARRAY];
 
 // ----------------------------------------------
 //
 // Schedule
 //
 // ----------------------------------------------
-export const SCHEDULES = [
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-  "SUNDAY",
-] as const;
-export type Schedule = (typeof SCHEDULES)[number];
-export const DAY_ORDER: Schedule[] = [...SCHEDULES];
-export const SCHEDULE_CONFIG: Record<Schedule, { label: string }> = {
+export const SCHEDULES = {
+  MONDAY: "MONDAY",
+  TUESDAT: "TUESDAY",
+  WEDNESDAY: "WEDNESDAY",
+  THURDAY: "THURSDAY",
+  FRIDAY: "FRIDAY",
+  SATURDAY: "SATURDAY",
+  SUNDAY: "SUNDAY",
+} as const;
+export const SCHEDULE_ARRAY = Object.values(SCHEDULES);
+export type ScheduleType = (typeof SCHEDULE_ARRAY)[number];
+export const DAY_ORDER: ScheduleType[] = [...SCHEDULE_ARRAY];
+export const SCHEDULE_CONFIG: Record<ScheduleType, { label: string }> = {
   MONDAY: { label: "Mon" },
   TUESDAY: { label: "Tue" },
   WEDNESDAY: { label: "Wed" },
@@ -73,49 +84,69 @@ export const SCHEDULE_CONFIG: Record<Schedule, { label: string }> = {
 // Order
 //
 // ----------------------------------------------
-export const ORDER_STATUS = [
-  "CREATED",
-  "QUEUED",
-  "PREPARING",
-  "DONE",
-  "PAYMENT_PENDING",
-  "CANCELLED",
-] as const;
-export type OrderStatus = (typeof ORDER_STATUS)[number];
-export type PaymentMethod = "CASH" | "QR";
+export const ORDER_STATUS = {
+  CREATED: "CREATED",
+  QUEUED: "QUEUED",
+  PREPARING: "PREPARING",
+  DONE: "DONE",
+  PAYMENT_PENDING: "PAYMENT_PENDING",
+  CANCELLED: "CANCELLED",
+} as const;
+export const ORDER_STATUS_ARRAY = Object.values(ORDER_STATUS);
+export type OrderStatusType = (typeof ORDER_STATUS_ARRAY)[number];
+
+// ----------------------------------------------
+//
+// Paymenst Method
+//
+// ----------------------------------------------
+export const PAYMENT_METHOD = {
+  CASH: "CASH",
+  QR: "QR",
+} as const;
+export const PAYMENT_METHOD_ARRAY = Object.values(PAYMENT_METHOD);
+export type PaymentMethodType = (typeof PAYMENT_METHOD_ARRAY)[number];
 
 // ----------------------------------------------
 //
 // Analytics
 //
 // ----------------------------------------------
-export const RANGES = [
-  "TODAY",
-  "THIS_WEEK",
-  "THIS_MONTH",
-  "THIS_YEAR",
-  "ALL",
-] as const;
-export type Range = (typeof RANGES)[number];
+export const RANGE = {
+  TODAY: "TODAY",
+  THIS_WEEK: "THIS_WEEK",
+  THIS_MONTH: "THIS_MONTH",
+  THIS_YEAR: "THIS_YEAR",
+  ALL: "ALL",
+} as const;
+export const RANGE_ARRAY = Object.values(RANGE);
+export type RangeType = (typeof RANGE_ARRAY)[number];
 
 // ----------------------------------------------
 //
 // Product Stock
 //
 // ----------------------------------------------
-export type ProductStockStatus = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
-export type PRODUCT_STOCK_STATUS = ProductStockStatus; // Backward compatibility
+export const STOCK_STATUS = {
+  INSTOCK: "IN_STOCK",
+  LOW_STOCK: "LOW_STOCK",
+  OUT_OF_STOCK: "OUT_OF_STOCK",
+} as const;
+export const STOCK_STATUS_ARRAY = Object.values(STOCK_STATUS);
+export type StockStatusType = (typeof STOCK_STATUS_ARRAY)[number];
+// export type PRODUCT_STOCK_STATUS = ProductStockStatus; // Backward compatibility
 
 // ----------------------------------------------
 //
 // Category
 //
 // ----------------------------------------------
-export const CATEGORY_TYPES = ["FOOD", "DRINK"] as const;
-export type CATEGORY_TYPE = (typeof CATEGORY_TYPES)[number];
-export const CATEGORY_TYPES_ARRAY: CATEGORY_TYPE[] = [...CATEGORY_TYPES];
+export const CATEGORY = { FOOD: "FOOD", DRINK: "DRINK" } as const;
+export const CATEGORY_ARRAY = Object.values(CATEGORY);
+export type CategoryType = (typeof CATEGORY_ARRAY)[number];
+// export const CATEGORY_TYPES_ARRAY: CATEGORY_TYPE[] = [...CATEGORY_TYPES];
 export const CATEGORY_COLOR_CONFIG: Record<
-  CATEGORY_TYPE | "ALL",
+  CategoryType | "ALL",
   { label: string; bgColor: string }
 > = {
   FOOD: { label: "FOOD", bgColor: "bg-amber-600" },

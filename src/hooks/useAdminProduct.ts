@@ -9,7 +9,7 @@ import {
 import type { AdminProductResponse } from "../types/product";
 import { getAllProducts } from "../services/admin/product";
 import { useEffect } from "react";
-import type { CATEGORY_TYPE } from "@/types";
+import type { CategoryType } from "@/types";
 
 export function useAdminProduct({
   page,
@@ -20,7 +20,7 @@ export function useAdminProduct({
 }: {
   page: number;
   size: number;
-  categoryType: CATEGORY_TYPE | "ALL";
+  categoryType: CategoryType | "ALL";
   categoryName: string | null;
   keyword: string | null;
 }) {

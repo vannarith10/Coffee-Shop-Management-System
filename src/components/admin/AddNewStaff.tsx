@@ -3,12 +3,12 @@ import { useCallback, useState } from "react";
 import {
   STATUSES,
   USER_STATUS_COLOR_CONFIG,
-  type Status,
+  type StatusType,
   type RoleType,
   SHIFT_ORDER,
-  type Shift,
+  type ShiftType,
   DAY_ORDER,
-  type Schedule,
+  type ScheduleType,
   ROLES_ARRAY,
 } from "@/types";
 import DefaultProfile from "../../assets/user-profile.png";
@@ -101,7 +101,7 @@ export default function AddNewStaff() {
     { label: "Special character", valid: /[@$!%*?&#]/.test(password) },
   ];
 
-  const handleSelectSchedule = (day: Schedule) => {
+  const handleSelectSchedule = (day: ScheduleType) => {
     const updateSchedules = currentSchedules.includes(day)
       ? currentSchedules.filter((d) => d !== day)
       : [...currentSchedules, day];
@@ -115,9 +115,9 @@ export default function AddNewStaff() {
       username: formData.username,
       password: formData.password,
       role: formData.role as RoleType,
-      shift: formData.shift as Shift,
-      schedules: formData.schedules as Schedule[],
-      status: formData.status as Status,
+      shift: formData.shift as ShiftType,
+      schedules: formData.schedules as ScheduleType[],
+      status: formData.status as StatusType,
     };
     createStaff(
       { data, image: file! },
@@ -438,7 +438,7 @@ export default function AddNewStaff() {
                 {STATUSES.map((status) => {
                   const isSelected = status === selectedStatus;
                   const color =
-                    USER_STATUS_COLOR_CONFIG[selectedStatus as Status];
+                    USER_STATUS_COLOR_CONFIG[selectedStatus as StatusType];
                   return (
                     <button
                       key={status}

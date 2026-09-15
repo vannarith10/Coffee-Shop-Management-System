@@ -1,10 +1,10 @@
 import { RotateCcw, SquarePlus } from "lucide-react";
 import { useState } from "react";
 import {
-  CATEGORY_TYPES_ARRAY,
+  CATEGORY_ARRAY,
   CategoryStatusOptions,
   type CATEGORY_STATUS,
-  type CATEGORY_TYPE,
+  type CategoryType,
   type CreateCategoryRequest,
 } from "@/types";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ import { useSearchParams } from "react-router-dom";
 
 export default function AddNewCategory() {
   const { refetch, isRefetching } = useCategoryStatusSummary();
-  const [selectedType, setSelectedType] = useState<CATEGORY_TYPE | null>(null);
+  const [selectedType, setSelectedType] = useState<CategoryType | null>(null);
   const [categoryName, setCategoryName] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<CATEGORY_STATUS | null>(
     null,
@@ -161,7 +161,7 @@ export default function AddNewCategory() {
                 TYPE
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {CATEGORY_TYPES_ARRAY.map((type) => {
+                {CATEGORY_ARRAY.map((type) => {
                   const isSelected = type === selectedType;
                   return (
                     <button

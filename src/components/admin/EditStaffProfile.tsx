@@ -3,14 +3,14 @@ import { getCroppedImg } from "../../utils/crop-helper";
 import type { Area } from "react-easy-crop";
 import {
   DAY_ORDER,
-  type Schedule,
+  type ScheduleType,
   type EditStaffDataRequest,
   SHIFT_ORDER,
-  type Shift,
+  type ShiftType,
   type RoleType,
   STATUSES,
   USER_STATUS_COLOR_CONFIG,
-  type Status,
+  type StatusType,
   ROLES_ARRAY,
 } from "@/types";
 import { base64ToFile } from "../../utils/convertor";
@@ -84,7 +84,7 @@ export default function EditStaffProfile() {
   const selectedRole = useWatch({ control, name: "role" });
   const selectedStatus = useWatch({ control, name: "status" });
   const schedules = useWatch({ control, name: "schedules" }) ?? [];
-  const handleSelectSchedule = (day: Schedule) => {
+  const handleSelectSchedule = (day: ScheduleType) => {
     const updateSchedules = schedules?.includes(day)
       ? schedules.filter((d) => d !== day)
       : [...schedules, day];
@@ -158,9 +158,9 @@ export default function EditStaffProfile() {
       password: formData.password,
       email: formData.email,
       role: formData.role as RoleType,
-      status: formData.status as Status,
-      shift_type: formData.shift as Shift,
-      schedules: formData.schedules as Schedule[],
+      status: formData.status as StatusType,
+      shift_type: formData.shift as ShiftType,
+      schedules: formData.schedules as ScheduleType[],
     };
 
     editStaff(
@@ -454,7 +454,7 @@ export default function EditStaffProfile() {
               const isCurrentStatus = status === staff?.status;
               const isSelected = status === selectedStatus;
               // get color from specific status
-              const color = USER_STATUS_COLOR_CONFIG[selectedStatus as Status];
+              const color = USER_STATUS_COLOR_CONFIG[selectedStatus as StatusType];
               return (
                 <button
                   key={status}

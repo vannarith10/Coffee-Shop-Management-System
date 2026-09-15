@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  CATEGORY_TYPES_ARRAY,
+  CATEGORY_ARRAY,
   CategoryStatusOptions,
-  type CATEGORY_TYPE,
+  type CategoryType,
   type PatchCategoryRequest,
 } from "@/types";
 import { toast } from "sonner";
@@ -35,11 +35,11 @@ export default function EditCategory({ isOpen, onClose }: Props) {
   const { data: category } = useGetCategoryById(id);
 
   const [currentName, setCurrentName] = useState<string>();
-  const [currentType, setCurrentType] = useState<CATEGORY_TYPE>();
+  const [currentType, setCurrentType] = useState<CategoryType>();
   const [currentStatus, setCurrentStatus] = useState<boolean>();
 
   const [categoryName, setCategoryName] = useState<string>("");
-  const [categoryType, setCategoryType] = useState<CATEGORY_TYPE | null>(null);
+  const [categoryType, setCategoryType] = useState<CategoryType | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export default function EditCategory({ isOpen, onClose }: Props) {
 
             <CustomSelect
               value={categoryType}
-              options={CATEGORY_TYPES_ARRAY.map((type) => ({
+              options={CATEGORY_ARRAY.map((type) => ({
                 label: type,
                 value: type,
               }))}

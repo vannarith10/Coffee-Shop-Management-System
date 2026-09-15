@@ -1,5 +1,5 @@
 import api from "../../lib/axios";
-import type { CATEGORY_TYPE } from "@/types";
+import type { CategoryType } from "@/types";
 
 //
 // Get Menu
@@ -14,7 +14,7 @@ export async function getMenu({
 }: {
   page: number;
   size: number;
-  categoryType: CATEGORY_TYPE | "ALL";
+  categoryType: CategoryType | "ALL";
   categoryName: string | null;
   keyword: string | null;
 }) {

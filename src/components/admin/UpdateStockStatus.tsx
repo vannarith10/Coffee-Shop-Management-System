@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ProductStock } from "../../types/product";
-import type { PRODUCT_STOCK_STATUS } from "@/types";
+import type { StockStatusType } from "@/types";
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
 import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
@@ -20,7 +20,7 @@ export default function UpdateStockStatus({
   onClose,
   // onUpdate,
 }: UpdateStockStatusProps) {
-  const [selectedStatus, setSelectedStatus] = useState<PRODUCT_STOCK_STATUS>(
+  const [selectedStatus, setSelectedStatus] = useState<StockStatusType>(
     product.status,
   );
 

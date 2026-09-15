@@ -1,6 +1,3 @@
-//
-// App.tsx
-//
 import {
   createBrowserRouter,
   Navigate,

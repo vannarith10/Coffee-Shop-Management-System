@@ -1,10 +1,14 @@
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { getSalesByCategory } from "../services/admin/category";
 import type { GetSalesByCategoryResponse } from "@/types";
-import { RANGES, type Range } from "@/types";
+import { RANGE_ARRAY, type RangeType } from "@/types";
 import { useEffect } from "react";
 
-export function useGetSalesByCategory({ range }: { range: Range }) {
+export function useGetSalesByCategory({ range }: { range: RangeType }) {
   const queryClient = useQueryClient();
   const queryKey = ["sales-by-category", range];
 
@@ -18,8 +22,9 @@ export function useGetSalesByCategory({ range }: { range: Range }) {
     gcTime: 1000 * 60 * 30,
   });
 
+  // Automatically fetching other range type
   useEffect(() => {
-    RANGES.forEach((r) => {
+    RANGE_ARRAY.forEach((r) => {
       const queryKey = ["sales-by-category", r];
 
       if (!queryClient.getQueryData(queryKey)) {

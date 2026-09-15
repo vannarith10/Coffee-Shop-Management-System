@@ -1,4 +1,4 @@
-import z, { string } from "zod";
+import z from "zod";
 import { passwordSchema } from "@/validation";
 import { ROLES, SCHEDULES, SHIFT, STATUS } from "@/types";
 

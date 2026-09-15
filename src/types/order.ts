@@ -1,5 +1,5 @@
 import type { Pagination } from "./common";
-import type { OrderStatus, PaymentMethod } from "./enums";
+import type { OrderStatusType, PaymentMethodType } from "./enums";
 
 // --------------------------------
 // General Order Types
@@ -18,17 +18,17 @@ export interface CreateOrderRequest {
 export interface CreateCashOrderResponse {
   order_id: string;
   order_number: string;
-  status: OrderStatus;
+  status: OrderStatusType;
   total_amount: number;
   note: string | null;
-  payment_method: PaymentMethod;
+  payment_method: PaymentMethodType;
 }
 
 export interface GetOrderInfoResponse {
   order_id: string;
   order_number: string;
-  payment_method: PaymentMethod;
-  order_status: OrderStatus;
+  payment_method: PaymentMethodType;
+  order_status: OrderStatusType;
   total_price: number;
   total_items: number;
   total_units: number;

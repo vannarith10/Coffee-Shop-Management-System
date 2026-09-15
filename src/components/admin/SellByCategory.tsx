@@ -3,7 +3,7 @@
 import { ResponsivePie } from "@nivo/pie";
 import { COLORS } from "../../utils/colors";
 import { useGetSalesByCategory } from "../../hooks/useGetSalesByCategory";
-import { RANGES, type Range } from "@/types";
+import { RANGE, RANGE_ARRAY, type RangeType } from "@/types";
 import { useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { TextLoader } from "@/components/ui";
@@ -16,7 +16,7 @@ interface ChartDatum {
 }
 
 const SellByCategory = () => {
-  const [selectedRange, setSelectedRange] = useState<Range>("ALL");
+  const [selectedRange, setSelectedRange] = useState<RangeType>(RANGE.ALL);
 
   const { data, isLoading, isError, isRefetching, refetch } =
     useGetSalesByCategory({
@@ -44,7 +44,7 @@ const SellByCategory = () => {
 
   const totalRevenue = chartData?.reduce((sum, item) => sum + item.value, 0);
 
-  function handleFilterRange(range: Range) {
+  function handleFilterRange(range: RangeType) {
     setSelectedRange(range);
   }
 
@@ -107,7 +107,7 @@ const SellByCategory = () => {
       {/* Filter range*/}
       {/* ================================= */}
       <div className="w-full flex flex-wrap gap-2 ">
-        {RANGES.map((range) => {
+        {RANGE_ARRAY.map((range) => {
           return (
             <button
               onClick={() => handleFilterRange(range)}

@@ -1,5 +1,5 @@
 import api from "../../lib/axios";
-import type { Range } from "@/types";
+import type { RangeType } from "@/types";
 import type {
   CreateCategoryRequest,
   PatchCategoryRequest,
@@ -61,7 +61,7 @@ export async function getAllCategoryNames() {
 //
 // Get Sales By Category
 //
-export async function getSalesByCategory({ range }: { range: Range }) {
+export async function getSalesByCategory({ range }: { range: RangeType }) {
   return await api.get(`/api/v2/reports/sales-by-category/${range}`);
 }
 

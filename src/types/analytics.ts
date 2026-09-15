@@ -1,8 +1,8 @@
 import type { BarDatum } from "@nivo/bar";
-import type { Range } from "./enums";
+import type { RangeType } from "./enums";
 
 export interface TopSellingProductRequest {
-  range: Range;
+  range: RangeType;
   page: number;
   size: number;
 }

@@ -7,7 +7,7 @@ import {
   YAxis,
   Cell,
 } from "recharts";
-import { RANGES, type Range } from "@/types";
+import { RANGE_ARRAY, type RangeType } from "@/types";
 import { TextLoader } from "@/components/ui";
 import { RotateCcw } from "lucide-react";
 import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
@@ -16,12 +16,12 @@ export default function TopSellingProductsChart() {
   // const [page, setPage] = useState(1);
   const page = 1;
   const size = 20;
-  const [selectedRange, setSelectedRange] = useState<Range>("TODAY");
+  const [selectedRange, setSelectedRange] = useState<RangeType>("TODAY");
 
   const { topSelling, isLoading, isError, refetch, isRefetching } =
     useTopSellingProduct({ range: selectedRange, page, size });
 
-  function handleFilterRange(range: Range) {
+  function handleFilterRange(range: RangeType) {
     setSelectedRange(range);
   }
 
@@ -92,7 +92,7 @@ export default function TopSellingProductsChart() {
       *
       --------------------------------------------------------------*/}
       <div className="w-full mb-4 flex flex-wrap gap-2">
-        {RANGES.map((range) => {
+        {RANGE_ARRAY.map((range) => {
           return (
             <button
               onClick={() => handleFilterRange(range)}

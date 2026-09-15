@@ -1,6 +1,6 @@
 import api from "../../lib/axios";
 import type { TopSellingProductRequest } from "@/types";
-import type { CATEGORY_TYPE } from "@/types";
+import type { CategoryType } from "@/types";
 import type {
   AddNewProductRequest,
   UpdateProductRequest,
@@ -18,7 +18,7 @@ export async function getAllProducts({
 }: {
   page: number;
   size: number;
-  categoryType: CATEGORY_TYPE | "ALL";
+  categoryType: CategoryType | "ALL";
   categoryName: string | null;
   keyword: string | null;
 }) {

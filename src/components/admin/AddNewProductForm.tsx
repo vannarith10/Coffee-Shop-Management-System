@@ -1,6 +1,6 @@
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import type { AddNewProductRequest, PRODUCT_STOCK_STATUS } from "@/types";
+import type { AddNewProductRequest, StockStatusType } from "@/types";
 import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
 import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
 import DefaultImage from "../../assets/picture.jpg";
@@ -115,7 +115,7 @@ export default function AddNewProductForm() {
   }, []);
 
   const stockStatus = useWatch({ control, name: "stock_status" });
-  const handleSelectStockStatus = (status: PRODUCT_STOCK_STATUS) => {
+  const handleSelectStockStatus = (status: StockStatusType) => {
     setValue("stock_status", status, { shouldValidate: true });
   };
 
@@ -136,7 +136,7 @@ export default function AddNewProductForm() {
       selling_price: formData.selling_price as number,
       cost_price: formData.cost as number,
       description: formData.description,
-      stock_status: formData.stock_status as PRODUCT_STOCK_STATUS,
+      stock_status: formData.stock_status as StockStatusType,
     };
 
     createProduct(

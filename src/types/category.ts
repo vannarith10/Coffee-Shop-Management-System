@@ -1,21 +1,19 @@
-import type { CATEGORY_TYPE } from "./enums";
+import z from "zod";
+import type { CategoryType } from "./enums";
+import type { createCategorySchema } from "@/validation/category.schema";
+import type { Pagination } from "@/types";
 
 export type CATEGORY_STATUS = boolean;
 
 export interface Category {
   category_id: string;
   category_name: string;
-  category_type: CATEGORY_TYPE;
+  category_type: CategoryType;
   is_active: boolean;
 }
 
 export interface GetAllCategoriesResponse {
-  pagination: {
-    page: number;
-    size: number;
-    total_pages: number;
-    total_items: number;
-  };
+  pagination: Pagination;
   categories: Category[];
 }
 
@@ -26,15 +24,16 @@ export const CategoryStatusOptions = [
 
 export interface PatchCategoryRequest {
   new_name: string | null;
-  new_type: CATEGORY_TYPE | null;
+  new_type: CategoryType | null;
   new_status: boolean | null;
 }
 
-export interface CreateCategoryRequest {
-  type: CATEGORY_TYPE;
-  name: string;
-  is_active: boolean;
-}
+// export interface CreateCategoryRequest {
+//   type: CATEGORY_TYPE;
+//   name: string;
+//   is_active: boolean;
+// }
+export type CreateCategoryRequest = z.infer<typeof createCategorySchema>;
 
 export interface CategoryStatusSummaryResponse {
   total_categories: number;
@@ -46,6 +45,6 @@ export interface CategoryStatusSummaryResponse {
 export interface GetSalesByCategoryResponse {
   category_id: string;
   category_name: string;
-  category_type: CATEGORY_TYPE;
+  category_type: CategoryType;
   revenue: number;
 }

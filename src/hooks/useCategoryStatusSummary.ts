@@ -1,6 +1,3 @@
-// hooks/useCategoryStatusSummary.ts
-// Tanstack
-
 import {
   keepPreviousData,
   useQuery,

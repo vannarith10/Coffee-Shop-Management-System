@@ -4,7 +4,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import type { PRODUCT_STOCK_STATUS, UpdateProductRequest } from "@/types";
+import type { StockStatusType, UpdateProductRequest } from "@/types";
 import TextLoader from "../../components/ui/TextLoader";
 import {
   Box,
@@ -140,7 +140,7 @@ export default function ProductDetailPage() {
       selling_price: formData.newSellingPrice,
       cost_price: formData.newCostPrice,
       description: formData.newDescription,
-      stock_status: formData.newStockStatus as PRODUCT_STOCK_STATUS,
+      stock_status: formData.newStockStatus as StockStatusType,
     };
     patchProduct(
       { id: safeId, data, image: file },
