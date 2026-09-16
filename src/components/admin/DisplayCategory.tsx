@@ -2,7 +2,7 @@ import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
 import { SquarePen } from "lucide-react";
 import EditCategory from "./EditCategory.tsx";
 import { ListSortAscending } from "lucide-react";
-import { useGetAllCategories } from "../../hooks/category/useGetAllCategories.ts";
+import { useGetAllCategories } from "../../features/categories/hooks/useGetAllCategories.ts";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 

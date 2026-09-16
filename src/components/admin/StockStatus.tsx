@@ -1,11 +1,11 @@
 import { Layers2, SquarePen } from "lucide-react";
-import type { ProductStock } from "../../types/product";
+import type { ProductStock } from "@/features/stock/types/stock"; 
 import { useState } from "react";
-import { STOCK_STATUS_CONFIG } from "@/types";
+import { STOCK_STATUS_CONFIG } from "@/features/products/types/product"; 
 import { RotateCcw } from "lucide-react";
 import UpdateStockStatus from "./UpdateStockStatus";
 import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
-import { useStockStatus } from "../../hooks/useStockStatus";
+import { useStockStatus } from "../../features/stock/hooks/useStockStatus";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 

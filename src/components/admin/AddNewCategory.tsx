@@ -1,18 +1,16 @@
 import { RotateCcw, SquarePlus } from "lucide-react";
 import { useState } from "react";
-import {
-  CATEGORY_ARRAY,
-  CategoryStatusOptions,
-  type CATEGORY_STATUS,
-  type CategoryType,
-  type CreateCategoryRequest,
-} from "@/types";
+import { CATEGORY_ARRAY } from "@/features/categories/types/enums";
+import { CategoryStatusOptions } from "@/features/categories/types/category";
+import { type CATEGORY_STATUS } from "@/features/categories/types/category";
+import { type CategoryType } from "@/features/categories/types/enums";
+import { type CreateCategoryRequest } from "@/features/categories/types/category";
 import { toast } from "sonner";
-import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
+import { useCategoryStatusSummary } from "@/features/categories/hooks/useCategoryStatusSummary";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
 import FormHeader from "../ui/FormHeader";
-import { useCreateCategory } from "../../hooks/category/useCreateCategory";
+import { useCreateCategory } from "../../features/categories/hooks/useCreateCategory";
 import { ButtonCancel, ButtonSubmit } from "@/components/ui";
 import { useSearchParams } from "react-router-dom";
 

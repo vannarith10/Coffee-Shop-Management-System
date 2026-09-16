@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { TextLoader } from "@/components/ui";
 import SpotlightCard from "../animation/SpotlightCard";
-import { useCategoryStatusSummary } from "../../hooks/useCategoryStatusSummary";
+import { useCategoryStatusSummary } from "@/features/categories/hooks/useCategoryStatusSummary"; 
 import type { JSX } from "react/jsx-runtime";
 //
 // Showing the numbers on the top of Category Tab

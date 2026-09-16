@@ -1,10 +1,10 @@
 import Waiting from "./Waiting";
 import { RotateCw } from "lucide-react";
-import { useGetOrderInfo } from "../../hooks/cashier/useGetOrderInfo";
+import { useGetOrderInfo } from "../../features/orders/hooks/useGetOrderInfo";
 import { useNavigate } from "react-router-dom";
-import { useConfirmOrder } from "../../hooks/cashier/useConfirmOrder";
+import { useConfirmOrder } from "../../features/orders/hooks/useConfirmOrder";
 import { toast } from "sonner";
-import useCartStore from "../../hooks/cashier/useCartStore";
+import useCartStore from "../../features/cart/hooks/useCartStore";
 
 const ConfirmFinalize = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch, isFetching } = useGetOrderInfo(

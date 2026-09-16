@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCroppedImg } from "../../utils/crop-helper";
 import type { Area } from "react-easy-crop";
-import {
-  DAY_ORDER,
-  type ScheduleType,
-  type EditStaffDataRequest,
-  SHIFT_ORDER,
-  type ShiftType,
-  type RoleType,
-  STATUSES,
-  USER_STATUS_COLOR_CONFIG,
-  type StatusType,
-  ROLES_ARRAY,
-} from "@/types";
+import { type ScheduleType } from "@/features/staff/types/enums";
+import { type EditStaffDataRequest } from "@/features/staff/types/staff";
+import { SHIFT_ORDER } from "@/features/staff/types/enums";
+import { type ShiftType } from "@/features/staff/types/enums";
+import { type RoleType } from "@/features/staff/types/enums";
+import { STATUSES } from "@/features/staff/types/enums";
+import { USER_STATUS_COLOR_CONFIG } from "@/features/staff/types/enums";
+import { type StatusType } from "@/features/staff/types/enums";
+import { ROLES_ARRAY } from "@/features/staff/types/enums";
+import { DAY_ORDER } from "@/features/staff/types/enums";
 import { base64ToFile } from "../../utils/convertor";
 import { Trash2 } from "lucide-react";
-import { useDeleteStaff } from "../../hooks/useDeleteStaff";
+import { useDeleteStaff } from "../../features/staff/hooks/useDeleteStaff";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -26,10 +24,10 @@ import {
   ButtonCancel,
   ButtonSubmit,
 } from "@/components/ui";
-import { useEditStaff } from "../../hooks/useEditStaff";
+import { useEditStaff } from "../../features/staff/hooks/useEditStaff";
 import DefaultProfile from "../../assets/user-profile.png";
 import { useSearchParams } from "react-router-dom";
-import { useGetASingleProfile } from "../../hooks/staff/useGetASingleProfile";
+import { useGetASingleProfile } from "../../features/staff/hooks/useGetStaffById";
 import z from "zod";
 import {
   Controller,
@@ -39,7 +37,7 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { editStaffSchema } from "@/validation";
+import { editStaffSchema } from "@/features/staff/schemas/staff.schema"; 
 
 type EditStaffFormData = z.infer<typeof editStaffSchema>;
 
@@ -454,7 +452,8 @@ export default function EditStaffProfile() {
               const isCurrentStatus = status === staff?.status;
               const isSelected = status === selectedStatus;
               // get color from specific status
-              const color = USER_STATUS_COLOR_CONFIG[selectedStatus as StatusType];
+              const color =
+                USER_STATUS_COLOR_CONFIG[selectedStatus as StatusType];
               return (
                 <button
                   key={status}

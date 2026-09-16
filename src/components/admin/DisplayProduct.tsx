@@ -1,11 +1,11 @@
 import { useRef } from "react";
 import NoImage from "../../assets/picture.jpg";
-import { STOCK_STATUS_CONFIG } from "@/types";
+import { STOCK_STATUS_CONFIG } from "@/features/products/types/product"; 
 import { RotateCcw, SquareChartGantt } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
-import { useAdminProduct } from "../../hooks/useAdminProduct";
-import { useProductFilter } from "../../hooks/useProductFilter";
+import { useAdminProduct } from "../../features/products/hooks/useAdminProduct";
+import { useProductFilter } from "../../features/products/hooks/useProductFilter";
 
 export default function DisplayProduct() {
   const size = 10;

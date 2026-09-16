@@ -1,9 +1,7 @@
 //
-import type { GetUserProfileResponse } from "@/types";
+import type { GetUserProfileResponse } from "@/features/user/types/user";
 import Loader from "./Loader";
 import DefaultProfile from "../../assets/user-profile.png";
-
-
 
 interface Props {
   data: GetUserProfileResponse | undefined;
@@ -11,8 +9,6 @@ interface Props {
   isError: boolean;
   refetch: () => void;
 }
-
-
 
 const UserProfile = ({ data, isLoading, isError, refetch }: Props) => {
   return (

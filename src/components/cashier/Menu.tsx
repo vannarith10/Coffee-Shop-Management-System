@@ -1,14 +1,11 @@
-//
-// components/cashier/Menu
-//
 import { useEffect, useRef } from "react";
-import { useGetProductMenu } from "../../hooks/cashier/useGetProductMenu";
-import { useProductFilter } from "../../hooks/useProductFilter";
+import { useGetProductMenu } from "../../features/Menu/hooks/useGetProductMenu";
+import { useProductFilter } from "../../features/products/hooks/useProductFilter";
 import NoImage from "../../assets/picture.jpg";
 import { motion } from "framer-motion";
-import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
-import useCartStore from "../../hooks/cashier/useCartStore";
-import type { ProductMenuItem } from "../../types/product";
+import { useGetAllCategoryNames } from "@/features/categories/hooks/useGetAllCategoryNames";
+import useCartStore from "../../features/cart/hooks/useCartStore";
+import type { ProductMenuItem } from "@/features/products/types/product";
 
 const Menu = () => {
   const { addToCart } = useCartStore();

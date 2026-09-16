@@ -1,5 +1,3 @@
-//
-
 export const formatDateTime = (
   isoDate: string | null | undefined,
   options = {

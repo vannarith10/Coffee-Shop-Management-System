@@ -1,14 +1,11 @@
-//
-//
-//
 import { motion } from "framer-motion";
 import { QrCode, Receipt, Send } from "lucide-react";
-import useCartStore from "../../hooks/cashier/useCartStore";
+import useCartStore from "../../features/cart/hooks/useCartStore";
 import { useState, type ReactNode } from "react";
 import DefaultImage from "../../assets/picture.jpg";
 import { toast } from "sonner";
-import { useCreateOrder } from "../../hooks/cashier/useCreateOrder";
-import type { CreateOrderRequest } from "../../types/order";
+import { useCreateOrder } from "../../features/orders/hooks/useCreateOrder";
+import type { CreateOrderRequest } from "@/features/orders/types/order";
 import { useNavigate } from "react-router-dom";
 import MyPopupForm from "../animation/MyPopupForm";
 import FormHeader from "../ui/FormHeader";

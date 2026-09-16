@@ -1,8 +1,8 @@
 //
 import { LogOut } from "lucide-react";
 // import { useAuth } from "../../contexts/useAuth";
-import { useGetShopNameAndLogo } from "../../hooks/barista/useGetShopNameAndLogo";
-import { useGetUserProfile } from "../../hooks/useGetUserProfile";
+import { useGetShopNameAndLogo } from "../../features/shop/hooks/useGetShopNameAndLogo";
+import { useGetUserProfile } from "../../features/user/hooks/useGetUserProfile";
 import ShopProfile from "../ui/ShopProfile";
 import ThemeSwitch from "../ui/ThemeSwitch";
 import UserProfile from "../ui/UserProfile";

@@ -1,8 +1,8 @@
 import { Store } from "lucide-react";
 import { useState } from "react";
-import { useGetShopInfo } from "../../hooks/useGetShopInfo";
+import { useGetShopInfo } from "../../features/shop/hooks/useGetShopInfo";
 import { toast } from "sonner";
-import { useUpdateShopInfo } from "../../hooks/useUpdateShopInfo";
+import { useUpdateShopInfo } from "../../features/shop/hooks/useUpdateShopInfo";
 
 const GeneralInformation = () => {
   const { data } = useGetShopInfo();

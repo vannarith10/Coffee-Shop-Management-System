@@ -3,25 +3,25 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import PageNotFound from "./pages/PageNotFound";
-import UnauthorizedPage from "./pages/UnauthorizedPage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import PageNotFound from "./features/auth/pages/PageNotFound";
+import UnauthorizedPage from "./features/auth/pages/UnauthorizedPage";
 import RoleRoute from "./routes/RoleRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import CashierDashboard from "./pages/cashier/CashierDashboard";
-import BaristaDashboard from "./pages/barista/BaristaDashboard";
+import AdminDashboard from "./features/admin/pages/AdminDashboard";
+import CashierDashboard from "./features/cashier/pages/CashierDashboard";
+import BaristaDashboard from "./features/barista/pages/BaristaDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import { Toaster } from "sonner";
-import StaffTab from "./pages/admin/StaffTab";
-import CategoryTab from "./pages/admin/CategoryTab";
-import ProductTab from "./pages/admin/ProductTab";
-import ReportTab from "./pages/admin/ReportTab";
-import SettingTab from "./pages/admin/SettingTab";
-import ProductDetailPage from "./pages/admin/ProductDetailPage";
+import StaffTab from "./features/admin/pages/StaffTab";
+import CategoryTab from "./features/admin/pages/CategoryTab";
+import ProductTab from "./features/admin/pages/ProductTab";
+import ReportTab from "./features/admin/pages/ReportTab";
+import SettingTab from "./features/admin/pages/SettingTab";
+import ProductDetailPage from "./features/admin/pages/ProductDetailPage";
 import CashierLayout from "./layouts/CashierLayout";
-import ConfirmOrder from "./pages/cashier/ConfirmOrder";
+import ConfirmOrder from "./features/cashier/pages/ConfirmOrder";
 import { GlassFilter } from "@/components/ui";
 import { websocketManager } from "./websocket/websocket-manager";
 import { useAuthStore } from "./stores/useAuthStore";

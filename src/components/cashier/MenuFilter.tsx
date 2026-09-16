@@ -1,12 +1,9 @@
-//
-//  components/cashier/MenuFilter.tsx
-//
 import { useEffect, useState } from "react";
-import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
-import { useProductFilter } from "../../hooks/useProductFilter";
+import { useGetAllCategoryNames } from "@/features/categories/hooks/useGetAllCategoryNames";
+import { useProductFilter } from "../../features/products/hooks/useProductFilter";
 import { motion } from "framer-motion";
 import SearchBox from "../ui/SearchBox";
-import { useDebounce } from "../../hooks/useDebounce";
+import { useDebounce } from "use-debounce";
 
 const filters: { value: ProductFilter; background_color: string }[] = [
   {
@@ -39,7 +36,7 @@ const MenuFilter = () => {
 
   // const { keyword, setKeyword } = useProductFilter();
   const [inputValue, setInputValue] = useState(keyword ?? "");
-  const debouncedKeyword = useDebounce(inputValue, 500);
+  const [debouncedKeyword] = useDebounce(inputValue, 500);
 
   //=====================================================================
   // Clear 'selectedCategoryName', 'keyword' when we switch category type
@@ -61,7 +58,6 @@ const MenuFilter = () => {
   // handle send request when user stops typing
   // =====================================
   useEffect(() => {
-    // setKeyword gets value from debouncedKeyword, and debouncedKeyword gets from inputValue
     setKeyword(debouncedKeyword);
   }, [debouncedKeyword, setKeyword]);
 

@@ -2,7 +2,7 @@ import { RotateCcw, Wallet } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { ChartColumn } from "lucide-react";
 import SpotlightCard from "../animation/SpotlightCard";
-import { useBusinessSummary } from "../../hooks/useBusinessSummary";
+import { useBusinessSummary } from "../../features/analytic/hooks/useBusinessSummary";
 import { TextLoader } from "@/components/ui";
 
 export default function BusinessSummary() {

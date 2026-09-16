@@ -1,12 +1,9 @@
-//
-//  stores/useAuthStore.ts
-//
 import { create } from "zustand";
-import type { UserInfo } from "@/types";
+import type { UserInfo } from "../features/auth/types/auth";
 import { persist } from "zustand/middleware";
 import { websocketManager } from "../websocket/websocket-manager";
-import { refreshWithLock } from "../lib/auth-refresh";
-import { scheduleTokenRefresh } from "../lib/auth-token-scheduler";
+import { refreshWithLock } from "../features/auth/lib/auth-refresh";
+import { scheduleTokenRefresh } from "../features/auth/lib/auth-token-scheduler";
 
 // Define shape of store
 interface AuthState {
@@ -101,7 +98,7 @@ export const useAuthStore = create<AuthState>()(
         if (state?.accessToken) {
           scheduleTokenRefresh(state.accessToken);
         }
-        
+
         if (state) {
           state.initialize();
         }

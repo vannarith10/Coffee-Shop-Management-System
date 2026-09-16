@@ -1,19 +1,14 @@
-//
-// components/barista/QueueOrder.tsx
-//
 import { useEffect, useRef } from "react";
-import { useRetrieveOrder } from "../../hooks/barista/useRetrieveOrder";
+import { useRetrieveOrder } from "@/features/orders/hooks/useRetrieveOrder";
 import Masonry from "react-masonry-css";
 import OrderCard from "./OrderCard";
 import { AnimatePresence, motion } from "framer-motion";
-import { useUpdateOrderStatus } from "../../hooks/barista/useUpdateOrderStatus";
+import { useUpdateOrderStatus } from "@/features/orders/hooks/useUpdateOrderStatus";
 import { toast } from "sonner";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
-import type {
-  BaristaOrderItem,
-  BaristaOrderQueue,
-} from "@/types";
-import { useGetQueuedOrder } from "../../websocket/order/useGetQueuedOrder";
+import type { BaristaOrderQueue } from "@/features/orders/types/order";
+import type { BaristaOrderItem } from "@/features/orders/types/order";
+import { useGetQueuedOrder } from "@/features/orders/realtime/useGetQueuedOrder";
 
 const breakpointColumnsObj = {
   default: 4,

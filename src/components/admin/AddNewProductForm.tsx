@@ -1,13 +1,15 @@
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import type { AddNewProductRequest, StockStatusType } from "@/types";
-import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
-import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
+import { type StockStatusType } from "@/features/stock/types/stock";
+import { type AddNewProductRequest } from "@/features/products/types/product";
+import { useGetAllCategoryNames } from "@/features/categories/hooks/useGetAllCategoryNames"; 
+import { STATUS_OPTIONS } from "@/features/products/types/product";
+import { STOCK_STATUS_CONFIG } from "@/features/products/types/product";
 import DefaultImage from "../../assets/picture.jpg";
 import type { Area } from "react-easy-crop";
 import { base64ToFile } from "../../utils/convertor";
 import { getCroppedImg } from "../../utils/crop-helper";
-import { useCreateProduct } from "../../hooks/useCreateProduct";
+import { useCreateProduct } from "../../features/products/hooks/useCreateProduct";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
 import {

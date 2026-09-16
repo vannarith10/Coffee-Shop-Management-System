@@ -6,7 +6,7 @@ import { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import Loader from "../components/ui/Loader";
 import { useAuthStore } from "../stores/useAuthStore";
-import { type RoleType } from "@/types";
+import { type RoleType } from "../features/staff/types/enums";
 
 function getRoute(role: RoleType) {
   switch (role) {

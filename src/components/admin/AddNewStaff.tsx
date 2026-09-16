@@ -1,23 +1,21 @@
 import { SquarePlus } from "lucide-react";
 import { useCallback, useState } from "react";
-import {
-  STATUSES,
-  USER_STATUS_COLOR_CONFIG,
-  type StatusType,
-  type RoleType,
-  SHIFT_ORDER,
-  type ShiftType,
-  DAY_ORDER,
-  type ScheduleType,
-  ROLES_ARRAY,
-} from "@/types";
+import { STATUSES } from "@/features/staff/types/enums";
+import { USER_STATUS_COLOR_CONFIG } from "@/features/staff/types/enums";
+import { type StatusType } from "@/features/staff/types/enums";
+import { type RoleType } from "@/features/staff/types/enums";
+import { SHIFT_ORDER } from "@/features/staff/types/enums";
+import { type ShiftType } from "@/features/staff/types/enums";
+import { DAY_ORDER } from "@/features/staff/types/enums";
+import { type ScheduleType } from "@/features/staff/types/enums";
+import { ROLES_ARRAY } from "@/features/staff/types/enums";
 import DefaultProfile from "../../assets/user-profile.png";
 import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
 import { toast } from "sonner";
-import type { CreateStaffRequest } from "../../types/staff";
-import { useCreateStaff } from "../../hooks/useCreateStaff";
+import type { CreateStaffRequest } from "@/features/staff/types/staff";
+import { useCreateStaff } from "../../features/staff/hooks/useCreateStaff";
 import MyPopupForm from "../animation/MyPopupForm";
 import { AnimatePresence } from "framer-motion";
 import ButtonCancel from "../ui/ButtonCancel";
@@ -38,7 +36,7 @@ import {
   type FieldErrors,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createStaffSchema } from "@/validation";
+import { createStaffSchema } from "@/features/staff/schemas/staff.schema"; 
 
 type CreateStaffFormData = z.infer<typeof createStaffSchema>;
 

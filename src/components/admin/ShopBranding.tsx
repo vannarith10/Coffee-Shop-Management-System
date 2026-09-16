@@ -1,7 +1,7 @@
 import { Feather, Trash2 } from "lucide-react";
 import React, { useCallback, useRef, useState } from "react";
 import DefaultImage from "../../assets/picture.jpg";
-import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
+import { useGetShopNameAndLogo } from "../../features/shop/hooks/useGetShopNameAndLogo";
 import {
   Loader,
   ImageCropForm,
@@ -9,11 +9,11 @@ import {
   ButtonCancel,
   TextLoader,
 } from "@/components/ui";
-import { useDeleteShopLogo } from "../../hooks/useDeleteShopLogo";
+import { useDeleteShopLogo } from "../../features/shop/hooks/useDeleteShopLogo";
 import type { Area } from "react-easy-crop";
 import { getCroppedImg } from "../../utils/crop-helper";
 import { base64ToFile } from "../../utils/convertor";
-import { useUpdateShopLogo } from "../../hooks/useUpdateShopLogo";
+import { useUpdateShopLogo } from "../../features/shop/hooks/useUpdateShopLogo";
 import { AnimatePresence } from "framer-motion";
 import MyPopupForm from "../animation/MyPopupForm";
 

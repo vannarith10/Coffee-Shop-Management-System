@@ -1,11 +1,12 @@
 import { useState } from "react";
-import type { ProductStock } from "../../types/product";
-import type { StockStatusType } from "@/types";
+import type { ProductStock } from "@/features/stock/types/stock"; 
+import type { StockStatusType } from "@/features/stock/types/stock"; 
 import { Layers2 } from "lucide-react";
 import { toast } from "sonner";
-import { STATUS_OPTIONS, STOCK_STATUS_CONFIG } from "@/types";
+import { STATUS_OPTIONS } from "@/features/products/types/product"; 
+import { STOCK_STATUS_CONFIG } from "@/features/products/types/product";
 import MyPopupForm from "../animation/MyPopupForm";
-import { useUpdateStockStatus } from "../../hooks/stock/useUpdateStockStatus";
+import { useUpdateStockStatus } from "../../features/stock/hooks/useUpdateStockStatus";
 import { ButtonCancel, ButtonSubmit } from "@/components/ui";
 
 interface UpdateStockStatusProps {

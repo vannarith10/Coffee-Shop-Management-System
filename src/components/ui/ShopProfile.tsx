@@ -5,7 +5,7 @@ import Loader from "./Loader";
 import DefaultLogo from "../../assets/picture.jpg";
 import ErrorImage from "../../assets/error-image.jpg";
 import TextLoader from "../ui/TextLoader";
-import type { ShopNameAndLogo } from "@/types";
+import type { ShopNameAndLogo } from "@/types"; 
 
 
 interface Props {

@@ -1,6 +1,6 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { useEffect, useState } from "react";
-import { useGetRevenueTrends } from "../../hooks/useGetRevenueTrends";
+import { useGetRevenueTrends } from "../../features/analytic/hooks/useGetRevenueTrends";
 import { DefaultRevenueTrends } from "../../utils/default-values";
 import { TextLoader } from "@/components/ui";
 import { RotateCcw } from "lucide-react";

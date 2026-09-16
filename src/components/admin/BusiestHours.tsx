@@ -1,5 +1,5 @@
 import { ResponsiveHeatMap } from "@nivo/heatmap";
-import { useGetBusiestHours } from "../../hooks/useGetBusiestHours";
+import { useGetBusiestHours } from "../../features/report/hooks/useGetBusiestHours";
 import { RotateCcw } from "lucide-react";
 
 const BusiestHours = () => {

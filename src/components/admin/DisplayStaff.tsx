@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 import DefaultProfile from "../../assets/user-profile.png";
 import { UserRoundPen } from "lucide-react";
-import { DAY_ORDER, ROLES_ARRAY, SCHEDULE_CONFIG } from "@/types";
+import { DAY_ORDER } from "@/features/staff/types/enums"; 
+import { ROLES_ARRAY } from "@/features/staff/types/enums";
+import { SCHEDULE_CONFIG } from "@/features/staff/types/enums";
 import { ContactRound } from "lucide-react";
 import { RotateCcw } from "lucide-react";
 import EditStaffProfile from "./EditStaffProfile";
 import { TextLoader, PageHeader, PageFooter } from "@/components/ui";
-import { useStaff } from "../../hooks/useGetStaffProfiles";
-import { USER_STATUS_COLOR_CONFIG } from "@/types";
+import { useStaff } from "../../features/staff/hooks/useGetStaffProfiles";
+import { USER_STATUS_COLOR_CONFIG } from "@/features/staff/types/enums"; 
 import { AnimatePresence } from "framer-motion";
 import { COLORS } from "../../utils/colors";
 import { useSearchParams } from "react-router-dom";
@@ -72,7 +74,6 @@ export default function DisplayStaff() {
       return prev;
     });
   };
-
 
   return (
     <>

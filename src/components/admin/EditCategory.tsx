@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  CATEGORY_ARRAY,
-  CategoryStatusOptions,
-  type CategoryType,
-  type PatchCategoryRequest,
-} from "@/types";
+import { CategoryStatusOptions } from "@/features/categories/types/category";
+import type { CategoryType } from "@/features/categories/types/enums";
+import { type PatchCategoryRequest } from "@/features/categories/types/category";
+import { CATEGORY_ARRAY } from "@/features/categories/types/enums";
 import { toast } from "sonner";
 import MyPopupForm from "../animation/MyPopupForm";
 import {
@@ -13,9 +11,9 @@ import {
   ButtonSubmit,
   CustomSelect,
 } from "@/components/ui";
-import { useUpdateCategory } from "../../hooks/category/useUpdateCategory";
+import { useUpdateCategory } from "../../features/categories/hooks/useUpdateCategory";
 import { useSearchParams } from "react-router-dom";
-import { useGetCategoryById } from "../../hooks/category/useGetCategoryById";
+import { useGetCategoryById } from "../../features/categories/hooks/useGetCategoryById";
 
 type Props = {
   isOpen: boolean;

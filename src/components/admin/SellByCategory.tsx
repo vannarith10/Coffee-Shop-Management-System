@@ -1,9 +1,9 @@
-// components/admin/SellByCategory.tsx
-//
 import { ResponsivePie } from "@nivo/pie";
 import { COLORS } from "../../utils/colors";
-import { useGetSalesByCategory } from "../../hooks/useGetSalesByCategory";
-import { RANGE, RANGE_ARRAY, type RangeType } from "@/types";
+import { useGetSalesByCategory } from "@/features/report/hooks/useGetSalesByCategory";
+import { RANGE } from "@/features/analytic/types/enums";
+import { RANGE_ARRAY } from "@/features/analytic/types/enums";
+import type { RangeType } from "@/features/analytic/types/enums";
 import { useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { TextLoader } from "@/components/ui";

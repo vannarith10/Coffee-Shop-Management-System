@@ -2,7 +2,7 @@
 // routes/RoleRoute.tsx
 //
 import { useAuthStore } from "../stores/useAuthStore";
-import { type RoleType } from "@/types";
+import { type RoleType } from "../features/staff/types/enums";
 import { Navigate, Outlet } from "react-router-dom";
 
 interface Props {

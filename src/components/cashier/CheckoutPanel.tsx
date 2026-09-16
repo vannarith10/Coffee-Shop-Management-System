@@ -4,9 +4,9 @@
 // * Displays checkout items
 //
 import { ClockFading, Minus, Plus, Trash2 } from "lucide-react";
-import useCartStore from "../../hooks/cashier/useCartStore";
+import useCartStore from "../../features/cart/hooks/useCartStore";
 import DefaultImage from "../../assets/picture.jpg";
-import { CATEGORY_COLOR_CONFIG } from "@/types";
+import { CATEGORY_COLOR_CONFIG } from "@/features/categories/types/enums";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Checkout from "./Checkout";

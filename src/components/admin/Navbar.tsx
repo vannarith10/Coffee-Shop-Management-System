@@ -7,7 +7,7 @@ import {
 } from "@/components/ui";
 import { links } from "../../constants/navLinks";
 import { NavLink } from "react-router-dom";
-import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo";
+import { useGetShopNameAndLogo } from "../../features/shop/hooks/useGetShopNameAndLogo";
 import { motion } from "framer-motion";
 
 export default function Navbar() {

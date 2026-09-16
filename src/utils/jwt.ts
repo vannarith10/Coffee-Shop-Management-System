@@ -1,7 +1,3 @@
-//
-//
-//
-
 export function isTokenExpired(token: string, thresholdSeconds = 60): boolean {
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));

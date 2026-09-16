@@ -1,0 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
+import type { Staff } from "../types/staff";
+import { getASpecificProfile } from "../services/staff";
+
+export function useGetASingleProfile(id: string) {
+  const queryKey = ["staff-profile", id];
+
+  return useQuery<Staff>({
+    queryKey,
+    queryFn: () => getASpecificProfile(id).then((res) => res.data),
+    enabled: !!id, // prevent empty string, id = "" => not execute
+    staleTime: 0,
+    refetchOnMount: "always",
+  });
+}

@@ -7,10 +7,11 @@ import {
   YAxis,
   Cell,
 } from "recharts";
-import { RANGE_ARRAY, type RangeType } from "@/types";
+import { RANGE_ARRAY } from "@/features/analytic/types/enums"; 
+import type { RangeType } from "@/features/analytic/types/enums";
 import { TextLoader } from "@/components/ui";
 import { RotateCcw } from "lucide-react";
-import { useTopSellingProduct } from "../../hooks/useTopSellingProduct";
+import { useTopSellingProduct } from "../../features/analytic/hooks/useTopSellingProduct";
 
 export default function TopSellingProductsChart() {
   // const [page, setPage] = useState(1);

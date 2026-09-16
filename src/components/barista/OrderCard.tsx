@@ -1,7 +1,7 @@
 //
 // Card of Order
 //
-import type { BaristaOrderItem } from "@/types";
+import type { BaristaOrderItem } from "@/features/orders/types/order";
 import { formatDateTime } from "../../utils/dateFormatter";
 
 interface Props {

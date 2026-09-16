@@ -1,6 +1,4 @@
-//util/role.ts
-
-import { ROLES, type RoleType } from "@/types";
+import { ROLES, type RoleType } from "../features/staff/types/enums";
 
 export const isAdmin = (role?: RoleType) => role === ROLES.ADMIN;
 

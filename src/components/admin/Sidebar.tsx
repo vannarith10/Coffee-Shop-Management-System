@@ -1,7 +1,7 @@
 import { LogoutButton, ThemeSwitch, ShopProfile } from "@/components/ui";
 import { NavLink } from "react-router-dom";
 import { links } from "../../constants/navLinks.ts";
-import { useGetShopNameAndLogo } from "../../hooks/useGetShopNameAndLogo.ts";
+import { useGetShopNameAndLogo } from "../../features/shop/hooks/useGetShopNameAndLogo.ts";
 
 export default function Sidebar() {
   const { data, isLoading, isError, isRefetching, refetch } =

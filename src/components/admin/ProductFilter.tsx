@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useGetAllCategoryNames } from "../../hooks/useGetAllCategoryNames";
-import { useProductFilter } from "../../hooks/useProductFilter";
+import { useGetAllCategoryNames } from "@/features/categories/hooks/useGetAllCategoryNames"; 
+import { useProductFilter } from "../../features/products/hooks/useProductFilter";
 import { Delete, Search } from "lucide-react";
-import { useDebounce } from "../../hooks/useDebounce";
 import { motion } from "framer-motion";
+import { useDebounce } from "use-debounce";
 
 const filters: { value: ProductFilter; background_color: string }[] = [
   {
@@ -34,16 +34,12 @@ export default function ProductFilter() {
     setKeyword,
   } = useProductFilter();
   const [inputValue, setInputValue] = useState(keyword ?? "");
-  const debouncedKeyword = useDebounce(inputValue, 500);
+  const [debouncedKeyword] = useDebounce(inputValue, 500);
 
   const filteredCategory =
     categoryNameType?.filter((c) => c.category_type === selectedCategoryType) ??
     [];
 
-  // =====================================
-  // Debounce handles setKeyword
-  // handle send request when user stops typing
-  // =====================================
   useEffect(() => {
     setKeyword(debouncedKeyword);
   }, [debouncedKeyword, setKeyword]);
@@ -80,8 +76,8 @@ export default function ProductFilter() {
             return (
               <motion.button
                 key={filter.value}
-                initial={{ opacity: 0, scale: 0.8, y: -20, }}
-                animate={{ opacity: 1, scale: 1, y: 0, }}
+                initial={{ opacity: 0, scale: 0.8, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{
                   type: "spring",
                   duration: 1,
@@ -135,8 +131,8 @@ export default function ProductFilter() {
             return (
               <motion.button
                 key={cate.category_id}
-                initial={{ opacity: 0, scale: 0.8, y: -20, }}
-                animate={{ opacity: 1, scale: 1, y: 0, }}
+                initial={{ opacity: 0, scale: 0.8, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{
                   type: "spring",
                   duration: 1,

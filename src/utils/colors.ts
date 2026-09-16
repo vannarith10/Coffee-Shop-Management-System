@@ -1,6 +1,3 @@
-// utils/colors.ts
-//
-
 export const COLORS = [
   "#22C55E", // Green
   "#8B5CF6", // Purple

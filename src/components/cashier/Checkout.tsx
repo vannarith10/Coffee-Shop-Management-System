@@ -1,10 +1,10 @@
 //
 // components/cashier/Checkout.tsx
 //
-// Display the checkout information under checkout items
+// Display the checkout information under checkoFut items
 //
 import { useState } from "react";
-import useCartStore from "../../hooks/cashier/useCartStore";
+import useCartStore from "../../features/cart/hooks/useCartStore";
 import PaymentMethodDialog from "./PaymentMethodDialog";
 import { AnimatePresence } from "framer-motion";
 
@@ -79,7 +79,7 @@ const Checkout = () => {
       {/* Payment method dialog box */}
       {/* ========================= */}
       <AnimatePresence>
-        {checkedout && <PaymentMethodDialog onClose={onClose} note={note}/>}
+        {checkedout && <PaymentMethodDialog onClose={onClose} note={note} />}
       </AnimatePresence>
     </div>
   );
