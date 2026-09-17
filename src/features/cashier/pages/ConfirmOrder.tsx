@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import ConfirmSummary from "@/components/cashier/ConfirmSummary";
-import ConfirmFinalize from "@/components/cashier/ConfirmFinalize";
+import ConfirmSummary from "@/features/cashier/components/ConfirmSummary";
+import ConfirmFinalize from "../components/ConfirmFinalize"; 
 import { useGetOrderInfo } from "@/features/orders/hooks/useGetOrderInfo";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";

@@ -82,7 +82,7 @@ const MyPopupForm = ({ children, onClose, className, handleSubmit }: Props) => {
         <form
           onSubmit={(e) => handleSubmit(e)}
           onClick={(e) => e.stopPropagation()}
-          className=" overflow-y-scroll scrollbar-hide h-fit max-h-[90vh] w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] bg-background-secondary flex flex-col p-10 pt-0 gap-6 rounded-4xl border-2 border-border"
+          className=" overflow-y-scroll scrollbar-hide h-screen sm:h-fit sm:max-h-[90vh] w-screen sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] bg-background-secondary flex flex-col px-4 pb-4 sm:px-10 sm:pb-10 pt-0 gap-4 sm:gap-6  sm:rounded-4xl border-2 border-border transition-all duration-500 ease-out"
         >
           {children}
         </form>

@@ -1,7 +1,7 @@
-import DisplayProduct from "@/components/admin/DisplayProduct";
+import DisplayProduct from "@/features/admin/components/DisplayProduct";
 import { Outlet } from "react-router-dom";
-import AddNewProductForm from "@/components/admin/AddNewProductForm";
-import ProductFilter from "@/components/admin/ProductFilter";
+import AddNewProductForm from "@/features/admin/components/AddNewProductForm";
+import ProductFilter from "@/features/admin/components/ProductFilter";
 import ScrollToTheTop from "@/components/ScrollToTheTop";
 
 const ProductTab = () => {

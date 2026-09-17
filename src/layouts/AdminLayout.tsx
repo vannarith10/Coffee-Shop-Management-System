@@ -1,8 +1,5 @@
-//
-// layouts/AdminLayout.tsx
-//
-import Navbar from "../components/admin/Navbar";
-import Sidebar from "../components/admin/Sidebar";
+import Navbar from "@/features/admin/components/Navbar";
+import Sidebar from "@/features/admin/components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 export default function AdminLayout() {

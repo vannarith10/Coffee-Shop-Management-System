@@ -1,9 +1,6 @@
-//
-//  SettingTab.tsx
-//
-import GeneralInformation from "@/components/admin/GeneralInformation"; 
-import ShopBranding from "@/components/admin/ShopBranding"; 
-import ScrollToTheTop from "@/components/ScrollToTheTop"; 
+import GeneralInformation from "../components/GeneralInformation";
+import ShopBranding from "../components/ShopBranding";
+import ScrollToTheTop from "@/components/ScrollToTheTop";
 
 const SettingTab = () => {
   return (

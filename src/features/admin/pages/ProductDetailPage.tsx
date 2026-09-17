@@ -20,9 +20,7 @@ import {
 } from "lucide-react";
 import { STATUS_OPTIONS } from "@/features/products/types/product";
 import ButtonCopy from "@/components/ui/ButtonCopy";
-
 import Picture from "../../../assets/picture.jpg";
-
 import type { Area } from "react-easy-crop";
 import ImageCropForm from "@/components/ui/ImageCropForm";
 import { getCroppedImg } from "../../../utils/crop-helper";
@@ -284,15 +282,15 @@ export default function ProductDetailPage() {
               *
             ------------------------------------------- */}
             <div className="flex items-center gap-4 border-b border-border py-4">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <FolderPen />
-                <span className="whitespace-nowrap font-semibold">Name</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Name</span>
               </div>
               <input
                 type="text"
                 {...register("newName")}
                 readOnly={!isEditing}
-                className={`${isEditing ? "text-white" : "text-amber-400"} w-full font-bold text-2xl outline-none `}
+                className={`${isEditing ? "text-white" : "text-amber-400"} w-full font-bold text-sm sm:text-xl md:text-2xl outline-none `}
               />
             </div>
             {/* ------------------------------------------
@@ -303,7 +301,7 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-4 border-b border-border py-4 ">
               <div className="flex gap-2">
                 <ChartBarStacked />
-                <span className="whitespace-nowrap font-semibold">
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
                   Category Name
                 </span>
               </div>
@@ -341,11 +339,11 @@ export default function ProductDetailPage() {
             >
               <div className="flex gap-2">
                 <Tag />
-                <span className="whitespace-nowrap font-semibold">
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
                   Category Type
                 </span>
               </div>
-              <span className="font-bold">{product?.category_type}</span>
+              <span className="font-bold text-xs sm:text-sm md:text-lg">{product?.category_type}</span>
             </div>
             {/* ------------------------------------------
               *
@@ -355,7 +353,7 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <DollarSign />
-                <span className="whitespace-nowrap font-semibold">Price</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Price</span>
               </div>
               <Controller
                 name="newSellingPrice"
@@ -378,7 +376,7 @@ export default function ProductDetailPage() {
             <div className="flex gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <CircleDollarSign />
-                <span className="whitespace-nowrap font-semibold">Cost</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Cost</span>
               </div>
               <Controller
                 name="newCostPrice"
@@ -401,7 +399,7 @@ export default function ProductDetailPage() {
             <div className="flex gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <FileText />
-                <span className="whitespace-nowrap font-semibold">
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
                   Description
                 </span>
               </div>
@@ -419,7 +417,7 @@ export default function ProductDetailPage() {
             <div className="flex flex-col gap-4 border-b border-border py-4 pb-4">
               <div className="flex gap-2">
                 <Box />
-                <span className="whitespace-nowrap font-semibold">
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
                   Stock Status
                 </span>
               </div>

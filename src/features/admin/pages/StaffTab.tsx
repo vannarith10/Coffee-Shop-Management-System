@@ -2,8 +2,8 @@
 // pages/admin/StaffTab.tsx
 //
 
-import AddNewStaff from "../../../components/admin/AddNewStaff";
-import DisplayStaff from "../../../components/admin/DisplayStaff";
+import AddNewStaff from "../components/AddNewStaff";
+import DisplayStaff from "../components/DisplayStaff";
 import ScrollToTheTop from "../../../components/ScrollToTheTop";
 
 export default function StaffTab() {

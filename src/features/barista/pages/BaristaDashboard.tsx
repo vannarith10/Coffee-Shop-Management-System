@@ -1,6 +1,6 @@
-import Navbar from "@/components/barista/Navbar";
-import PreparingOrder from "@/components/barista/PreparingOrder";
-import QueueOrder from "@/components/barista/QueueOrder";
+import Navbar from "../components/Navbar"; 
+import PreparingOrder from "@/features/barista/components/PreparingOrder";
+import QueueOrder from "@/features/barista/components/QueueOrder";
 
 export default function BaristaDashboard() {
   return (

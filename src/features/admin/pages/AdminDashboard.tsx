@@ -1,6 +1,6 @@
-import BusinessSummary from "../../../components/admin/BusinessSummary";
-import TopSellingProducts from "../../../components/admin/TopSellingProducts";
-import StockStatus from "../../../components/admin/StockStatus";
+import BusinessSummary from "../components/BusinessSummary";
+import TopSellingProducts from "../components/TopSellingProducts";
+import StockStatus from "../components/StockStatus";
 import ScrollToTheTop from "../../../components/ScrollToTheTop";
 
 export default function AdminDashboard() {

@@ -1,6 +1,6 @@
-import CheckoutPanel from "@/components/cashier/CheckoutPanel";
-import Menu from "@/components/cashier/Menu";
-import MenuFilter from "@/components/cashier/MenuFilter";
+import CheckoutPanel from "@/features/cashier/components/CheckoutPanel";
+import Menu from "@/features/cashier/components/Menu";
+import MenuFilter from "@/features/cashier/components/MenuFilter";
 
 export default function CashierDashboard() {
   return (
