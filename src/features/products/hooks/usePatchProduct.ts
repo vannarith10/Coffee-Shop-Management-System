@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { patchProduct } from "../services/product";
 import type { UpdateProductRequest } from "../types/product";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 
 interface PatchProductRequest {
   id: string;

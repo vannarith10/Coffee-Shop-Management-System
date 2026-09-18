@@ -122,7 +122,7 @@ export default function DisplayProduct() {
                     key={product.id}
                     onClick={() => {
                       navigate(`${product.id}`, {
-                        replace: true,
+                        // replace: true,
                         state: { preserveScroll: true },
                       });
                     }}

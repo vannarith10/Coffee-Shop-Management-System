@@ -1,12 +1,7 @@
-import type { PaginationType } from "@/types"; 
+import type { PaginationType } from "@/types/common";
 import { type CategoryType } from "@/features/categories/types/enums";
 import type { StockStatusType } from "@/features/stock/types/stock";
 
-// export const STOCK_STATUS = {
-//   normal: "IN_STOCK",
-//   low: "LOW_STOCK",
-//   out: "OUT_OF_STOCK",
-// } as const;
 
 export const STOCK_STATUS_CONFIG = {
   IN_STOCK: {

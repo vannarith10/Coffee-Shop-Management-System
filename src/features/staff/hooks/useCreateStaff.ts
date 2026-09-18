@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createStaffAccount } from "../services/staff";
 import type { CreateStaffRequest, CreateStaffResponse } from "../types/staff";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 
 type CreateStaffRequests = {
   data: CreateStaffRequest;

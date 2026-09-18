@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateShopInfo } from "../services/shop";
 import type { AxiosError } from "axios";
-import type { UpdateShopInfoRequest } from "@/types";
+import type { UpdateShopInfoRequest } from "../types/shop";
 import { type BackendErrorDetailType } from "../../../types/common";
 import { toast } from "sonner";
 

@@ -1,7 +1,7 @@
 import { STOCK_STATUS, type STOCK_STATUS_ARRAY } from "./enums";
 import z from "zod";
 import { CATEGORY } from "../../categories/types/enums";
-import type { PaginationType } from "@/types";
+import type { PaginationType } from "@/types/common";
 
 export type StockStatusType = (typeof STOCK_STATUS_ARRAY)[number];
 

@@ -1,5 +1,6 @@
 import api, { publicApi } from "../../../lib/axios";
-import type { ShopLogoUpdateResponse, UpdateShopInfoRequest } from "@/types";
+import type { ShopLogoUpdateResponse } from "../types/shop";
+import { type UpdateShopInfoRequest } from "../types/shop";
 
 //
 // Get shop's image and name

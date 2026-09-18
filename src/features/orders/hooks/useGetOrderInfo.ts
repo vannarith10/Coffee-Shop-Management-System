@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getOrderInfo } from "../services/order";
 import type { GetOrderInfoResponse } from "../types/order";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 import type { AxiosError } from "axios";
 
 export function useGetOrderInfo(orderId: string) {

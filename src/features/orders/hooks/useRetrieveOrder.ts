@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { RetrieveOrderStatus } from "../types/order";
 import type { BaristaOrderQueue } from "../types/order";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 import { getOrders } from "../services/order";
 
 interface OrderQueueRequest {

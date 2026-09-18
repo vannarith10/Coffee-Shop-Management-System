@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getShopInfo } from "../services/shop";
-import type { ShopInfo } from "@/types";
+import type { ShopInfo } from "../types/shop";
 
 export function useGetShopInfo() {
   const queryKey = ["shop-info"];

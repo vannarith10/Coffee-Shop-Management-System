@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getShopImageAndName } from "../services/shop";
-import type { ShopNameAndLogo } from "@/types";
+import type { ShopNameAndLogo } from "../types/shop";
 
 export function useGetShopNameAndLogo() {
   const queryKey = ["shop-name-and-logo"];

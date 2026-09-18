@@ -1,12 +1,8 @@
-//
-// Displays Shop's name ans logo
-//
 import Loader from "./Loader";
 import DefaultLogo from "../../assets/picture.jpg";
 import ErrorImage from "../../assets/error-image.jpg";
 import TextLoader from "../ui/TextLoader";
-import type { ShopNameAndLogo } from "@/types"; 
-
+import { type ShopNameAndLogo } from "@/features/shop/types/shop";
 
 interface Props {
   isLoading: boolean;
@@ -15,7 +11,6 @@ interface Props {
   data: ShopNameAndLogo | undefined;
   refetch: () => void;
 }
-
 
 const ShopProfile = ({
   isLoading,
@@ -50,25 +45,27 @@ const ShopProfile = ({
               Shop name
           -------------------- */}
         <div className="flex items-center">
-            <h1 className="font-bold text-sm md:text-lg shimmer shimmer-color-orange-500 text-text-primary uppercase transition-all duration-300">
-              {(isLoading || isRefetching) && !isError ? (
-                <TextLoader text="Loading" />
-              ) : (
-                data?.name
-              )}
-            </h1>
-            {/* handle error */}
-            {isError && (
-              <div className="flex items-center gap-2">
-                <p className="text-white font-bold text-sm uppercase shimmer shimmer-color-red-500">Error</p>
-                <button
-                  onClick={() => refetch()}
-                  className=" font-semibold bg-background-secondary hover:bg-background-secondary-hover px-2 rounded-md cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
-                >
-                  Reload
-                </button>
-              </div>
+          <h1 className="font-bold text-sm md:text-lg shimmer shimmer-color-orange-500 text-text-primary uppercase transition-all duration-300">
+            {(isLoading || isRefetching) && !isError ? (
+              <TextLoader text="Loading" />
+            ) : (
+              data?.name
             )}
+          </h1>
+          {/* handle error */}
+          {isError && (
+            <div className="flex items-center gap-2">
+              <p className="text-white font-bold text-sm uppercase shimmer shimmer-color-red-500">
+                Error
+              </p>
+              <button
+                onClick={() => refetch()}
+                className=" font-semibold bg-background-secondary hover:bg-background-secondary-hover px-2 rounded-md cursor-pointer active:scale-80 transition-all duration-300 ease-out outline-none"
+              >
+                Reload
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

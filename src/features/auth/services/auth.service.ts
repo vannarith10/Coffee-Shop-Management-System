@@ -2,7 +2,7 @@ import type { AxiosError } from "axios";
 import { authApi } from "../../../lib/axios";
 import { type LoginRequest } from "../types/auth";
 import { type LoginResponse } from "../types/auth";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common"; 
 import type { RefreshTokenResponse } from "../types/auth";
 
 // ----------------------------------------------------------------

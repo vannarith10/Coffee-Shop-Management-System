@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 import type { CreateCashOrderResponse } from "../types/order";
 import type { CreateOrderRequest } from "../types/order";
 import { createCashOrder } from "../services/order";

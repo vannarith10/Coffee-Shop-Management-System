@@ -1,4 +1,4 @@
-import type { PaginationType } from "@/types";
+import type { PaginationType } from "@/types/common";
 import type { RoleType, StatusType, ShiftType, ScheduleType } from "./enums";
 
 export interface Staff {

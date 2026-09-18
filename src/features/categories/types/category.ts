@@ -1,7 +1,7 @@
 import z from "zod";
 import type { CategoryType } from "./enums";
 import type { createCategorySchema } from "@/features/categories/schemas/category.schema";
-import type { PaginationType } from "@/types";
+import type { PaginationType } from "@/types/common";
 
 export type CATEGORY_STATUS = boolean;
 

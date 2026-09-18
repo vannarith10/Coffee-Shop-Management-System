@@ -57,6 +57,7 @@ type UpdateProductFormData = z.infer<typeof updateProductSchema>;
 
 export default function ProductDetailPage() {
   const [isOpen, setIsOpen] = useState(true);
+  const isClosingRef = useRef(false);
   const { id } = useParams<{ id: string }>();
   const safeId = id ?? "";
   const {
@@ -230,16 +231,23 @@ export default function ProductDetailPage() {
     setImage(null);
   };
 
+  const handleCloseForm = () => {
+    isClosingRef.current = true;
+    setIsOpen(false);
+  };
+
   return (
     <AnimatePresence
       mode="wait"
       onExitComplete={() => {
-        navigate("/admin/products", { replace: true });
+        if (isClosingRef.current) {
+          navigate(-1);
+        }
       }}
     >
       {isOpen && (
         <MyPopupForm
-          onClose={() => setIsOpen(false)}
+          onClose={handleCloseForm}
           handleSubmit={handleSubmit(onSubmit, onInvalid)}
         >
           {/* ------------------------------------------
@@ -249,7 +257,7 @@ export default function ProductDetailPage() {
             ------------------------------------------- */}
           <FormHeader
             title="Product Detail"
-            onClose={() => setIsOpen(false)}
+            onClose={handleCloseForm}
             className=" w-full sticky top-0 z-100"
           />
 
@@ -259,8 +267,17 @@ export default function ProductDetailPage() {
                             *
               -------------------------------------------- */}
           <div
-            className={`min-w-48 flex justify-center items-center bg-background-secondary-hover p-4 rounded-xl border-2 ${isEditing ? "border-green-500" : "border-border"}`}
+            className={` relative w-full min-w-48 min-h-fit flex justify-center items-center bg-background-secondary-hover p-4 rounded-xl border-2 overflow-hidden ${isEditing ? "border-green-500" : "border-border"}`}
           >
+            {/* Background layer */}
+            <div
+              className="absolute inset-0 bg-cover bg-center "
+              style={{ backgroundImage: `url(${preview})` }}
+            ></div>
+
+            {/* Overlay with blur */}
+            <div className=" absolute inset-0 backdrop-blur-md rounded-[inherit]"></div>
+
             <ImageInput
               isDisabled={!isEditing}
               preview={preview}
@@ -284,7 +301,9 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-4 border-b border-border py-4">
               <div className="flex gap-2 items-center">
                 <FolderPen />
-                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Name</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
+                  Name
+                </span>
               </div>
               <input
                 type="text"
@@ -343,7 +362,9 @@ export default function ProductDetailPage() {
                   Category Type
                 </span>
               </div>
-              <span className="font-bold text-xs sm:text-sm md:text-lg">{product?.category_type}</span>
+              <span className="font-bold text-xs sm:text-sm md:text-lg">
+                {product?.category_type}
+              </span>
             </div>
             {/* ------------------------------------------
               *
@@ -353,7 +374,9 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <DollarSign />
-                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Price</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
+                  Price
+                </span>
               </div>
               <Controller
                 name="newSellingPrice"
@@ -376,7 +399,9 @@ export default function ProductDetailPage() {
             <div className="flex gap-4 border-b border-border py-4">
               <div className="flex gap-2">
                 <CircleDollarSign />
-                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">Cost</span>
+                <span className="whitespace-nowrap font-semibold text-sm md:text-lg">
+                  Cost
+                </span>
               </div>
               <Controller
                 name="newCostPrice"

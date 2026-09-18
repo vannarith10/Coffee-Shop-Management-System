@@ -1,11 +1,8 @@
-//
-// hooks/useEditStaff.ts
-//
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import type { BackendErrorDetailType } from "@/types";
+import type { BackendErrorDetailType } from "@/types/common";
 import type { EditStaffDataRequest } from "../types/staff";
-import { editStaffDetail } from "../services/staff"; 
+import { editStaffDetail } from "../services/staff";
 
 interface EditStaffRequest {
   userId: string;
@@ -14,7 +11,11 @@ interface EditStaffRequest {
 }
 
 export function useEditStaff() {
-  return useMutation<void, AxiosError<BackendErrorDetailType>, EditStaffRequest>({
+  return useMutation<
+    void,
+    AxiosError<BackendErrorDetailType>,
+    EditStaffRequest
+  >({
     mutationFn: (request) =>
       editStaffDetail({
         userId: request.userId,

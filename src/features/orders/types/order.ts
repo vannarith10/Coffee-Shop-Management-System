@@ -1,4 +1,4 @@
-import type { PaginationType } from "@/types";
+import type { PaginationType } from "@/types/common";
 import type { OrderStatusType, PaymentMethodType } from "./enums";
 
 // --------------------------------
